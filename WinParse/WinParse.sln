@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.WinForms", "WinParse.WinForms\WinParse.WinForms.csproj", "{6354E98A-4FE1-4869-8974-8EE0780A5F0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.DataSaver", "WinParse.DataSaver\WinParse.DataSaver.csproj", "{6C968817-C8BB-4BFF-9284-C786DBF5E90D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.DataParser", "WinParse.DataParser\WinParse.DataParser.csproj", "{586A03BB-1702-4143-B370-E1DC6656762A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.DataLoader", "WinParse.DataLoader\WinParse.DataLoader.csproj", "{1F03FA64-CCEE-4BDB-AED8-9AAB4EE556B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.BusinessLogic", "WinParse.BusinessLogic\WinParse.BusinessLogic.csproj", "{C6982AB9-704A-474F-A303-89B4C4A3D11E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAccess", "SiteAccess\SiteAccess.csproj", "{DDC82E86-35CB-4465-B23C-6C341FE9CC36}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6354E98A-4FE1-4869-8974-8EE0780A5F0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6354E98A-4FE1-4869-8974-8EE0780A5F0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6354E98A-4FE1-4869-8974-8EE0780A5F0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6354E98A-4FE1-4869-8974-8EE0780A5F0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C968817-C8BB-4BFF-9284-C786DBF5E90D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C968817-C8BB-4BFF-9284-C786DBF5E90D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C968817-C8BB-4BFF-9284-C786DBF5E90D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C968817-C8BB-4BFF-9284-C786DBF5E90D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{586A03BB-1702-4143-B370-E1DC6656762A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{586A03BB-1702-4143-B370-E1DC6656762A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{586A03BB-1702-4143-B370-E1DC6656762A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{586A03BB-1702-4143-B370-E1DC6656762A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F03FA64-CCEE-4BDB-AED8-9AAB4EE556B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F03FA64-CCEE-4BDB-AED8-9AAB4EE556B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F03FA64-CCEE-4BDB-AED8-9AAB4EE556B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F03FA64-CCEE-4BDB-AED8-9AAB4EE556B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6982AB9-704A-474F-A303-89B4C4A3D11E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6982AB9-704A-474F-A303-89B4C4A3D11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6982AB9-704A-474F-A303-89B4C4A3D11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6982AB9-704A-474F-A303-89B4C4A3D11E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDC82E86-35CB-4465-B23C-6C341FE9CC36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDC82E86-35CB-4465-B23C-6C341FE9CC36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDC82E86-35CB-4465-B23C-6C341FE9CC36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDC82E86-35CB-4465-B23C-6C341FE9CC36}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
