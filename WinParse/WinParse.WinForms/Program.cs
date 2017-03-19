@@ -1,16 +1,17 @@
 ﻿using DevExpress.LookAndFeel;
+using DXApplication1;
 using System;
 using System.Windows.Forms;
 
 namespace WinParse.WinForms
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// The main entry point for the application. 
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -19,7 +20,7 @@ namespace WinParse.WinForms
             DevExpress.UserSkins.BonusSkins.Register();
             UserLookAndFeel.Default.SetSkinStyle("DevExpress Style");
 
-            Application.Run(new Form1());
+            Application.Run(new XtraForm1());
         }
     }
 }

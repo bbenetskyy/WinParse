@@ -1,4 +1,4 @@
-﻿namespace FormulasCollection.Models
+﻿namespace WinParse.BusinessLogic.Models
 {
     public class ResultForForks
     {
@@ -18,8 +18,11 @@
         public string FuulID { get { return "event_" + this.EventId; } }
 
         public DataMarathonForAutoPlays marathonAutoPlay { get; set; }
+        public MarathonEvent parentEvent { get; set; }
 
-        public ResultForForks() { }
+        public ResultForForks()
+        {
+        }
 
         public ResultForForks(string eventID, string nameTeam1, string nameTeam2, string date, string nameCoff, string coef, string type, string bookmaker, string league, DataMarathonForAutoPlays obj)
         {

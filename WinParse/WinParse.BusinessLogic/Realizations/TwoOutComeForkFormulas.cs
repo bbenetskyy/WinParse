@@ -1,21 +1,85 @@
-﻿using DataParser.Enums;
-using FormulasCollection.Enums;
-using FormulasCollection.Helpers;
-using FormulasCollection.Models;
+﻿//#define TestCoef
+//#define TestNames
 using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using ToolsPortable;
+using WinParse.BusinessLogic.Enums;
+using WinParse.BusinessLogic.Helpers;
+using WinParse.BusinessLogic.Models;
+using WinParse.DataParser.Enums;
 
-namespace FormulasCollection.Realizations
+namespace WinParse.BusinessLogic.Realizations
 {
     public class TwoOutComeForkFormulas
     {
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TwoOutComeCalculatorFormulas _calculatorFormulas;
         private readonly Dictionary<string, string> _pinKeyCache = new Dictionary<string, string>();
+
+        public static int CalculateSimilarity(string first, string second, DateTime dateFirst, DateTime dateSecond)
+        {
+            try
+            {
+                if (dateSecond.Year != dateFirst.Year || dateSecond.DayOfYear != dateFirst.DayOfYear)
+                    return 0;
+                Regex regex = new Regex("U|O^[A-Za-z]?\\d+");
+                if (regex.IsMatch(first) && !regex.IsMatch(second)
+                || !regex.IsMatch(first) && regex.IsMatch(second))
+                    return 0;
+                var source = first.ToLower();
+                var target = second.ToLower();
+                if ((source.Length == 0) || (target.Length == 0)) return 0;
+                if (source == target) return 200;
+                if (source.Contains(target) || target.Contains(source)) return 200;
+
+                var sourceSplit = source.Split(new[] { " - ", " v " }, StringSplitOptions.None);
+                var targetSplit = target.Split(new[] { " - ", " v ", " @ " }, StringSplitOptions.None);
+
+                var stepsToSameOne = ComputeLevenshteinDistance(sourceSplit[0], targetSplit[0]);
+                var stepsToSameTwo = ComputeLevenshteinDistance(sourceSplit[1], targetSplit[1]);
+                var one = stepsToSameOne / Math.Max(sourceSplit[0].Length, targetSplit[0].Length) * 100;
+                var two = stepsToSameTwo / Math.Max(sourceSplit[1].Length, targetSplit[1].Length) * 100;
+
+                var stepsToSameOneR = ComputeLevenshteinDistance(sourceSplit[1], targetSplit[0]);
+                var stepsToSameTwoR = ComputeLevenshteinDistance(sourceSplit[0], targetSplit[1]);
+                var oneR = stepsToSameOneR / Math.Max(sourceSplit[1].Length, targetSplit[0].Length) * 100;
+                var twoR = stepsToSameTwoR / Math.Max(sourceSplit[0].Length, targetSplit[1].Length) * 100;
+                return Math.Max(one + two, oneR + twoR);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private static int ComputeLevenshteinDistance(string source, string target)
+        {
+            if ((source == null) || (target == null)) return 0;
+            if ((source.Length == 0) || (target.Length == 0)) return 0;
+            if (source == target) return source.Length;
+            var i = 0;
+            var targetSplit = target.Split(' ');
+            var sourceSplit = source.Split(' ');
+            foreach (var first in sourceSplit)
+            {
+                foreach (var second in targetSplit)
+                {
+                    if (first.Contains(second))
+                    {
+                        i = i + second.Length;
+                    }
+                    else if (second.Contains(first))
+                    {
+                        i = i + first.Length;
+                    }
+                }
+            }
+            return i;
+        }
 
         public TwoOutComeForkFormulas()
         {
@@ -24,46 +88,37 @@ namespace FormulasCollection.Realizations
 
         public bool CheckIsFork(double? coef1, double? coef2, ResultForForks marEvent, ResultForForksDictionary pinEvent)
         {
+            if (marEvent.Event_RU.Contains("Манчестер Юнайтед") && marEvent.Event_RU.Contains("Халл Сити"))
+            {
+                int i = 0;
+            }
             if (coef1 == null || coef2 == null) return false;
 
-            return GetProfit(coef1.Value, coef2.Value) > 0;
+            return _calculatorFormulas.GetProfit(coef1.Value, coef2.Value) > 0;
         }
-
-        private double GetProfit(double coef1,
-            double coef2)
-        {
-            var defRate = 100d;
-            var rates = _calculatorFormulas.GetRecommendedRates(defRate, coef1, coef2);
-
-            var rate1 = Convert.ToDouble(rates.Item1);
-            var rate2 = Convert.ToDouble(rates.Item2);
-            var allRate = _calculatorFormulas.CalculateSummaryRate(rate1, rate2);
-            var income1 = Convert.ToDouble(_calculatorFormulas.CalculateRate(allRate, allRate - rate2, coef1));
-            var income2 = Convert.ToDouble(_calculatorFormulas.CalculateRate(allRate, allRate - rate1, coef2));
-            var income3 = Convert.ToDouble(_calculatorFormulas.CalculateClearRate(rate2, income1));
-            var income4 = Convert.ToDouble(_calculatorFormulas.CalculateClearRate(rate1, income2));
-            //todo delete this shit and refactored to one command
-            return Math.Round(Convert.ToDouble(_calculatorFormulas.CalculateSummaryIncome(income3,
-                income4)) - defRate,
-                2);
-        }
-
-        private bool CheckIsMustToBeRevert(string eventMarathon, string eventPinacle) =>
-           Extentions.GetStringSimilarityInPercent(eventMarathon.Split('#')[0],
-                eventPinacle.Split('#')[0], true) < 75
-            && Extentions.GetStringSimilarityInPercent(eventMarathon.Split('#')[1],
-                eventPinacle.Split('#')[1], true) < 75;
 
         public List<Fork> GetAllForksDictionary(Dictionary<string, ResultForForksDictionary> pinnacle,
             List<ResultForForks> marathon)
         {
-            var start = DateTime.Now;
             var resList = new List<Fork>();
+#if TestCoef
+            var alltypes = new List<string>();
+            foreach (var @event in marathon)
+            {
+                if (!alltypes.Contains(@event.Type))
+                    alltypes.Add(@event.Type);
+            }
+#endif
+#if TestNames
+            using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(@"D:\T2.txt"))
+            {
+#endif
             foreach (var eventItem in marathon)
             {
                 if (eventItem.Event == null) continue;
                 string pinKey = null;
-                if (_pinKeyCache.ContainsKey(eventItem.Event))
+                if (_pinKeyCache.ContainsKey(eventItem.Event) && pinnacle.ContainsKey(_pinKeyCache[eventItem.Event]))
                 {
                     pinKey = _pinKeyCache[eventItem.Event];
                 }
@@ -82,8 +137,21 @@ namespace FormulasCollection.Realizations
                                 ConvertToDateTimeFromMarathon(eventItem.MatchDateTime),
                                 pinEvent.Value.MatchDateTime)
                             >= 85)
-                            .Key;
-
+                            .Key
+                                 ?? pinnacle.FirstOrDefault(pinEvent =>
+                                     CalculateSimilarity(
+                                         eventItem.Event,
+                                         pinEvent.Key,
+                                         ConvertToDateTimeFromMarathon(eventItem.MatchDateTime),
+                                         pinEvent.Value.MatchDateTime)
+                                     >= 100)
+                                     .Key;
+#if TestNames
+                            if (pinKey != null)
+                            {
+                                file.WriteLine($"{eventItem.Event} => {pinKey}");
+                            }
+#endif
                     }
                     catch (Exception ex)
                     {
@@ -98,31 +166,33 @@ namespace FormulasCollection.Realizations
                     _pinKeyCache.Add(eventItem.Event, pinKey);
 
                 var pinnacleEvent = pinnacle[pinKey];
+
                 try
                 {
-                    var pinEventKey = IsAnyForkAll(eventItem, pinnacle[pinKey], eventItem.SportType.EnumParse<SportType>());
-                    if (pinEventKey == null) continue;
-                    if (pinEventKey.IsNotBlank())
+                    var pinEventKeys = IsAnyForkAll(eventItem, pinnacle[pinKey],
+                        eventItem.SportType.EnumParse<SportType>());
+                    if (pinEventKeys.Count == 0) continue;
+                    foreach (var pinEventKey in pinEventKeys)
                     {
                         //fork variable is created for debug, please don't refactor it into resList.Add function
                         var fork = new Fork
                         {
-                            League = eventItem.League,
+                            League = pinnacleEvent.LeagueName,
                             MarathonEventId = eventItem.EventId,
                             PinnacleEventId = pinnacleEvent.EventId,
                             Event = eventItem.Event,
                             TypeFirst = eventItem.Type,
                             CoefFirst = eventItem.Coef,
                             TypeSecond = pinEventKey.ToString(CultureInfo.InvariantCulture),
-                            CoefSecond = pinnacleEvent.TypeCoefDictionary[pinEventKey].ToString(CultureInfo.InvariantCulture),
+                            CoefSecond = pinnacleEvent.ForkDetailDictionary[pinEventKey].TypeCoef.ToString(CultureInfo.InvariantCulture),
                             Sport = eventItem.SportType,
-                            MatchDateTime = pinnacleEvent.MatchDateTime.ToString(CultureInfo.CurrentCulture),
+                            MatchDateTime = pinnacleEvent.MatchDateTime,
                             BookmakerSecond = pinKey,
                             BookmakerFirst = eventItem.Event_RU,
                             Type = ForkType.Current,
-                            LineId = pinnacleEvent.TypeLineIdDictionary[pinEventKey],
-                            Profit = GetProfit(Convert.ToDouble(eventItem.Coef),
-                                Convert.ToDouble(pinnacleEvent.TypeCoefDictionary[pinEventKey])),
+                            LineId = pinnacleEvent.ForkDetailDictionary[pinEventKey].LineId,
+                            Profit = _calculatorFormulas.GetProfit(Convert.ToDouble(eventItem.Coef),
+                                                                   Convert.ToDouble(pinnacleEvent.ForkDetailDictionary[pinEventKey].TypeCoef)),
                             sn = eventItem.marathonAutoPlay.sn,
                             mn = eventItem.marathonAutoPlay.mn,
                             ewc = eventItem.marathonAutoPlay.ewc,
@@ -131,7 +201,11 @@ namespace FormulasCollection.Realizations
                             ewf = eventItem.marathonAutoPlay.ewf,
                             epr = eventItem.marathonAutoPlay.epr,
                             prices = eventItem.marathonAutoPlay.prices,
-                            selection_key = eventItem.marathonAutoPlay.selection_key
+                            selection_key = eventItem.marathonAutoPlay.selection_key,
+                            Period = pinnacleEvent.ForkDetailDictionary[pinEventKey].Period,
+                            SideType = pinnacleEvent.ForkDetailDictionary[pinEventKey].SideType,
+                            TeamType = pinnacleEvent.ForkDetailDictionary[pinEventKey].TeamType,
+                            BetType = pinnacleEvent.ForkDetailDictionary[pinEventKey].BetType
                         };
                         resList.Add(fork);
                     }
@@ -142,9 +216,9 @@ namespace FormulasCollection.Realizations
                     _logger.Error(ex.StackTrace);
                 }
             }
-            var fd = marathon.FirstOrDefault();
-            if (fd != null)
-                _logger.Fatal($"{fd.SportType} {DateTime.Now - start}");
+#if TestNames
+            }
+#endif
             return resList;
         }
 
@@ -168,39 +242,51 @@ namespace FormulasCollection.Realizations
                 case "янв":
                     month = "01";
                     break;
+
                 case "фев":
                     month = "02";
                     break;
+
                 case "мар":
                     month = "03";
                     break;
+
                 case "апр":
                     month = "04";
                     break;
+
                 case "май":
                     month = "05";
                     break;
+
                 case "июн":
                     month = "06";
                     break;
+
                 case "июл":
                     month = "07";
                     break;
+
                 case "авг":
                     month = "08";
                     break;
+
                 case "сен":
                     month = "09";
                     break;
+
                 case "окт":
                     month = "10";
                     break;
+
                 case "ноя":
                     month = "11";
                     break;
+
                 case "дек":
                     month = "12";
                     break;
+
                 default:
                     month = matchDateTime.Substring(2, 3);
                     break;
@@ -216,49 +302,32 @@ namespace FormulasCollection.Realizations
                 CultureInfo.CurrentCulture);
         }
 
-        private void RevertValues(Dictionary<string, ResultForForksDictionary> pinnacle, string pinKey)
+        private List<string> IsAnyForkAll(ResultForForks marEvent, ResultForForksDictionary pinEvent, SportType st)
         {
-            var pin = pinnacle[pinKey];
-            var tmpDic = new Dictionary<string, double>();
-            foreach (var typeCoef in pin.TypeCoefDictionary)
-            {
-                if (typeCoef.Key == "1")
-                    tmpDic.Add("2", typeCoef.Value);
-                else if (typeCoef.Key == "2")
-                    tmpDic.Add("1", typeCoef.Value);
-                else if (typeCoef.Key.StartsWith("F1"))
-                    tmpDic.Add("F2" + typeCoef.Key.Remove(0, 2), typeCoef.Value);
-                else if (typeCoef.Key.StartsWith("F2"))
-                    tmpDic.Add("F1" + typeCoef.Key.Remove(0, 2), typeCoef.Value);
-                else
-                    tmpDic.Add(typeCoef.Key, typeCoef.Value);
-            }
-            pin.TypeCoefDictionary = tmpDic;
-        }
-
-        private string IsAnyForkAll(ResultForForks marEvent, ResultForForksDictionary pinEvent, SportType st)
-        {
+            var resList = new List<string>();
             try
             {
                 marEvent.Type = marEvent.Type.Trim();
-                var resType = SportsConverterTypes.TypeParseAll(marEvent.Type,
-                    st);
-                if (!pinEvent.TypeCoefDictionary.ContainsKey(resType))
-                    return null;
-                var isFork = CheckIsFork(marEvent.Coef.ConvertToDoubleOrNull(),
-                    pinEvent.TypeCoefDictionary[resType],
-                    marEvent,
-                    pinEvent);
-                return isFork
-                    ? resType
-                    : null;
+                var resTypes = SportsConverterTypes.TypeParseAll(marEvent.Type, st);
+                if (resTypes == null) return resList;
+                foreach (var resType in resTypes)
+                {
+                    if (!pinEvent.ForkDetailDictionary.ContainsKey(resType))
+                        continue;
+                    var isFork = CheckIsFork(marEvent.Coef.ConvertToDoubleOrNull(),
+                        pinEvent.ForkDetailDictionary[resType].TypeCoef,
+                        marEvent,
+                        pinEvent);
+                    if (isFork)
+                        resList.Add(resType);
+                }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex.Message);
                 _logger.Error(ex.StackTrace);
-                return null;
             }
+            return resList;
         }
     }
 }

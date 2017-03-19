@@ -1,19 +1,20 @@
-﻿using DataParser.Enums;
-using DataSaver.Models;
-using DataSaver.RavenDB;
-using FormulasCollection.Enums;
-using FormulasCollection.Models;
-using NLog;
+﻿using NLog;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Linq;
 using Raven.Json.Linq;
+using SiteAccess.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using WinParse.BusinessLogic.Enums;
+using WinParse.BusinessLogic.Models;
+using WinParse.DataParser.Enums;
+using WinParse.DataSaver.Models;
+using WinParse.DataSaver.RavenDB;
 
 namespace DataSaver
 {
@@ -36,7 +37,6 @@ namespace DataSaver
                 Conventions = { ShouldCacheRequest = url => false }
             };
             _store.Initialize();
-            //_store.DatabaseCommands.DisableAllCaching();
         }
 
         public void ClearDatabase()
@@ -55,10 +55,11 @@ namespace DataSaver
                 if (_session == null)
                 {
                     _session = _store.OpenSession();
+                    _session.Advanced.MaxNumberOfRequestsPerSession = int.MaxValue;
                 }
 
                 // ReSharper disable once InvertIf
-                if (_session.Advanced.NumberOfRequests ==
+                if (_session.Advanced.NumberOfRequests >=
                     _session.Advanced.MaxNumberOfRequestsPerSession)
                 {
                     _session.Dispose();
@@ -70,7 +71,8 @@ namespace DataSaver
 
         public void InsertForks(List<Fork> forkList)
         {
-            if (forkList == null) return;
+            if (forkList == null)
+                return;
 
             foreach (var fork in forkList)
             {
@@ -80,7 +82,8 @@ namespace DataSaver
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex.Message); _logger.Error(ex.StackTrace);
+                    _logger.Error(ex.Message);
+                    _logger.Error(ex.StackTrace);
                 }
             }
             Session.SaveChanges();
@@ -88,7 +91,8 @@ namespace DataSaver
 
         public void ClearAndInsertForks(List<Fork> forkList, SportType sportType)
         {
-            if (forkList == null || forkList.Count == 0) return;
+            if (forkList == null || forkList.Count == 0)
+                return;
 
             var rowsForDelete = MoveForks(forkList, sportType);
             ClearForks(rowsForDelete);
@@ -97,19 +101,22 @@ namespace DataSaver
 
         public List<ForkRow> MoveForks(List<Fork> forkList, SportType sportType)
         {
-            if (forkList == null || forkList.Count == 0) return new List<ForkRow>();
+            if (forkList == null || forkList.Count == 0)
+                return new List<ForkRow>();
 
             var savedForks = GetAllForkRows()
                 ?.ToList();
 
-            if (savedForks == null || savedForks.Count == 0) return new List<ForkRow>();
+            if (savedForks == null || savedForks.Count == 0)
+                return new List<ForkRow>();
 
             var rowsForDelete = savedForks.Where(fBase => fBase.Sport == sportType.ToString())
-                                          .ToList();
+                .ToList();
             foreach (var fBase in rowsForDelete.Where(f => f.Type == ForkType.Saved))
             {
                 var fork = forkList.FirstOrDefault(fNew => IsSameFork(fNew, fBase));
-                if (fork == null) continue;
+                if (fork == null)
+                    continue;
                 forkList.Remove(fork);
             }
             rowsForDelete.RemoveAll(f => f.Type == ForkType.Saved);
@@ -135,30 +142,20 @@ namespace DataSaver
             if (rowsForDelete == null || rowsForDelete.Count <= 0)
                 return;
             rowsForDelete.ForEach(f =>
-                    _store.DatabaseCommands.Delete(f.Id,
-                        null));
+                _store.DatabaseCommands.Delete(f.Id,
+                    null));
             rowsForDelete.Clear();
         }
 
         public IEnumerable<ForkRow> GetAllForkRows()
         {
-            var jsonList = new List<JsonDocument>();
+            var resList = new List<ForkRow>();
             using (_store.DatabaseCommands.DisableAllCaching())
             {
-                for (var i = 0;
-                    i <=
-                    Session.Query<ForkRow>().Customize(x => x.WaitForNonStaleResultsAsOfNow()).GetPageCount(PageSize);
-                    i += PageSize)
-                {
-                    jsonList.AddRange(_store.DatabaseCommands.GetDocuments(i, PageSize));
-                }
+                resList.AddRange(Session.Query<ForkRow>()
+                                        .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                                        .GetAllRecords(PageSize));
             }
-            jsonList.RemoveAll(json => !json.Key.Contains("ForkRows/"));
-
-            if (jsonList.Count == 0)
-                return new List<ForkRow>();
-
-            var resList = jsonList.Select(MapJsonDocumentToForkRow);
             return resList;
         }
 
@@ -170,11 +167,11 @@ namespace DataSaver
         public List<Fork> GetForks(Filter searchCriteria, ForkType forkType)
         {
             return GetAllForkRows().Where(f => f.Type == forkType &&
-                ((searchCriteria.Basketball && f.Sport == SportType.Basketball.ToString()) ||
-                (searchCriteria.Football && f.Sport == SportType.Soccer.ToString()) ||
-                (searchCriteria.Hockey && f.Sport == SportType.Hockey.ToString()) ||
-                (searchCriteria.Volleyball && f.Sport == SportType.Volleyball.ToString()) ||
-                (searchCriteria.Tennis && f.Sport == SportType.Tennis.ToString())))
+                                               ((searchCriteria.Basketball && f.Sport == SportType.Basketball.ToString()) ||
+                                                (searchCriteria.Football && f.Sport == SportType.Soccer.ToString()) ||
+                                                (searchCriteria.Hockey && f.Sport == SportType.Hockey.ToString()) ||
+                                                (searchCriteria.Volleyball && f.Sport == SportType.Volleyball.ToString()) ||
+                                                (searchCriteria.Tennis && f.Sport == SportType.Tennis.ToString())))
                 .Select(MapForkRowToFork).ToList();
         }
 
@@ -188,7 +185,15 @@ namespace DataSaver
         public void DeleteFork(ForkRow forkRow)
         {
             var forkDocument = Session.Load<ForkRow>(forkRow.Id);
-            Session.Delete(forkDocument);
+            try
+            {
+                Session.Delete(forkDocument);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                _logger.Error(ex.StackTrace);
+            }
             Session.SaveChanges();
         }
 
@@ -217,7 +222,7 @@ namespace DataSaver
                 CoefFirst = json.DataAsJson.Value<string>("CoefFirst"),
                 TypeSecond = json.DataAsJson.Value<string>("TypeSecond"),
                 CoefSecond = json.DataAsJson.Value<string>("CoefSecond"),
-                MatchDateTime = json.DataAsJson.Value<string>("MatchDateTime"),
+                MatchDateTime = json.DataAsJson.Value<DateTime>("MatchDateTime"),
                 BookmakerFirst = json.DataAsJson.Value<string>("BookmakerFirst"),
                 BookmakerSecond = json.DataAsJson.Value<string>("BookmakerSecond"),
                 MarathonEventId = json.DataAsJson.Value<string>("MarathonEventId"),
@@ -237,11 +242,16 @@ namespace DataSaver
                 MarRate = json.DataAsJson.Value<string>("MarRate"),
                 MarSuccess = json.DataAsJson.Value<string>("MarSuccess"),
                 PinRate = json.DataAsJson.Value<string>("PinRate"),
-                PinSuccess = json.DataAsJson.Value<string>("PinSuccess")
+                PinSuccess = json.DataAsJson.Value<string>("PinSuccess"),
+                Period = json.DataAsJson.Value<int>("Period"),
+                SideType = json.DataAsJson.Value<SideType>("SideType"),
+                TeamType = json.DataAsJson.Value<TeamType>("TeamType"),
+                BetType = json.DataAsJson.Value<BetType>("Period")
             };
             return result;
         }
-        protected User MapJsonDocumentToUsers(JsonDocument json)
+
+        protected User MapJsonDocumentToUser(JsonDocument json)
         {
             var result = new User
             {
@@ -251,6 +261,29 @@ namespace DataSaver
                 LoginMarathon = json.DataAsJson.Value<string>("LoginMarathon"),
                 PasswordMarathon = json.DataAsJson.Value<string>("PasswordMarathon"),
                 AntiGateCode = json.DataAsJson.Value<string>("AntiGateCode")
+            };
+            return result;
+        }
+
+        protected Filter MapJsonDocumentToFilter(JsonDocument json)
+        {
+            var result = new Filter
+            {
+                Id = json.Key,
+                MinPercent = json.DataAsJson.Value<decimal?>("MinPercent"),
+                MaxPercent = json.DataAsJson.Value<decimal?>("MaxPercent"),
+                MinRate = json.DataAsJson.Value<decimal?>("MinRate"),
+                MaxRate = json.DataAsJson.Value<decimal?>("MaxRate"),
+                Basketball = json.DataAsJson.Value<bool>("Basketball"),
+                Football = json.DataAsJson.Value<bool>("Football"),
+                Hockey = json.DataAsJson.Value<bool>("Hockey"),
+                LicenseKey = json.DataAsJson.Value<string>("LicenseKey"),
+                Tennis = json.DataAsJson.Value<bool>("Tennis"),
+                Volleyball = json.DataAsJson.Value<bool>("Volleyball"),
+                AutoUpdateTime = json.DataAsJson.Value<int?>("AutoUpdateTime"),
+                AutoDelete = json.DataAsJson.Value<bool>("AutoDelete"),
+                AutoDeleteTime = json.DataAsJson.Value<int?>("AutoDeleteTime"),
+                PinnaclePlace = json.DataAsJson.Value<bool>("PinnaclePlace")
             };
             return result;
         }
@@ -285,15 +318,18 @@ namespace DataSaver
                 prices = fork.prices,
                 selection_key = fork.selection_key,
 
-
                 MarRate = fork.MarRate,
                 PinRate = fork.PinRate,
                 MarSuccess = fork.MarSuccess,
-                PinSuccess = fork.PinSuccess
+                PinSuccess = fork.PinSuccess,
+
+                Period = fork.Period,
+                SideType = fork.SideType,
+                TeamType = fork.TeamType,
+                BetType = fork.BetType
             };
             return result;
         }
-
 
         protected Fork MapForkRowToFork(ForkRow forkRow)
         {
@@ -328,7 +364,12 @@ namespace DataSaver
                 MarRate = forkRow.MarRate,
                 PinRate = forkRow.PinRate,
                 MarSuccess = forkRow.MarSuccess,
-                PinSuccess = forkRow.PinSuccess
+                PinSuccess = forkRow.PinSuccess,
+
+                Period = forkRow.Period,
+                SideType = forkRow.SideType,
+                TeamType = forkRow.TeamType,
+                BetType = forkRow.BetType
             };
             return result;
         }
@@ -346,14 +387,38 @@ namespace DataSaver
             Session.SaveChanges();
         }
 
+        public void UpdateFilter(Filter filter)
+        {
+            var userDocument = Session.Load<Filter>(filter.Id);
+
+            userDocument.Basketball = filter.Basketball;
+            userDocument.MinPercent = filter.MinPercent;
+            userDocument.MaxPercent = filter.MaxPercent;
+            userDocument.MinRate = filter.MinRate;
+            userDocument.MaxRate = filter.MaxRate;
+            userDocument.Football = filter.Football;
+            userDocument.Hockey = filter.Hockey;
+            userDocument.LicenseKey = filter.LicenseKey;
+            userDocument.Tennis = filter.Tennis;
+            userDocument.Volleyball = filter.Volleyball;
+            userDocument.AutoUpdateTime = filter.AutoUpdateTime;
+            userDocument.AutoDelete = filter.AutoDelete;
+            userDocument.AutoUpdateTime = filter.AutoUpdateTime;
+            userDocument.AfterTime = filter.AfterTime;
+            userDocument.BeforeTime = filter.BeforeTime;
+            userDocument.PinnaclePlace = filter.PinnaclePlace;
+
+            Session.SaveChanges();
+        }
+
         /// <summary>
-        /// Add new User into Raven Db
+        /// Add new User into Raven Db 
         /// </summary>
-        /// <param name="loginPinnacle">User pinnacle login</param>
-        /// <param name="passwordPinnacle">User pinnacle password</param>
-        /// <param name="loginMarathon">User marathon login</param>
-        /// <param name="passwordMarathon">User marathon password</param>
-        /// <param name="antiGateCode">anticaptcha user private Id</param>
+        /// <param name="loginPinnacle"> User pinnacle login </param>
+        /// <param name="passwordPinnacle"> User pinnacle password </param>
+        /// <param name="loginMarathon"> User marathon login </param>
+        /// <param name="passwordMarathon"> User marathon password </param>
+        /// <param name="antiGateCode"> anticaptcha user private Id </param>
         /// <returns></returns>
         public bool AddUserToDb(string loginPinnacle,
             string passwordPinnacle,
@@ -398,23 +463,48 @@ namespace DataSaver
             return true;
         }
 
+        public bool AddFilterToDb(Filter filter)
+        {
+            try
+            {
+                Session.Store(filter);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                _logger.Error(ex.StackTrace);
+            }
+            Session.SaveChanges();
+            return true;
+        }
 
         public User FindUser()
         {
-            var jsonList = new List<JsonDocument>();
+            var resList = new List<User>();
             using (_store.DatabaseCommands.DisableAllCaching())
             {
-                for (var i = 0;
-                    i <=
-                    Session.Query<ForkRow>().Customize(x => x.WaitForNonStaleResultsAsOfNow()).GetPageCount(PageSize);
-                    i += PageSize)
-                {
-                    jsonList.AddRange(_store.DatabaseCommands.GetDocuments(i, PageSize));
-                }
+                resList.AddRange(Session.Query<User>()
+                                        .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                                        .GetAllRecords(PageSize));
             }
-            jsonList.RemoveAll(json => !json.Key.Contains("users/"));
-            var resList = jsonList.Select(MapJsonDocumentToUsers);
             return resList.FirstOrDefault();
+        }
+
+        public Filter FindFilter()
+        {
+            var resList = new List<Filter>();
+            using (_store.DatabaseCommands.DisableAllCaching())
+            {
+                resList.AddRange(Session.Query<Filter>()
+                                        .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                                        .GetAllRecords(PageSize));
+            }
+            var first = resList.FirstOrDefault();
+            if (first != null)
+                return first;
+
+            AddFilterToDb(new Filter());
+            return FindFilter();
         }
     }
 }

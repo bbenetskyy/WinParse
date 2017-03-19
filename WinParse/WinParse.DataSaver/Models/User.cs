@@ -1,4 +1,4 @@
-﻿namespace DataSaver.Models
+﻿namespace WinParse.DataSaver.Models
 {
     public class User
     {

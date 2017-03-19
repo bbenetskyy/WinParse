@@ -1,58 +1,29 @@
-﻿using DataParser.Enums;
-using FormulasCollection.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ToolsPortable;
+using WinParse.BusinessLogic.Models;
+using WinParse.DataParser.Enums;
 
-namespace FormulasCollection.Helpers
+namespace WinParse.BusinessLogic.Helpers
 {
-    public class SportsConverterTypes
+    public static class SportsConverterTypes
     {
-        public static string TypeParseAll(string typeEvent, SportType st)
+        public static List<string> TypeParseAll(string typeEvent, SportType st)
         {
             string typeEventTrim = typeEvent.Trim();
-            /*  if (typeEventTrim[0].Equals('F'))
-              {
-              string val = null;
-              try
-              {
-                  val = typeEventTrim.Split('(', ')')[1].ToString();
-              }
-              catch(Exception ex)
-              {
 
-                  val = null;
-              }
-              if (val == null) return null;
-                  return typeEventTrim[1].Equals('1')
-                  ? "F2(" + (val[0].Equals('-') ? val.Substring(1) : "-" + val.Substring(1)) + ")"
-                  : "F1(" + (val[0].Equals('-') ? val.Substring(1) : "-" + val.Substring(1)) + ")";
-              }
-              if (typeEventTrim[0].Equals('T'))
-              {
-              string val = null;
-              try
-              {
-                  val = typeEventTrim.Split('(', ')')[1].ToString();
-              }
-              catch(Exception ex)
-              {
-                  val = null;
-              }
-              if (val == null) return null;
-                  return typeEventTrim[1].Equals('U')
-                  ? "TO(" + val + ")"
-                  : "TU(" + val + ")";
-              }*/
             string typeCoefForPinnacle = string.Empty;
             string number = string.Empty;
             bool isTotal = false;
             bool isFora = false;
             if (typeEvent.Contains("TU"))
             {
-                typeEventTrim = "TU";
+                typeEventTrim = typeEvent.Split('(')[0];
                 isTotal = true;
             }
             else if (typeEvent.Contains("TO"))
             {
-                typeEventTrim = "TO";
+                typeEventTrim = typeEvent.Split('(')[0];
                 isTotal = true;
             }
             bool totalNum = typeEvent.Contains("(") && typeEvent.Contains(")");
@@ -63,12 +34,12 @@ namespace FormulasCollection.Helpers
 
             if (typeEvent.Contains("F1"))
             {
-                typeEventTrim = "F1";
+                typeEventTrim = typeEvent.Split('(')[0];
                 isFora = true;
             }
             else if (typeEvent.Contains("F2"))
             {
-                typeEventTrim = "F2";
+                typeEventTrim = typeEvent.Split('(')[0];
                 isFora = true;
             }
             if (isFora)
@@ -83,52 +54,122 @@ namespace FormulasCollection.Helpers
                 }
             }
 
-            if (SportTypes.TypeCoefsSoccer.ContainsKey(typeEventTrim) && st == SportType.Soccer)
+            if (st == SportType.Soccer && SportTypes.TypeCoefsSoccer.ContainsKey(typeEventTrim))
             {
                 if (isTotal || isFora)
                 {
-                    return SportTypes.TypeCoefsBasketBall[typeEventTrim] + "(" + number + ")";
+                    return CheckAsiatType(SportTypes.TypeCoefsSoccer[typeEventTrim] + "(" + number + ")");
                 }
                 else
-                    return SportTypes.TypeCoefsSoccer[typeEventTrim];
+                    return CheckAsiatType(SportTypes.TypeCoefsSoccer[typeEventTrim]);
             }
-            if (SportTypes.TypeCoefsTennis.ContainsKey(typeEventTrim) && st == SportType.Tennis)
+            if (st == SportType.Tennis && SportTypes.TypeCoefsTennis.ContainsKey(typeEventTrim))
             {
                 if (isTotal || isFora)
                 {
-                    return SportTypes.TypeCoefsBasketBall[typeEventTrim] + "(" + number + ")";
+                    return CheckAsiatType(SportTypes.TypeCoefsTennis[typeEventTrim] + "(" + number + ")");
                 }
                 else
-                    return SportTypes.TypeCoefsTennis[typeEventTrim];
+                    return CheckAsiatType(SportTypes.TypeCoefsTennis[typeEventTrim]);
             }
-            if (SportTypes.TypeCoefsBasketBall.ContainsKey(typeEventTrim) && st == SportType.Basketball)
+            if (st == SportType.Basketball && SportTypes.TypeCoefsBasketBall.ContainsKey(typeEventTrim))
             {
                 if (isTotal || isFora)
                 {
-                    return SportTypes.TypeCoefsBasketBall[typeEventTrim] + "(" + number + ")";
+                    return CheckAsiatType(SportTypes.TypeCoefsBasketBall[typeEventTrim] + "(" + number + ")");
                 }
                 else
-                    return SportTypes.TypeCoefsBasketBall[typeEventTrim];
+                    return CheckAsiatType(SportTypes.TypeCoefsBasketBall[typeEventTrim]);
             }
-            if (SportTypes.TypeCoefsHockey.ContainsKey(typeEventTrim) && st == SportType.Hockey)
+            if (st == SportType.Hockey && SportTypes.TypeCoefsHockey.ContainsKey(typeEventTrim))
             {
                 if (isTotal || isFora)
                 {
-                    return SportTypes.TypeCoefsBasketBall[typeEventTrim] + "(" + number + ")";
+                    return CheckAsiatType(SportTypes.TypeCoefsHockey[typeEventTrim] + "(" + number + ")");
                 }
                 else
-                    return SportTypes.TypeCoefsHockey[typeEventTrim];
+                    return CheckAsiatType(SportTypes.TypeCoefsHockey[typeEventTrim]);
             }
-            if (SportTypes.TypeCoefsVolleyBall.ContainsKey(typeEventTrim) && st == SportType.Volleyball)
+            if (st == SportType.Volleyball && SportTypes.TypeCoefsVolleyBall.ContainsKey(typeEventTrim))
             {
                 if (isTotal || isFora)
                 {
-                    return SportTypes.TypeCoefsBasketBall[typeEventTrim] + "(" + number + ")";
+                    return CheckAsiatType(SportTypes.TypeCoefsVolleyBall[typeEventTrim] + "(" + number + ")");
                 }
                 else
-                    return SportTypes.TypeCoefsVolleyBall[typeEventTrim];
+                    return CheckAsiatType(SportTypes.TypeCoefsVolleyBall[typeEventTrim]);
             }
-            return string.Empty;
+            return null;
+        }
+
+        public static List<string> CheckAsiatType(string _type)
+        {
+            // перевірити азіатскі типи на баскетбол const double delta = 0.25;
+
+            List<string> result = new List<string>();
+            result.Add(_type);
+            /*string znak = string.Empty;
+
+            if (!(_type.Contains("(") && _type.Contains(")")))
+                return result;
+            string name = _type.Split('(', ')')[0];
+            string number = _type.Split('(', ')')[1];
+            if (!string.IsNullOrEmpty(number) && number.Contains("+") || number.Contains("-"))
+            {
+                znak = number[0].ToString();
+                number = number.Substring(1);
+            }
+            if (!string.IsNullOrEmpty(number))
+            {
+                double num = number.ConvertToDoubleOrNull() ?? 0;
+                double num1 = num - delta;
+                double num2 = num + delta;
+
+                string val1 = name.Trim() + "(" + (num1 == 0 ? "" : znak) + num1.ToString() + ")";
+                string val2 = name.Trim() + "(" + (num1 == 0 ? "" : znak) + num2.ToString() + ")";
+                result.Add(val1);
+                result.Add(val2);
+            }*/
+            return result;
+        }
+
+        public static string MinimalizeValue(this string typeValue)
+        {
+            if (typeValue.IsBlank()) return typeValue;
+            if (!typeValue.Contains(".")) return typeValue;
+            if (typeValue.IndexOf('.') == typeValue.Length) return typeValue;
+            if (typeValue[typeValue.IndexOf('.') + 1] == '0')
+            {
+                var firstpart = typeValue.Remove(typeValue.IndexOf('.'));
+                var secondpart = typeValue.Split('0').Last();
+                return firstpart + secondpart;
+            }
+            else
+            {
+                var firstpart = typeValue.Remove(typeValue.IndexOf('.') + 1);
+                var secondpart = typeValue.Split('.').Last().Replace("0", string.Empty);
+                return firstpart + secondpart;
+            }
+        }
+
+        public static string InvertValue(this string typeValue)
+        {
+            if (typeValue.IsBlank()) return typeValue;
+
+            var intValue = typeValue.ConvertToIntOrNull();
+            if (intValue != null && intValue.Value == 0)
+                return typeValue;
+
+            return typeValue.StartsWith("-")
+                ? typeValue.TrimStart('-')
+                : "-" + typeValue;
+        }
+
+        public static string LocalizeToMarathon(this string typeValue)
+        {
+            return typeValue.StartsWith("-")
+                ? typeValue
+                : "+" + typeValue.TrimStart('-');
         }
     }
 }

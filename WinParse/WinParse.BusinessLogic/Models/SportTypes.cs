@@ -1,8 +1,6 @@
-﻿using DataParser.Enums;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace FormulasCollection.Models
+namespace WinParse.BusinessLogic.Models
 {
     public static class SportTypes
     {
@@ -18,11 +16,11 @@ namespace FormulasCollection.Models
         public static Dictionary<string, string> TypeCoefsHockey => CoefsHockey;
         public static Dictionary<string, string> TypeCoefsVolleyBall => CoefsVolleyBall;
 
-
         static SportTypes()
         {
             initCoefsAll();
         }
+
         private static void initCoefsAll()
         {
             CoefsSoccer = new Dictionary<string, string>
@@ -35,8 +33,14 @@ namespace FormulasCollection.Models
                 { "X", "12"},
                 { "TO","TU"},
                 {"TU","TO" },
+                { "TTO", "TTU" },
+                { "TTU", "TTO" },
                 {"F1","F2"},
-                {"F2","F1"}
+                {"F2","F1"},
+                { "TF1U", "TF1O"},
+                { "TF2U", "TF2O"},
+                { "TF1O", "TF1U"},
+                { "TF2O", "TF2U"}
             };
             CoefsTennis = new Dictionary<string, string>
             {
@@ -45,16 +49,30 @@ namespace FormulasCollection.Models
                 { "TO","TU"},
                 {"TU","TO" },
                 {"F1","F2"},
-                {"F2","F1"}
+                {"F2","F1"},
+                {"TSO","TSU" },
+                {"TSU","TSO" },
+                {"TGO","TGU" },
+                {"TGU","TGO" },
+                { "TF1U", "TF1O"},
+                { "TF2U", "TF2O"},
+                { "TF1O", "TF1U"},
+                { "TF2O", "TF2U"}
             };
             CoefsBasketBall = new Dictionary<string, string>
             {
-                { "1","2"},
-                { "2","1"},
-                { "TO","TU"},
+                {"1","2"},
+                {"2","1"},
+                {"TO","TU"},
                 {"TU","TO" },
                 {"F1","F2"},
-                {"F2","F1"}
+                {"F2","F1"},
+                { "TPTO","TPTU" },
+                { "TPTU","TPTO" },
+                { "TF1U", "TF1O"},
+                { "TF2U", "TF2O"},
+                { "TF1O", "TF1U"},
+                { "TF2O", "TF2U"}
             };
             CoefsHockey = new Dictionary<string, string>
             {
@@ -67,7 +85,13 @@ namespace FormulasCollection.Models
                 { "TO","TU"},
                 {"TU","TO" },
                 {"F1","F2"},
-                {"F2","F1"}
+                {"F2","F1"},
+                { "TPRO","TPRU" },
+                { "TPRU","TPRO" },
+                { "TF1U", "TF1O"},
+                { "TF2U", "TF2O"},
+                { "TF1O", "TF1U"},
+                { "TF2O", "TF2U"}
             };
             CoefsVolleyBall = new Dictionary<string, string>
             {
@@ -76,9 +100,12 @@ namespace FormulasCollection.Models
                 {"TO","TU"},
                 {"TU","TO"},
                 {"F1","F2"},
-                {"F2","F1"}
+                {"F2","F1"},
+                { "TF1U", "TF1O"},
+                { "TF2U", "TF2O"},
+                { "TF1O", "TF1U"},
+                { "TF2O", "TF2U"}
             };
         }
-
     }
 }

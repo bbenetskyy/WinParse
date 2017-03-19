@@ -1,7 +1,9 @@
-﻿using FormulasCollection.Enums;
+﻿using SiteAccess.Enums;
+using System;
 using System.Collections.Generic;
+using WinParse.BusinessLogic.Enums;
 
-namespace DataSaver.Models
+namespace WinParse.DataSaver.Models
 {
     /// <summary>
     ///Represents strongly named DataRow class.
@@ -9,78 +11,77 @@ namespace DataSaver.Models
     public class ForkRow
     {
         /// <summary>
-        /// Id stored in DB, ONLY auto increment so please NOT fill it
+        /// Id stored in DB, ONLY auto increment so please NOT fill it 
         /// </summary>
         public string Id { get; set; }
 
         /// <summary>
-        /// Sport Type
+        /// Sport Type 
         /// </summary>
         public string Sport { get; set; }
 
         /// <summary>
-        /// Default place for Team Names, time of match and other details
+        /// Default place for Team Names, time of match and other details 
         /// </summary>
         public string Event { get; set; }
 
         /// <summary>
-        /// Details for first type of Fork
+        /// Details for first type of Fork 
         /// </summary>
         public string TypeFirst { get; set; }
 
         /// <summary>
-        /// Value for first coef of Fork
+        /// Value for first coef of Fork 
         /// </summary>
         public string CoefFirst { get; set; }
 
         /// <summary>
-        /// Details for second type of Fork
+        /// Details for second type of Fork 
         /// </summary>
         public string TypeSecond { get; set; }
 
         /// <summary>
-        /// Value for second coef of Fork
+        /// Value for second coef of Fork 
         /// </summary>
         public string CoefSecond { get; set; }
 
         /// <summary>
-        /// Game time
+        /// Game time 
         /// </summary>
-        public string MatchDateTime { get; set; }
+        public DateTime? MatchDateTime { get; set; }
 
         /// <summary>
-        /// First Bookmaker Name
+        /// First Bookmaker Name 
         /// </summary>
         public string BookmakerFirst { get; set; }
 
         /// <summary>
-        /// Second Bookmaker Name
+        /// Second Bookmaker Name 
         /// </summary>
         public string BookmakerSecond { get; set; }
 
         /// <summary>
-        ///  Event Id for Pinnacle search from Marathon
+        /// Event Id for Pinnacle search from Marathon 
         /// </summary>
         public string MarathonEventId { get; set; }
 
         /// <summary>
-        /// Event Id for Pinnacle search from Pinnacle
+        /// Event Id for Pinnacle search from Pinnacle 
         /// </summary>
         public string PinnacleEventId { get; set; }
 
         /// <summary>
-        /// League of game
+        /// League of game 
         /// </summary>
         public string League { get; set; }
 
         /// <summary>
-        /// Type of Fork
+        /// Type of Fork 
         /// </summary>
         public ForkType Type { get; set; }
 
-
         /// <summary>
-        /// Id of event for placing bet in Pinnacle
+        /// Id of event for placing bet in Pinnacle 
         /// </summary>
         public string LineId { get; set; }
 
@@ -109,5 +110,13 @@ namespace DataSaver.Models
         public string MarSuccess { get; set; }
 
         public string PinSuccess { get; set; }
+
+        public SideType? SideType { get; set; }
+
+        public TeamType? TeamType { get; set; }
+
+        public int Period { get; set; }
+
+        public BetType BetType { get; set; }
     }
 }

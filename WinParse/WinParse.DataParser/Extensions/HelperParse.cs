@@ -1,7 +1,9 @@
-﻿using FormulasCollection.Models;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
+using WinParse.BusinessLogic.Models;
 
-namespace DataParser.Extensions
+namespace WinParse.DataParser.Extensions
 {
     public static class HelperParse
     {
@@ -34,13 +36,13 @@ namespace DataParser.Extensions
                 {
                     isFinish = true;
                     result += (date && !result.Contains("/2016")) ? "/2016 " : "";
-
                 }
                 if (isFinish && !date)
                     return result;
             }
             return !date ? "" : result;
         }
+
         public static string GetAttribut2(this string line)
         {
             string res = string.Empty;
@@ -56,8 +58,9 @@ namespace DataParser.Extensions
                 }
             }
 
-            return res.Replace(" ","");
+            return res.Replace(" ", "");
         }
+
         public static string getValueWithoutStartTags(this string line)
         {
             string result = string.Empty;
@@ -85,6 +88,7 @@ namespace DataParser.Extensions
             eventid = line.Substring(0, line.IndexOf("\""));
             return eventid;
         }
+
         public static string TagsContent(this string line, string nameTag)
         {
             string findTag = "";
@@ -114,8 +118,6 @@ namespace DataParser.Extensions
                 }
             }
             return result;
-
-
         }
 
         public static string TagsContent2(this string line, string nameTag)
@@ -147,8 +149,6 @@ namespace DataParser.Extensions
                 }
             }
             return result;
-
-
         }
 
         public static bool CheckFullData(this DataMarathonForAutoPlays obj)
@@ -165,6 +165,7 @@ namespace DataParser.Extensions
                    obj.selection_key != null &&
                    obj.sn != null;
         }
+
         public static string EventToString(this ResultForForks ev)
         {
             StringBuilder sb = new StringBuilder();
@@ -193,23 +194,17 @@ namespace DataParser.Extensions
             }
             else sb.Append("   Coef:  " + "NULL");
 
-
             if (!string.IsNullOrEmpty(ev.MatchDateTime))
             {
                 sb.Append("   MatchDateTime:  " + ev.MatchDateTime);
             }
             else sb.Append("   MatchDateTime:  " + "NULL");
 
-
-
-
-
             if (!string.IsNullOrEmpty(ev.EventId))
             {
                 sb.Append("   EventId:  " + ev.EventId);
             }
             else sb.Append("   EventId:  " + "NULL");
-
 
             if (!string.IsNullOrEmpty(ev.League))
             {
@@ -225,6 +220,7 @@ namespace DataParser.Extensions
 
             return sb.ToString();
         }
+
         public static bool isFullData(this ResultForForks team)
         {
             if (team == null) return false;
@@ -241,6 +237,7 @@ namespace DataParser.Extensions
                       && team.marathonAutoPlay.CheckFullData();
             }
         }
+
         public static bool Validate(this ResultForForks team)
         {
             if (team == null) return false;
@@ -249,9 +246,43 @@ namespace DataParser.Extensions
                 return !string.IsNullOrEmpty(team.EventId)
                      && !string.IsNullOrEmpty(team.MatchDateTime)
                      && team.marathonAutoPlay.CheckFullData();
-                     //&& team.AllCoef != null;
+                //&& team.AllCoef != null;
             }
         }
 
+        public static int GetKeyContainsDictionaryValue(this Dictionary<string, string> teams, string line)
+        {
+            int num = -1;
+            foreach (var team in teams)
+            {
+                if (line.Contains(team.Value))
+                {
+                    num = Convert.ToInt32(team.Key);
+                }
+            }
+            return num;
+        }
+
+        public static string GetNumberWithTotal(this string line)
+        {
+            string result = string.Empty;
+            bool start = false;
+            foreach (char l in line)
+            {
+                if (l.ToString().Equals("@"))
+                    start = true;
+                if (start)
+                {
+                    int number;
+                    bool check = Int32.TryParse(l.ToString(), out number);
+                    if (check)
+                    {
+                        result += number.ToString();
+                        return result;
+                    }
+                }
+            }
+            return result;
+        }
     }
 }

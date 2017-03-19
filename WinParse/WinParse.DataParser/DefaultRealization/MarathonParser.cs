@@ -1,8 +1,4 @@
-﻿
-using DataParser.Enums;
-using DataParser.Extensions;
-using DataParser.Models;
-using FormulasCollection.Models;
+﻿using WinParse.DataParser.Extensions;
 using NLog;
 using OpenQA.Selenium;
 using OpenQA.Selenium.PhantomJS;
@@ -10,38 +6,42 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Json;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using WinParse.BusinessLogic.Models;
+using WinParse.DataParser.Models;
+using WinParse.DataParser.Enums;
 
-namespace DataParser.DefaultRealization
+namespace WinParse.DataParser.DefaultRealization
 {
     public class MarathonParser
     {
         #region [Public field]
         public List<ResultForForks> result;
         public List<ResultForForks> newResult;
-        #endregion
+        #endregion [Public field]
 
         #region [Private field]
         private Dictionary<string, EnglishNameTeams> englishNameTeams_Dictionary;
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private PhantomJSDriver _driver;
-        OpenQA.Selenium.Firefox.FirefoxDriver firefox;
+        private OpenQA.Selenium.Firefox.FirefoxDriver firefox;
         private string isClick_IdEvent = ".";
         private string RefreshPage = "";
 
-
-
         private List<string> errorReadEvent = null;
-        #endregion
+        #endregion [Private field]
 
         #region[Static field]
         public static List<ResultForForks> winik = new List<ResultForForks>();
         #endregion
 
         #region [Constructors]
+
         public MarathonParser()
         {
             #region Selenium
@@ -60,7 +60,7 @@ namespace DataParser.DefaultRealization
                          firefox.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromMinutes(35));*/
 
             /*
-             var driverService = PhantomJSDriverService.CreateDefaultService(); 
+             var driverService = PhantomJSDriverService.CreateDefaultService();
              _driver = new PhantomJSDriver();
              _driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromMinutes(35));
              _driver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.FromMinutes(35));
@@ -75,8 +75,8 @@ namespace DataParser.DefaultRealization
 
         public MarathonParser(SportType sportType)
         {
-
         }
+
         #endregion
 
         #region [Initi]
@@ -107,20 +107,22 @@ namespace DataParser.DefaultRealization
             var ids = englishTeams.Keys.ToList();
 
             var tasks = new Task<List<ResultForForks>>[ids.Count];
+            //var tasks = new List<ResultForForks>();
             var idCounter = 0;
 
             for (var index = 0; index < ids.Count; index++)
             {
-                // ReSharper disable once AccessToModifiedClosure
+                //ReSharper disable once AccessToModifiedClosure
                 tasks[index] = Task.Factory.StartNew(() => LoadEvent(ids[idCounter++], sportType, englishTeams, russianTeams));
+                //tasks = LoadEvent(ids[idCounter++], sportType, englishTeams, russianTeams);
             }
             Task.WaitAll(tasks);
             foreach (var task in tasks)
             {
                 if (task.Result != null)
                     result.AddRange(task.Result);
+                //result.Add(task);
             }
-
 
             return result;
         }
@@ -128,6 +130,7 @@ namespace DataParser.DefaultRealization
         #endregion
 
         #region [Load Event for ID]
+
         public List<ResultForForks> LoadEvent(string eventID, SportType sportType, Dictionary<string, EnglishNameTeams> englishNameTeams_Dictionary, Dictionary<string, EnglishNameTeams> russianNameTeams_Dictionary)
         {
             ResultForForks teamToAdd = null;
@@ -142,7 +145,6 @@ namespace DataParser.DefaultRealization
             if (englishNameTeams_Dictionary.ContainsKey(teamToAdd.EventId))
             {
                 teamToAdd.Event = englishNameTeams_Dictionary[teamToAdd.EventId].name1 + " - " + englishNameTeams_Dictionary[teamToAdd.EventId].name2;
-                // teamToAdd.Event_RU = russianNameTeams_Dictionary[teamToAdd.EventId].name1 + " - " + russianNameTeams_Dictionary[teamToAdd.EventId].name2;
                 teamToAdd.Event_RU = russianNameTeams_Dictionary[teamToAdd.EventId].eventRU;
             }
             else
@@ -159,76 +161,7 @@ namespace DataParser.DefaultRealization
             }
             return resEvent;
         }
-        public Dictionary<string,string> LoadID(SportType sportType)
-        {
-            Dictionary<string, string> ListIDforSelectedSport = new Dictionary<string, string>();
-            //string
-            string url = string.Empty;
-            string namefile = string.Empty;
-            //string selectedEvent = string.Empty;
-            string eventid = string.Empty;
-            string _teamName = string.Empty;
-            //string totalOrFora = string.Empty;
 
-            //bool
-            bool isEventID = false;
-            bool isTeamName = false;
-
-
-            UrlAndNameFile(sportType, out url, out namefile);
-            string gotHtml = Html(url);
-            string[] lines = gotHtml.Split('\n');
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                if (lines[i].Contains(">Итоги<") || lines[i].Contains(">Итоги.<"))
-                    break;
-                if (lines[i]._Contains(MarathonTags.mainTagForEvent, MarathonTags.newEventID))
-                {
-                    isEventID = true;
-                }
-                if (lines[i].Contains(MarathonTags.newTeamName))
-                {
-                    isTeamName = true;
-                }
-                if (isEventID)
-                {
-                    string eventID = lines[i].GetEventID();
-                    try
-                    {
-                        //ListIDforSelectedSport.Add(eventID);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.Error("GetNameTeamsAndDateAsync(SportType sportType)\n\n\n if(isEventID) :" + eventID + "\n\n\n i = " + i + "\n\n\n\n" + e.Message + "\n\n\n\n\n" + e.StackTrace);
-                    }
-                    isEventID = false;
-                    eventid = eventID;
-
-                }
-                if (isTeamName)
-                {
-
-                    if (string.IsNullOrEmpty(_teamName))
-                    {
-                        var teamName = lines[i].GetAttribut();
-                        _teamName = teamName.Trim(' ');
-                    }
-                    else
-                    {
-                        i++;
-                        var teamName = lines[i].GetAttribut();
-                        _teamName += " - " + teamName.Trim(' ');
-                        isTeamName = false;
-                    }
-                }
-                if(!isTeamName && !string.IsNullOrEmpty(_teamName) && !isEventID && !string.IsNullOrEmpty(eventid))
-                {
-                    ListIDforSelectedSport[eventid] = _teamName;
-                }
-            }
-            return ListIDforSelectedSport;
-        }
         #endregion
 
         #region [Parse]
@@ -242,7 +175,6 @@ namespace DataParser.DefaultRealization
             //List<string>
             List<string> list_coeffType = new List<string>();
 
-
             //string
             string url = string.Empty;
             string namefile = string.Empty;
@@ -255,7 +187,6 @@ namespace DataParser.DefaultRealization
 
             DataMarathonForAutoPlays obj = new DataMarathonForAutoPlays();
             List<ResultForForks> resEvent = null;
-
 
             UrlAndNameFile(sportType, out url, out namefile);
             string gotHtml = Html(url);
@@ -295,11 +226,9 @@ namespace DataParser.DefaultRealization
                     }
                     isEventID = false;
                     eventid = eventID;
-
                 }
                 if (resEvent != null)
                 {
-
                     ResultForForks newTseamToAdd = teamToAdd;
                     result.AddRange(resEvent);
                     //result.Add(newTseamToAdd);
@@ -312,7 +241,6 @@ namespace DataParser.DefaultRealization
                     {
                         errorReadEvent.Add(sportType.ToString() + " - " + eventid.ToString());
                     }
-
                 }
             }
             try
@@ -325,6 +253,7 @@ namespace DataParser.DefaultRealization
             }
             return result;
         }
+
         private List<ResultForForks> GetNameTeamsAndDateAsync2(SportType sportType)
         {
             result.Clear();
@@ -361,8 +290,6 @@ namespace DataParser.DefaultRealization
             bool isLigue = false;
 
             DataMarathonForAutoPlays obj = new DataMarathonForAutoPlays();
-
-
 
             UrlAndNameFile(sportType, out url, out namefile);
             string gotHtml = Html(url);
@@ -418,7 +345,6 @@ namespace DataParser.DefaultRealization
                         isTotal = true;
                     }
 
-
                     //Parse
                     if (isTypeCoff)
                     {
@@ -439,7 +365,6 @@ namespace DataParser.DefaultRealization
                             else
                             {
                                 typeCoeff = lines[i].Contains("Меньше") ? "TU" : (lines[i].Contains("Больше") ? "TO" : "NOForaNOTotal");
-
                             }
                             typeCoeff = typeCoeff.Replace(" ", "");
                             if (!string.IsNullOrEmpty(typeCoeff))
@@ -456,7 +381,6 @@ namespace DataParser.DefaultRealization
                         }
                     }
 
-
                     if (isEventID)
                     {
                         string eventID = lines[i].GetEventID();
@@ -471,12 +395,10 @@ namespace DataParser.DefaultRealization
                         isTypeCoff = false;
                         isEventID = false;
                         eventid = eventID;
-
                     }
 
                     /*if (isTeamName)
                     {
-                        
                         if (string.IsNullOrEmpty(teamToAdd.Event))
                         {
                             var teamName = lines[i].GetAttribut();
@@ -509,7 +431,6 @@ namespace DataParser.DefaultRealization
                             teamToAdd.marathonAutoPlay = obj;
                             isSelectionKey = false;
                         }
-
                     }
                     if (isValueCoef)
                     {
@@ -584,15 +505,6 @@ namespace DataParser.DefaultRealization
                 }
                 catch (Exception e)
                 {
-                    /* if (!File.Exists("log.txt"))
-                     {
-                         File.Create("log.txt");
-                     }
-                     using (StreamWriter sw = new StreamWriter("log.txt", true))
-                     {
-                         sw.WriteLine("EXCEPTION: " + teamToAdd.EventToString());
-                         sw.Close();
-                     }*/
                     _logger.Error(e.StackTrace + "/n" + e.Message);
                 }
             }
@@ -603,6 +515,10 @@ namespace DataParser.DefaultRealization
         {
             //https://www.marathonbet.com/su/events.htm?id=4563829
 
+            if (event_id == "4955689" || event_id == "5037190")
+            {
+                int ufi = 0;
+            }
             string reURL = "https://www.marathonbet.com/su/events.htm?id=" + event_id;
             string html = Html(reURL);
             //WriteToDocument(html);
@@ -633,7 +549,6 @@ namespace DataParser.DefaultRealization
 
                         if (nameTeams.Count >= 2)
                         {
-
                             bool ifExistsID = result.Find(x => x.EventId.Equals(event_id)) != null;
                             bool ifExists = result.Find(x => x.Event.Equals(teamName)) != null;
                             var findTeams = ifExists ? result.Find(x => x.Event.Equals(teamName)).Event : string.Empty;
@@ -679,17 +594,29 @@ namespace DataParser.DefaultRealization
                         else if (lines[i].Contains(Tags_DataMarathonForAutoPlays.data_selection_key))
                         {
                             obj = ParseForAutoPlay(lines[i], Tags_DataMarathonForAutoPlays.data_selection_key, obj);
-                            list.Add(obj);
+                            if (obj.cid != null)
+                            {
+                                if (obj.sn.ToLower().Contains("азиат") || obj.mn.ToLower().Contains("азиат"))
+                                {
+                                    obj = RecreateAsiatEvent(obj).FirstOrDefault();
+                                    list.Add(obj);
+                                }
+                                else
+                                {
+                                    list.Add(obj);
+                                }
+                            }
                             teamToAdd.marathonAutoPlay = obj;
                             obj = new DataMarathonForAutoPlays();
                             isSelectionKey = false;
                         }
-
                     }
                 }
                 catch (Exception e)
                 {
                     _logger.Error("Error in FullParse(string event_id)!!" + "\n\n\n");
+                    _logger.Error(e.Message);
+                    _logger.Error(e.StackTrace);
                 }
             }
             if (sportType.ToString().Equals(SportType.Volleyball.ToString()))
@@ -698,7 +625,11 @@ namespace DataParser.DefaultRealization
             }
             else
             {
-                CreateEvent(list, ref eventCoefList, nameTeams, event_id);
+                CreateEvent(list, ref eventCoefList, nameTeams, event_id, sportType);
+            }
+            if (teamToAdd.Event_RU.Contains("Манчестер Юнайтед") && teamToAdd.Event_RU.Contains("Халл Сити"))
+            {
+                int i = 0;
             }
             eventCoefList.EventId = teamToAdd.EventId;
             eventCoefList.Event = teamToAdd.Event;
@@ -710,12 +641,89 @@ namespace DataParser.DefaultRealization
 
             return ConvertWith_MarathonEvent_To_ListResultForForks(eventCoefList);
         }
-        List<string> dictionary = new List<string>() {
+
+        private List<DataMarathonForAutoPlays> RecreateAsiatEvent(DataMarathonForAutoPlays obj)
+        {
+            List<DataMarathonForAutoPlays> result = new List<DataMarathonForAutoPlays>();
+            string sn = string.Empty;
+            sn = obj.sn;
+            char _znak1 = default(char);
+            char _znak2 = default(char);
+            double _num1 = default(double);
+            double _num2 = default(double);
+            string newSN1 = string.Empty;
+            string newSN2 = string.Empty;
+            string newSN3 = string.Empty;
+            string _name = string.Empty;
+            bool isTotal = !(obj.sn.Contains("(") && obj.sn.Contains(")"));
+            try
+            {
+                string[] midleSN = isTotal ? obj.sn.Split(' ')[1].Split(',') : obj.sn.Split('(', ')')[1].Split(',');
+
+                if (!isTotal && (midleSN[0].Contains('-') || midleSN[0].Contains('+')))
+                    _znak1 = midleSN[0][0];
+                if (!isTotal && midleSN[1].Contains('-') || midleSN[1].Contains('+'))
+                    _znak2 = midleSN[1][0];
+
+                if (_znak1 != default(char))
+                    _num1 = Convert.ToDouble(midleSN[0].Substring(1));
+                else
+                    _num1 = Convert.ToDouble(midleSN[0]);
+                if (_znak2 != default(char))
+                    _num2 = Convert.ToDouble(midleSN[1].Substring(1));
+                else
+                    _num2 = Convert.ToDouble(midleSN[1]);
+                _name = isTotal ? obj.sn.Split(' ')[0].Trim() : obj.sn.Split('(', ')')[0].Trim();
+
+                char resZnak = _znak1 != default(char) ? _znak1 : _znak2;
+                if (_name.Contains(";"))
+                {
+                    int index = _name.IndexOf(";");
+                    _name = _name.Substring(index + 1);
+                }
+                if (isTotal)
+                {
+                    //newSN1 = _name + " " + _num1.ToString();
+                    //newSN2 = _name + " " + _num2.ToString();
+                    newSN3 = _name + " " + ((_num1 + _num2) / 2).ToString();
+                }
+                else
+                {
+                    //newSN1 = _name + "(" + _znak1.ToString() + _num1.ToString() + ")";
+                    //newSN2 = _name + "(" + _znak2.ToString() + _num2.ToString() + ")";
+                    newSN3 = _name + "(" + resZnak.ToString() + ((_num1 + _num2) / 2).ToString() + ")";
+                }
+
+                string mn = obj.mn;
+                string ewc = obj.ewc;
+                string cid = obj.cid;
+                string prt = obj.prt;
+                string ewf = obj.ewf;
+                string epr = obj.epr;
+                List<string> prices = obj.prices;
+                string selection_key = obj.selection_key;
+
+                // result.Add(new DataMarathonForAutoPlays() { mn = mn, ewc = ewc, cid = cid, prt = prt, ewf = ewf, epr =
+                // epr, prices = prices, selection_key = selection_key, sn = newSN1 }); result.Add(new
+                // DataMarathonForAutoPlays() { mn = mn, ewc = ewc, cid = cid, prt = prt, ewf = ewf, epr = epr, prices =
+                // prices, selection_key = selection_key, sn = newSN2 });
+                result.Add(new DataMarathonForAutoPlays() { mn = mn, ewc = ewc, cid = cid, prt = prt, ewf = ewf, epr = epr, prices = prices, selection_key = selection_key, sn = newSN3, isAsiat = true });
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+                _logger.Error(e.StackTrace);
+            }
+            return result;
+        }
+
+        private List<string> dictionary = new List<string>() {
             "Победитель матча",
             "Победа с учетом форы",
             "Тотал очков"
         };
-        private void CreateEvent(List<DataMarathonForAutoPlays> list, ref MarathonEvent teamToAdd, Dictionary<string, string> nameTeams, string eventID)
+
+        private void CreateEvent(List<DataMarathonForAutoPlays> list, ref MarathonEvent teamToAdd, Dictionary<string, string> nameTeams, string eventID, SportType sportType)
         {
             Dictionary<string, string> mainCoef = new Dictionary<string, string>();
             List<EventForAutoPlay> Coef = new List<EventForAutoPlay>();
@@ -728,9 +736,12 @@ namespace DataParser.DefaultRealization
                 {
                     if (list[i].CheckFullData())
                     {
-                        switch (list[i].mn)
+                        //switch (list[i].mn.ToLower())
+                        //{
+                        if (CheckWithoutTags(list[i].mn.ToLower()) && CheckWithoutTags(list[i].selection_key))
                         {
-                            case "Победитель матча":
+                            if (list[i].mn.ToLower().Contains("победитель матча"))
+                            {
                                 if (list[i].sn.Equals(nameTeams["1"]))
                                 {
                                     if (!mainCoef.ContainsKey("1"))
@@ -750,8 +761,9 @@ namespace DataParser.DefaultRealization
                                     }
                                 }
                                 //else_logger.Error(l.sn + " - " + l.epr);
-                                break;
-                            case "Результат":
+                            }
+                            if (list[i].mn.ToLower().Contains("результат"))
+                            {
                                 string r = ChangeFormatResult(list[i].sn, nameTeams);
                                 if (!mainCoef.ContainsKey(r))
                                 {
@@ -760,8 +772,15 @@ namespace DataParser.DefaultRealization
                                     value = list[i].epr;
                                 }
                                 //else_logger.Error(l.sn + " - " + l.epr);
-                                break;
-                            case "Победа с учетом форы":
+                            }
+                            if (list[i].mn.ToLower().Contains("победа с учетом форы"))
+                            {
+                                if (sportType == SportType.Hockey)
+                                {
+                                    if (MarathonTags.WITHOUT_FORE_NUM.Any(x => list[i].sn.Contains(x)))
+                                        continue;
+                                }
+
                                 string f = ChangeFormatFora(list[i].sn, nameTeams["1"]);
                                 if (!mainCoef.ContainsKey(f))
                                 {
@@ -770,21 +789,10 @@ namespace DataParser.DefaultRealization
                                     value = list[i].epr;
                                 }
                                 //else_logger.Error(l.sn + " - " + l.epr);
-                                break;
-
-                            case "Тотал очков":
-                                string t = ChangeFormatTotals(list[i].sn);
-                                if (!mainCoef.ContainsKey(t))
-                                {
-                                    mainCoef.Add(t, list[i].epr);
-                                    type = t;
-                                    value = list[i].epr;
-                                }
-                                //else_logger.Error(l.sn + " - " + l.epr);
-                                break;
-
+                            }
                             //Tennis
-                            case "Результат матча":
+                            if (list[i].mn.ToLower().Contains("результат матча"))
+                            {
                                 string rr = ChangeFormatResult(list[i].sn, nameTeams);
                                 if (!mainCoef.ContainsKey(rr))
                                 {
@@ -792,40 +800,55 @@ namespace DataParser.DefaultRealization
                                     type = rr;
                                     value = list[i].epr;
                                 }
-                                break;
-                            /*case "Победа с учетом форы по сетам":
-                                string ff = ChangeFormatFora(list[i].sn, nameTeams["1"],eventID);
-                                if (!mainCoef.ContainsKey(ff))
-                                    mainCoef.Add(ff, list[i].epr);
-                                //else_logger.Error(l.sn + " - " + l.epr);
-                                break;
-                            case "Победа с учетом форы по геймам":
-                                string fff = ChangeFormatFora(list[i].sn, nameTeams["1"],eventID);
-                                if (!mainCoef.ContainsKey(fff))
-                                    mainCoef.Add(fff, list[i].epr);
-                                //else_logger.Error(l.sn + " - " + l.epr);
-                                break;*/
-                            case "Тотал по сетам":
-                                string tt = ChangeFormatTotals(list[i].sn);
-                                if (!mainCoef.ContainsKey(tt))
-                                {
-                                    mainCoef.Add(tt, list[i].epr);
-                                    type = tt;
-                                    value = list[i].epr;
-                                }
-                                //else_logger.Error(l.sn + " - " + l.epr);
-                                break;
-                            case "Тотал по геймам":
-                                string ttt = ChangeFormatTotals(list[i].sn);
-                                if (!mainCoef.ContainsKey(ttt))
-                                {
-                                    mainCoef.Add(ttt, list[i].epr);
-                                    type = ttt;
-                                    value = list[i].epr;
-                                }
-                                //else_logger.Error(l.sn + " - " + l.epr);
-                                break;
+                            }
+                        }
+                        if (list[i].mn.ToLower().Contains("тотал по сетам"))
+                        {
+                            string tt = ChangeFormatTotals(list[i].sn);
+                            if (!mainCoef.ContainsKey(tt))
+                            {
+                                mainCoef.Add(tt, list[i].epr);
+                                type = tt;
+                                value = list[i].epr;
+                            }
+                            //else_logger.Error(l.sn + " - " + l.epr);
+                        }
+                        if (list[i].mn.ToLower().Contains("тотал по геймам"))
+                        {
+                            string ttt = ChangeFormatTotals(list[i].sn);
+                            if (!mainCoef.ContainsKey(ttt))
+                            {
+                                mainCoef.Add(ttt, list[i].epr);
+                                type = ttt;
+                                value = list[i].epr;
+                            }
+                            //else_logger.Error(l.sn + " - " + l.epr);
+                        }
 
+                        //}
+                        if (list[i].mn.ToLower().Contains("тотал") && (list[i].mn.ToLower().Contains("голов") || list[i].mn.ToLower().Contains("очк")))
+                        {
+                            int numTeam = nameTeams.GetKeyContainsDictionaryValue(list[i].mn);
+                            string t = string.Empty;
+                            Total totalType = this.GetTotalType(list[i].selection_key);
+                            if (numTeam != -1)
+                            {
+                                t = ChangeFormatTotals(list[i].sn, true, numTeam);
+                            }
+                            else if (totalType != Total.unknown_T)
+                            {
+                                t = ChangeFormatTotalsOthers(list[i].mn, list[i].sn, totalType);
+                            }
+                            else
+                            {
+                                t = ChangeFormatTotals(list[i].sn);
+                            }
+                            if (!mainCoef.ContainsKey(t))
+                            {
+                                mainCoef.Add(t, list[i].epr);
+                                type = t;
+                                value = list[i].epr;
+                            }
                         }
                         if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(value))
                         {
@@ -838,12 +861,106 @@ namespace DataParser.DefaultRealization
                     _logger.Error("Error in CreateEvent(List<DataMarathonForAutoPlays> list)\n\n\n\n"
                          + "Origin: " + "[" + i + "]" + list[i].sn + " - " + list[i].epr + "\n\n\n" +
                          mainCoef.Keys.ToString() + " \n\n\n" + mainCoef.Values.ToString());
+                    _logger.Error(e.Message);
+                    _logger.Error(e.StackTrace);
                 }
             }
 
-
             teamToAdd.Coef = Coef;
             //teamToAdd.AllCoef = mainCoef;
+        }
+
+        private string ChangeFormatTotalsOthers(string line, string total, Total totalType)
+        {
+            string res = string.Empty;
+            switch (totalType)
+            {
+                case Total.time_T:
+                    res += DictionatyTypeCoef.TT + line.GetNumberWithTotal(); // Футбол тотал таймів
+                    break;
+
+                case Total.period_T:
+                    res += DictionatyTypeCoef.TPR + line.GetNumberWithTotal(); // Хокей тотал періодів
+                    break;
+
+                case Total.half_T:
+                    res += "TH" + line.GetNumberWithTotal();
+                    break;
+
+                case Total.part_T:
+                    res += DictionatyTypeCoef.TPT + line.GetNumberWithTotal(); //Баскетбол тотал половин
+                    break;
+
+                case Total.set_T:
+                    res += DictionatyTypeCoef.TS + line.GetNumberWithTotal(); //Теніс тотал сетів
+                    break;
+
+                case Total.game_T:
+                    res += DictionatyTypeCoef.TG + line.GetNumberWithTotal(); //Теніс тотал геймов
+                    break;
+            }
+            string resFora = string.Empty;
+            for (int i = total.Length - 1; i >= 0; i--)
+            {
+                if (total[i] != ' ')
+                    resFora = total[i] + resFora;
+                else break;
+            }
+            string type = (total.Contains("Меньше") || total.Contains("Under")) ? res + "U" : res + "O";
+            return type + "(" + resFora + ")";
+        }
+
+        private Total GetTotalType(string line)
+        {
+            Total result = Total.unknown_T;
+            if (line.ToLower().Contains("half"))  // Футбол тотал таймів
+            {
+                result = Total.time_T;
+            }
+            else if (line.ToLower().Contains("period")) // Хокей тотал періодів
+            {
+                result = Total.period_T;
+            }
+            else if (line.ToLower().Contains("половина"))
+            {
+                result = Total.half_T;
+            }
+            else if (line.ToLower().Contains("points")) //Баскетбол тотал половин
+            {
+                result = Total.part_T;
+            }
+            else if (line.ToLower().Contains("sets")) //Теніс тотал сетів
+            {
+                result = Total.set_T;
+            }
+            else if (line.ToLower().Contains("games")) //Теніс тотал геймов
+            {
+                result = Total.game_T;
+            }
+            return result;
+        }
+
+        private bool CheckWithoutTags(string line)
+        {
+            List<string> WITHOUT_NAME = new List<string>()
+        {
+            "период",
+            "Период",
+            "четвер",
+            "Четвер",
+            "половин",
+            "Половин"
+        };
+            foreach (var tag in WITHOUT_NAME)
+            {
+                if (line.Contains(tag))
+                    return false;
+            }
+            if (line._Contains("half", "period", "половина", "points", "sets", "games"))
+            {
+                return false;
+            }
+            return true;
         }
 
         private void CreateEventVoleyball(List<DataMarathonForAutoPlays> list, ref MarathonEvent teamToAdd, Dictionary<string, string> nameTeams, string eventID)
@@ -883,6 +1000,7 @@ namespace DataParser.DefaultRealization
                                 }
                                 //else_logger.Error(l.sn + " - " + l.epr);
                                 break;
+
                             case "Результат":
                                 string r = ChangeFormatResult(list[i].sn, nameTeams);
                                 if (!mainCoef.ContainsKey(r))
@@ -893,6 +1011,7 @@ namespace DataParser.DefaultRealization
                                 }
                                 //else_logger.Error(l.sn + " - " + l.epr);
                                 break;
+
                             case "Победа в матче с учетом форы по очкам":
                                 string f = ChangeFormatFora(list[i].sn, nameTeams["1"]);
                                 if (!mainCoef.ContainsKey(f))
@@ -914,6 +1033,7 @@ namespace DataParser.DefaultRealization
                                 }
                                 //else_logger.Error(l.sn + " - " + l.epr);
                                 break;
+
                             case "Тотал матча по партиям":
                                 string tt = ChangeFormatTotals(list[i].sn);
                                 if (!mainCoef.ContainsKey(tt))
@@ -924,6 +1044,7 @@ namespace DataParser.DefaultRealization
                                 }
                                 //else_logger.Error(l.sn + " - " + l.epr);
                                 break;
+
                             case "Тотал 1-й партии по очкам":
                                 string ttt = ChangeFormatTotals(list[i].sn);
                                 if (!mainCoef.ContainsKey(ttt))
@@ -946,13 +1067,15 @@ namespace DataParser.DefaultRealization
                     _logger.Error("Error in CreateEvent(List<DataMarathonForAutoPlays> list)\n\n\n\n"
                          + "Origin: " + "[" + i + "]" + list[i].sn + " - " + list[i].epr + "\n\n\n" +
                          mainCoef.Keys.ToString() + " \n\n\n" + mainCoef.Values.ToString());
+                    _logger.Error(e.Message);
+                    _logger.Error(e.StackTrace);
                 }
             }
-
 
             //teamToAdd.AllCoef = mainCoef;
             teamToAdd.Coef = Coef;
         }
+
         private List<ResultForForks> ConvertWith_MarathonEvent_To_ListResultForForks(MarathonEvent eventCoefList)
         {
             List<ResultForForks> res = new List<ResultForForks>();
@@ -971,7 +1094,8 @@ namespace DataParser.DefaultRealization
                         SportType = eventCoefList.SportType,
                         Type = eventCoefList.Coef[i].Type,
                         Coef = eventCoefList.Coef[i].Value,
-                        marathonAutoPlay = eventCoefList.Coef[i].marathonAutoPlay
+                        marathonAutoPlay = eventCoefList.Coef[i].marathonAutoPlay,
+                        parentEvent = eventCoefList
                     });
                 }
                 catch
@@ -1004,7 +1128,8 @@ namespace DataParser.DefaultRealization
             }
             return type + resFora;
         }
-        private string ChangeFormatTotals(string total)
+
+        private string ChangeFormatTotals(string total, bool isTeamTotal = false, int team_num = -1)
         {
             string resFora = string.Empty;
             for (int i = total.Length - 1; i >= 0; i--)
@@ -1013,9 +1138,18 @@ namespace DataParser.DefaultRealization
                     resFora = total[i] + resFora;
                 else break;
             }
-            string type = (total.Contains("Меньше") || total.Contains("Under")) ? "TU" : "TO";
+            string type = string.Empty;
+            if (!isTeamTotal)
+            {
+                type = (total.Contains("Меньше") || total.Contains("Under")) ? "TU" : "TO";
+            }
+            else
+            {
+                type = (total.Contains("Меньше") || total.Contains("Under")) ? DictionatyTypeCoef.TF + team_num + "U" : DictionatyTypeCoef.TF + team_num + "O";
+            }
             return type + "(" + resFora + ")";
         }
+
         private string ChangeFormatResult(string result, Dictionary<string, string> nameTeam)
         {
             string res = string.Empty;
@@ -1035,7 +1169,6 @@ namespace DataParser.DefaultRealization
                 res = "1";
             else if (nameTeam["2"].Contains(result))
                 res = "2";
-
             else if (result.Contains("Ничья") || result.Contains("ничья")) res = "X";
             return res;
         }
@@ -1068,12 +1201,13 @@ namespace DataParser.DefaultRealization
                 if (lines[i]._Contains(MarathonTags.newEventID))
                 {
                     _eventid = lines[i].GetEventID();
-
+                    //data-event-name
                     ru = lines[i].TagsContent("data-event-name=");
                 }
 
                 if (lines[i]._Contains(MarathonTags.newTeamName))
                 {
+                    i++;
                     if (name1 == null)
                         name1 = GetAttribut(lines[i]);// line.Substrings(Tags.NameTeam);
                     else name2 = GetAttribut(lines[i]);//line.Substrings(Tags.NameTeam);
@@ -1093,36 +1227,22 @@ namespace DataParser.DefaultRealization
                 }
             }
 
-
             return resultEnglishTeams;
         }
 
         private DataMarathonForAutoPlays ParseForAutoPlay(string line, string tag, DataMarathonForAutoPlays obj = null)
         {
-
             obj = obj == null ? (obj = new DataMarathonForAutoPlays()) : obj;
             if (tag.Equals(Tags_DataMarathonForAutoPlays.data_sel))
             {
                 line = line.TagsContent2(Tags_DataMarathonForAutoPlays.data_sel);
-                var a = getString(line);
-
-                var b = a.Split(':');
-
-                var b1 = b[0].Replace("[", "").Replace("]", "").Split(',');
-                var price = b[1].Replace("[", "").Replace("]", "").Split(',');
-
-                var subj = line.Split(',');
-                obj.sn = b1[0];
-                obj.mn = b1[1];
-                obj.ewc = b1[2];
-                obj.cid = b1[3];
-                obj.prt = b1[4];
-                obj.ewf = b1[5];
-                obj.epr = b1[6];
-
-                for (int i = 0; i < price.Length; i++)
+                try
                 {
-                    obj.prices.Add(price[i].Replace("\"", ""));
+                    obj = PraseJsonAutoPlay(line);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("ParseForAutoPlay /n/n/n/n" + e.Message + "/n/n/n/n" + e.StackTrace);
                 }
             }
             if (tag.Equals(Tags_DataMarathonForAutoPlays.data_selection_key))
@@ -1131,6 +1251,7 @@ namespace DataParser.DefaultRealization
             }
             return obj;
         }
+
         /*{"sn":"Burgos (+9.5)",
   "mn":"Победа с учетом форы",
   "ewc":"1/1 1",
@@ -1145,64 +1266,32 @@ namespace DataParser.DefaultRealization
         "3":"0.83",
         "4":"0.83",
         "5":"-1.21"}}*/
-        private string getString(string line)
+
+        private DataMarathonForAutoPlays PraseJsonAutoPlay(string line)
         {
-            line = line.Trim('{');
-            string result = "";
-            bool find_ = false; // :
-            bool _find = false; // {
-            string element = "";
-            string price = "";
-            foreach (var l in line)
+            DataMarathonForAutoPlays result = new DataMarathonForAutoPlays();
+            var json = (JsonObject)JsonValue.Parse(line);
+            result.sn = json["sn"].ToString().Trim('\"');
+            result.mn = json["mn"].ToString().Trim('\"');
+            result.ewc = json["ewc"].ToString().Trim('\"').Replace("\\", "");
+            result.cid = json["cid"].ToString().Trim('\"');
+            result.prt = json["prt"].ToString().Trim('\"');
+            result.ewf = json["ewf"].ToString().Trim('\"');
+            result.epr = json["epr"].ToString().Trim('\"');
+            List<string> prices = new List<string>();
+            var json_prices = (JsonObject)JsonValue.Parse(json["prices"].ToString());
+            for (int i = 0; i < 6; i++)
             {
-
-                if (l == ',')
-                {
-
-                    if (find_ && !_find)
-                    {
-                        find_ = false;
-                        result += (!string.IsNullOrEmpty(result)) ? "," : "[";
-                        result += element.Trim('\"');
-                        element = "";
-                    }
-                    if (find_ && _find)
-                    {
-                        find_ = false;
-                        price += (!string.IsNullOrEmpty(price)) ? "," : "[";
-                        price += element.Trim('\"');
-                        element = "";
-                    }
-
-                }
-                if (l == '{' || l == '}')
-                {
-                    find_ = false;
-                }
-                if (find_)
-                {
-
-                    element += l;
-
-                }
-                if (l == ':')
-                {
-                    find_ = true;
-                }
-                if (l == '{')
-                {
-                    _find = true;
-                }
-
+                prices.Add(json_prices[i.ToString()].ToString().Trim('\"').Replace("\\", ""));
             }
-            result += "]:";
-            result += (price + "," + element + "]");
-
+            result.prices = prices;
             return result;
         }
+
         #endregion
 
         #region[Page and URL]
+
         private static string Html(string url, bool a = true)
         {
             HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
@@ -1229,6 +1318,7 @@ namespace DataParser.DefaultRealization
             //WriteToDocument(HTML);
             return HTML;
         }
+
         private void UrlAndNameFile(SportType sportType, out string url, out string namefile, bool isEnglish = false)
         {
             string language = isEnglish ? "en" : "su";
@@ -1263,9 +1353,10 @@ namespace DataParser.DefaultRealization
                     break;
             }
         }
-        #endregion
 
+        #endregion
         #region [Documents]
+
         public static void WriteToDocument(List<ResultForForks> teams, string namefile = "check.txt")
         {
             if (File.Exists(namefile))
@@ -1283,7 +1374,6 @@ namespace DataParser.DefaultRealization
             sb.AppendLine();
             sb.AppendLine();
 
-
             if (!string.IsNullOrEmpty(sb.ToString()))
             {
                 var a = sb.ToString().Split('\n');
@@ -1295,8 +1385,6 @@ namespace DataParser.DefaultRealization
                 writer = new StreamWriter(namefile);
                 writer.WriteLine(b);
                 writer.Close();
-
-
             }
         }
 
@@ -1322,6 +1410,7 @@ namespace DataParser.DefaultRealization
         #endregion
 
         #region [Help]
+
         //------------------HELP_PARSE------------------------------
         private static string GetAttribut(string line, bool date = false)
         {
@@ -1342,13 +1431,13 @@ namespace DataParser.DefaultRealization
                 {
                     isFinish = true;
                     result += (date && !result.Contains("/2016")) ? "/2016 " : "";
-
                 }
                 if (isFinish && !date)
                     return result;
             }
             return !date ? "" : result;
         }
+
         private static string GetLigue(string line)
         {
             bool isStartTag = true;
@@ -1366,9 +1455,11 @@ namespace DataParser.DefaultRealization
             }
             return result;
         }
+
         #endregion
 
         #region [Selenium]
+
         private string PhantomDriver(string urlTypeSport, string id, string ligaID, bool today, SportType sporttype)
         {
             id = id.Contains("event_") ? id : "event_" + id;
@@ -1394,6 +1485,8 @@ namespace DataParser.DefaultRealization
             }
             catch (Exception e)
             {
+                _logger.Error(e.Message);
+                _logger.Error(e.StackTrace);
                 /*MessageBox.Show(e.Message.ToString());
                 _driver.Close();
                 _driver = new PhantomJSDriver();*/
@@ -1403,6 +1496,7 @@ namespace DataParser.DefaultRealization
             this.WriteToDocumentWithSelenium(res, sporttype, ligaID, id);
             return res;
         }
+
         private string PhantomFireFox(string urlTypeSport, string id, string ligaID, bool today, SportType sporttype)
         {
             id = id.Contains("event_") ? id : "event_" + id;
@@ -1437,6 +1531,7 @@ namespace DataParser.DefaultRealization
             this.WriteToDocumentWithSelenium(res, sporttype, ligaID, id);
             return res;
         }
+
         private void WriteToDocumentWithSelenium(string data, SportType sporttype, string LigueId, string id)
         {
             string mainNameFolder = "Selenium Results";
@@ -1469,7 +1564,9 @@ namespace DataParser.DefaultRealization
                 }
             }*/
         }
-        #endregion
 
+        #endregion
     }
+
+    public enum Total { main_T, time_T, set_T, period_T, part_T, half_T, game_T, unknown_T }
 }

@@ -1,4 +1,4 @@
-namespace DataParser.Models
+namespace WinParse.DataParser.Models
 {
     public class Surebet
     {

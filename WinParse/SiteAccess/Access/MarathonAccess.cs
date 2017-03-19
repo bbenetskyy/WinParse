@@ -1,5 +1,4 @@
-﻿
-using Common.Core.Helpers;
+﻿using Common.Core.Helpers;
 using Common.Core.Parsing;
 using Common.Modules.AntiCaptha;
 using Newtonsoft.Json.Linq;
@@ -19,7 +18,7 @@ namespace SiteAccess.Access
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private static int countAttemptToLogin = 5;
 
-        public MarathonAccess( IAntiCaptcha anti ) : base(null)
+        public MarathonAccess(IAntiCaptcha anti) : base(null)
         {
             _ac = anti;
             Encoding = Encoding.UTF8;
@@ -27,7 +26,7 @@ namespace SiteAccess.Access
             HomeReq();
         }
 
-        public void HomeReq( )
+        public void HomeReq()
         {
             Headers.Clear();
             Headers["Accept"] = "application/json, text/javascript, */*; q=0.01";
@@ -48,7 +47,7 @@ namespace SiteAccess.Access
             _html = UploadString("/betslip/view/current.htm".TrueLink(_domain), "firstLoad=true");
         }
 
-        public JObject SetBet( MarathonBet bet )
+        public JObject SetBet(MarathonBet bet)
         {
             Clear();
             try
@@ -56,7 +55,7 @@ namespace SiteAccess.Access
                 Add(bet);
                 Save(bet);
             }
-            catch (Exception e)   
+            catch (Exception e)
             {
                 _logger.Error(e, $"Can't add or save bet", bet);
                 return null;
@@ -80,14 +79,14 @@ namespace SiteAccess.Access
                 var jo = JObject.Parse(str);
                 return jo;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.Error(e, $"Can't place bet", bet);
                 return null;
             }
         }
 
-        public JObject SetBetOneClick( MarathonBet bet )
+        public JObject SetBetOneClick(MarathonBet bet)
         {
             Headers["Accept"] = "text/plain, */*; q=0.01";
             Headers["Accept-Language"] = "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4";
@@ -105,7 +104,7 @@ namespace SiteAccess.Access
             return jo;
         }
 
-        public JObject PlaceTicket( string id )
+        public JObject PlaceTicket(string id)
         {
             Headers["Accept"] = "text/plain, */*; q=0.01";
             Headers["Accept-Language"] = "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4";
@@ -122,10 +121,8 @@ namespace SiteAccess.Access
             return jo;
         }
 
-        public bool Login( string login, string password )
+        public bool Login(string login, string password)
         {
-
-
             Headers.Clear();
             Headers["Accept"] = "application/json, text/javascript, */*; q=0.01";
             Headers["Accept-Language"] = "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4";
@@ -139,7 +136,7 @@ namespace SiteAccess.Access
             var data =
                 $"login={HttpUtility.UrlEncode(login)}&login_password={HttpUtility.UrlEncode(password)}&loginUrl=https%3A%2F%2Fwww.marathonbet.com%3A443%2Fsu%2Flogin.htm";
             var jo = UploadJObject("/login.htm".TrueLink(_domain.OriginalString), data);
-            if(jo == null)
+            if (jo == null)
             {
                 _logger.Error("Answer from server was null, when login");
                 return false;
@@ -147,13 +144,13 @@ namespace SiteAccess.Access
 
             try
             {
-                if((string)jo["loginResult"] == "FAIL")
+                if ((string)jo["loginResult"] == "FAIL")
                 {
                     _logger.Error("Login result is FAIL");
                     return false;
                 }
 
-                if((string)jo["loginResult"] == "CAPTCHA_EXPECTED")
+                if ((string)jo["loginResult"] == "CAPTCHA_EXPECTED")
                 {
                     LoginWithCapcha(login, password);
                 }
@@ -167,9 +164,9 @@ namespace SiteAccess.Access
             }
         }
 
-        private void LoginWithCapcha( string login, string password )
+        private void LoginWithCapcha(string login, string password)
         {
-            for(int i = 0; i < countAttemptToLogin; i++)
+            for (int i = 0; i < countAttemptToLogin; i++)
             {
                 // Получение капчи
                 Headers.Clear();
@@ -193,10 +190,9 @@ namespace SiteAccess.Access
                 var data =
                 $"login={HttpUtility.UrlEncode(login)}&login_password={HttpUtility.UrlEncode(password)}&captcha={res}&loginUrl=https%3A%2F%2Fwww.marathonbet.com%3A443%2Fsu%2Flogin.htm";
 
-
                 var jo = UploadJObject("/login.htm".TrueLink(_domain.OriginalString), data);
 
-                if((string)jo["loginResult"] != "SUCCESS")
+                if ((string)jo["loginResult"] != "SUCCESS")
                 {
                     _logger.Error("Can't login with captcha in " + (i + 1) + "attempt.");
                     continue;
@@ -206,7 +202,7 @@ namespace SiteAccess.Access
             }
         }
 
-        private void Add( MarathonBet bet )
+        private void Add(MarathonBet bet)
         {
             Headers["Accept"] = "text/plain, */*; q=0.01";
             Headers["Accept-Language"] = "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4";
@@ -221,10 +217,9 @@ namespace SiteAccess.Access
                 "ch=" + bet.GetAddData() + "&url=https%3A%2F%2Fwww.marathonbet.com%2Fsu%2Fall-events.htm&ws=true";
 
             var res = UploadString("/betslip/add.htm".TrueLink(_domain), data);
-
         }
 
-        private void Save( MarathonBet bet )
+        private void Save(MarathonBet bet)
         {
             Headers["Accept"] = "text/plain, */*; q=0.01";
             Headers["Accept-Language"] = "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4";
@@ -241,7 +236,7 @@ namespace SiteAccess.Access
             UploadString("/betslip/save.htm".TrueLink(_domain), data);
         }
 
-        private void Clear( )
+        private void Clear()
         {
             Headers["Accept"] = "text/plain, */*; q=0.01";
             Headers["Accept-Language"] = "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4";
@@ -255,7 +250,7 @@ namespace SiteAccess.Access
             UploadString("/betslip/clear.htm".TrueLink(_domain), "");
         }
 
-        private void SetStateAfterLogin( )
+        private void SetStateAfterLogin()
         {
             Headers["Accept"] = "*/*";
             Headers["Accept-Language"] = "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4";
@@ -265,12 +260,11 @@ namespace SiteAccess.Access
             Headers["X-NewRelic-ID"] = _xpid;
             Headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8";
 
-
             var data = "betPolicy=EqualsToCurrent";
             UploadString("/betslip/updatebetplacingmode.htm".TrueLink(_domain), data);
         }
 
-        private Int64 GetTime( )
+        private Int64 GetTime()
         {
             Int64 retval = 0;
             var st = new DateTime(1970, 1, 1);
@@ -279,20 +273,20 @@ namespace SiteAccess.Access
             return retval;
         }
 
-        public bool CheckAvailable( )
+        public bool CheckAvailable()
         {
             throw new NotImplementedException();
         }
 
-        public bool MakeBet( MarathonBet bet )
+        public bool MakeBet(MarathonBet bet)
         {
             var res = SetBet(bet);
-            if(res == null)
+            if (res == null)
             {
                 _logger.Error("Place bet failed due to previous errors.", bet);
                 return false;
             }
-            if(res.ToString().Contains("ERROR"))
+            if (res.ToString().Contains("ERROR"))
             {
                 _logger.Error("Place bet result is ERROR.", res);
                 return false;
@@ -300,8 +294,8 @@ namespace SiteAccess.Access
             _logger.Info<MarathonBet>("Place bet success", bet);
             return true;
 
-
             #region results
+
             /*
              {{
   "result": "ERROR",
@@ -343,15 +337,15 @@ namespace SiteAccess.Access
 }}
              */
 
-            #endregion
+            #endregion results
         }
 
-        public void SetHeader( string key, string val )
+        public void SetHeader(string key, string val)
         {
             Headers[key] = val;
         }
 
-        public void SetProxy( IWebProxy proxy )
+        public void SetProxy(IWebProxy proxy)
         {
             Proxy = proxy as WebProxy;
         }

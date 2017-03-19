@@ -1,4 +1,4 @@
-﻿namespace DataParser.Models
+﻿namespace WinParse.DataParser.Models
 {
     public class Teams_Tenis_Volleyball_Basketball : Teams
     {

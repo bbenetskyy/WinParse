@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SiteAccess.Model
+﻿namespace SiteAccess.Model
 {
     public class User
     {
@@ -12,7 +6,8 @@ namespace SiteAccess.Model
         public string Password { get; set; }// = @"Ad2_w3Ddsg";
         public bool Logged { get; set; }
 
-        public User( string login, string password ) {
+        public User(string login, string password)
+        {
             Login = login;
             Password = password;
         }

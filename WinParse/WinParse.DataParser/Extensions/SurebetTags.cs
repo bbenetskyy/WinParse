@@ -1,4 +1,4 @@
-namespace DataParser.Extensions
+namespace WinParse.DataParser.Extensions
 {
     public static class SurebetTags
     {
@@ -7,6 +7,5 @@ namespace DataParser.Extensions
         public static string EVENT = "class=\"event";
         public static string COEFF = "class=\"coeff\"";
         public static string VALUE = "class=\"value odd_record_";
-
     }
 }

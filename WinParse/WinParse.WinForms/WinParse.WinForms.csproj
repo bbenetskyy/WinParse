@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WinParse.WinForms</RootNamespace>
     <AssemblyName>WinParse.WinForms</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -30,6 +30,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -61,29 +62,84 @@
     <Reference Include="DevExpress.XtraGrid.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraLayout.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraNavBar.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.5.0.0-beta06\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="ToolsPortable, Version=1.0.0.13, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ToolsPortable.1.0.0.13\lib\portable45-net45+win8+wp8+wpa81\ToolsPortable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="ErrorProvider\ExceptionHandlerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ErrorProvider\ExceptionHandlerForm.Designer.cs">
+      <DependentUpon>ExceptionHandlerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataManager.cs" />
+    <Compile Include="Models\PageManager.cs" />
+    <Compile Include="Pages\CalculatorPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pages\CalculatorPage.Designer.cs">
+      <DependentUpon>CalculatorPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\FilterPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pages\FilterPage.Designer.cs">
+      <DependentUpon>FilterPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\OpenCalculatorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pages\OpenCalculatorForm.Designer.cs">
+      <DependentUpon>OpenCalculatorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SearchPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pages\SearchPage.Designer.cs">
+      <DependentUpon>SearchPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="XtraForm1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XtraForm1.Designer.cs">
+      <DependentUpon>XtraForm1.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ErrorProvider\ExceptionHandlerForm.resx">
+      <DependentUpon>ExceptionHandlerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\CalculatorPage.resx">
+      <DependentUpon>CalculatorPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\FilterPage.resx">
+      <DependentUpon>FilterPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\OpenCalculatorForm.resx">
+      <DependentUpon>OpenCalculatorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\SearchPage.resx">
+      <DependentUpon>SearchPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -96,6 +152,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="XtraForm1.resx">
+      <DependentUpon>XtraForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -117,6 +178,28 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WinParse.BusinessLogic\WinParse.BusinessLogic.csproj">
+      <Project>{c6982ab9-704a-474f-a303-89b4c4a3d11e}</Project>
+      <Name>WinParse.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WinParse.DataSaver\WinParse.DataSaver.csproj">
+      <Project>{6c968817-c8bb-4bff-9284-c786dbf5e90d}</Project>
+      <Name>WinParse.DataSaver</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\BO_Skull_32x32.ico" />
+    <Content Include="Images\CalculateNow_32x32.png" />
+    <Content Include="Images\CalculateSheet_32x32.png" />
+    <Content Include="Images\ClearFormatting_32x32.ico" />
+    <Content Include="Images\CustomizeGrid_32x32.ico" />
+    <Content Include="Images\CustomizeGrid_32x32.png" />
+    <Content Include="Images\Paste_32x32.ico" />
+    <Content Include="Images\Paste_32x32.png" />
+    <Content Include="Images\PieStylePie_32x32.ico" />
+    <Content Include="Images\Pie_32x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

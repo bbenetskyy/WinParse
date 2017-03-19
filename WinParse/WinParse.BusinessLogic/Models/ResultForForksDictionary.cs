@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FormulasCollection.Models
+namespace WinParse.BusinessLogic.Models
 {
     public class ResultForForksDictionary
     {
@@ -11,8 +11,8 @@ namespace FormulasCollection.Models
 
         public string EventId { get; set; }
 
-        public Dictionary<string, double> TypeCoefDictionary { get; set; }
+        public string LeagueName { get; set; }
 
-        public Dictionary<string, string> TypeLineIdDictionary { get; set; }
+        public Dictionary<string, ForkDetail> ForkDetailDictionary { get; set; }
     }
 }

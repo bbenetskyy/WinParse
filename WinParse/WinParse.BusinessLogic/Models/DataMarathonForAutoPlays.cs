@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace FormulasCollection.Models
+namespace WinParse.BusinessLogic.Models
 {
     /*{"sn":"Burgos (+9.5)",
    "mn":"Победа с учетом форы",
@@ -20,6 +16,7 @@ namespace FormulasCollection.Models
          "3":"0.83",
          "4":"0.83",
          "5":"-1.21"}}*/
+
     public class DataMarathonForAutoPlays
     {
         public string sn { get; set; }
@@ -31,6 +28,8 @@ namespace FormulasCollection.Models
         public string epr { get; set; }
         public List<string> prices { get; set; }
         public string selection_key { get; set; }
+
+        public bool isAsiat { get; set; }
 
         public DataMarathonForAutoPlays()
         {

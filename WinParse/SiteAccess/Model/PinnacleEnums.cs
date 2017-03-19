@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SiteAccess.Enums
+﻿namespace SiteAccess.Enums
 {
     // Bets for pinnacle
 
@@ -16,12 +10,15 @@ namespace SiteAccess.Enums
         INDONESIAN,
         MALAY
     }
-    public enum WinRiskType {
+
+    public enum WinRiskType
+    {
         WIN,
         RISK
     }
 
-    public enum BetType {
+    public enum BetType
+    {
         MONEYLINE,
         TEAM_TOTAL_POINTS,
         SPREAD,
@@ -29,7 +26,8 @@ namespace SiteAccess.Enums
         SPECIAL
     }
 
-    public enum TeamType {
+    public enum TeamType
+    {
         DRAW,
         TEAM1,
         TEAM2
@@ -39,9 +37,5 @@ namespace SiteAccess.Enums
     {
         OVER,
         UNDER
-
     }
-    
-
-
 }
