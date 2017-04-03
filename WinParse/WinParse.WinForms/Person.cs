@@ -2,7 +2,7 @@
 
 namespace WinParse.WinForms
 {
-    internal class Person
+    internal class Person   
     {
         private string firstName;
         private string secondName;
