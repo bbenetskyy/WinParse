@@ -1,6 +1,6 @@
 ﻿using SiteAccess.Enums;
 
-namespace WinParse.DataParser.Models
+namespace DataParser.Models
 {
     public class EventWithTotalDictionary
     {

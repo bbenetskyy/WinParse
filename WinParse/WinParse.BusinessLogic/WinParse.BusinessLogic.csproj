@@ -68,7 +68,6 @@
     <Compile Include="Enums\SportType.cs" />
     <Compile Include="Helpers\SportsConverterTypes.cs" />
     <Compile Include="Models\CoefsWhichMustBeRevert.cs" />
-    <Compile Include="Models\DataMarathonForAutoPlays.cs" />
     <Compile Include="Models\EventForAutoPlay.cs" />
     <Compile Include="Models\Filter.cs" />
     <Compile Include="Models\ForkDetail.cs" />
@@ -87,6 +86,7 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="app.config" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -96,6 +96,10 @@
     <ProjectReference Include="..\SiteAccess\SiteAccess.csproj">
       <Project>{ddc82e86-35cb-4465-b23c-6c341fe9cc36}</Project>
       <Name>SiteAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WinParse.MarathonBetLibrary\WinParse.MarathonBetLibrary.csproj">
+      <Project>{f7dcd3c5-349a-4553-8a4f-60c95e132bff}</Project>
+      <Name>WinParse.MarathonBetLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,6 @@
-﻿namespace WinParse.BusinessLogic.Models
+﻿using MarathonBetLibrary.Model;
+
+namespace FormulasCollection.Models
 {
     public class ResultForForks
     {
@@ -20,9 +22,7 @@
         public DataMarathonForAutoPlays marathonAutoPlay { get; set; }
         public MarathonEvent parentEvent { get; set; }
 
-        public ResultForForks()
-        {
-        }
+        public ResultForForks() { }
 
         public ResultForForks(string eventID, string nameTeam1, string nameTeam2, string date, string nameCoff, string coef, string type, string bookmaker, string league, DataMarathonForAutoPlays obj)
         {

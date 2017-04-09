@@ -1,4 +1,9 @@
-﻿using NLog;
+﻿using DataParser.Enums;
+using DataParser.Models;
+using FormulasCollection.Helpers;
+using FormulasCollection.Models;
+using FormulasCollection.Realizations;
+using NLog;
 using SiteAccess.Enums;
 using System;
 using System.Collections.Generic;
@@ -7,13 +12,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using ToolsPortable;
-using WinParse.BusinessLogic.Helpers;
-using WinParse.BusinessLogic.Models;
-using WinParse.BusinessLogic.Realizations;
-using WinParse.DataParser.Enums;
-using WinParse.DataParser.Models;
 
-namespace WinParse.DataParser.DefaultRealization
+namespace DataParser.DefaultRealization
 {
     public class PinnacleSportsDataParser
     {
@@ -60,49 +60,29 @@ namespace WinParse.DataParser.DefaultRealization
                             var matchPeriod = Convert.ToInt32(period.Value["number"].ToString());
                             var matchDateTime = period.Value["cutoff"].ToString();
                             var lineId = period.Value["lineId"].ToString();
+                            var eventFactory = new EventFactory(lineId, matchPeriod, leagueId, matchDateTime);
 
                             if (period.Value.ContainsKey("moneyline") && period.Value["moneyline"] != null)
                             {
                                 var moneyLine = period.Value["moneyline"];
                                 if (moneyLine.ContainsKey("home") && moneyLine["home"] != null)
-                                    resList[id].Add(new EventWithTotalDictionary
-                                    {
-                                        LineId = lineId,
-                                        TotalType = "1",
-                                        TotalValue = moneyLine["home"].ToString(),
-                                        MatchDateTime = matchDateTime,
-                                        LeagueId = leagueId,
-                                        MatchPeriod = matchPeriod,
-                                        TeamType = TeamType.TEAM1,
-                                        SideType = SideType.OVER,
-                                        BetType = BetType.MONEYLINE
-                                    });
+                                    resList[id].AddRange(eventFactory.CreateEventsWithTotal("1",
+                                                                                      moneyLine["home"].ToString(),
+                                                                                      TeamType.TEAM1,
+                                                                                      SideType.OVER,
+                                                                                      BetType.MONEYLINE));
                                 if (moneyLine.ContainsKey("away") && moneyLine["away"] != null)
-                                    resList[id].Add(new EventWithTotalDictionary
-                                    {
-                                        LineId = lineId,
-                                        TotalType = "2",
-                                        TotalValue = moneyLine["away"].ToString(),
-                                        MatchDateTime = matchDateTime,
-                                        LeagueId = leagueId,
-                                        MatchPeriod = matchPeriod,
-                                        TeamType = TeamType.TEAM2,
-                                        SideType = SideType.OVER,
-                                        BetType = BetType.MONEYLINE
-                                    });
+                                    resList[id].AddRange(eventFactory.CreateEventsWithTotal("2",
+                                                                                      moneyLine["away"].ToString(),
+                                                                                      TeamType.TEAM2,
+                                                                                      SideType.OVER,
+                                                                                      BetType.MONEYLINE));
                                 if (moneyLine.ContainsKey("draw") && moneyLine["draw"] != null)
-                                    resList[id].Add(new EventWithTotalDictionary
-                                    {
-                                        LineId = lineId,
-                                        TotalType = "X",
-                                        TotalValue = moneyLine["draw"].ToString(),
-                                        MatchDateTime = matchDateTime,
-                                        LeagueId = leagueId,
-                                        MatchPeriod = matchPeriod,
-                                        TeamType = TeamType.DRAW,
-                                        SideType = SideType.OVER,
-                                        BetType = BetType.MONEYLINE
-                                    });
+                                    resList[id].AddRange(eventFactory.CreateEventsWithTotal("X",
+                                                                                      moneyLine["draw"].ToString(),
+                                                                                      TeamType.DRAW,
+                                                                                      SideType.OVER,
+                                                                                      BetType.MONEYLINE));
                             }
                             if (period.Value.ContainsKey("spreads") && period.Value["spreads"] != null && matchPeriod == 0)
                                 foreach (var spread in period.Value["spreads"])
@@ -110,198 +90,72 @@ namespace WinParse.DataParser.DefaultRealization
                                     if (!spread.Value.ContainsKey("hdp") || spread.Value["hdp"] == null) continue;
 
                                     if (spread.Value.ContainsKey("home") && spread.Value["home"] != null)
-                                        resList[id].Add(new EventWithTotalDictionary
-                                        {
-                                            LineId = lineId,
-                                            TotalType = $"F1({spread.Value["hdp"].ToString().LocalizeToMarathon()})".MinimalizeValue(),
-                                            TotalValue = spread.Value["home"].ToString(),
-                                            MatchDateTime = matchDateTime,
-                                            LeagueId = leagueId,
-                                            MatchPeriod = matchPeriod,
-                                            TeamType = TeamType.TEAM1,
-                                            SideType = SideType.OVER,
-                                            BetType = BetType.SPREAD
-                                        });
-
+                                        resList[id].AddRange(eventFactory.CreateEventsWithTotal($"F1({spread.Value["hdp"].ToString().LocalizeToMarathon()})".MinimalizeValue(),
+                                                                                          spread.Value["home"].ToString(),
+                                                                                          TeamType.TEAM1,
+                                                                                          SideType.OVER,
+                                                                                          BetType.SPREAD));
                                     if (spread.Value.ContainsKey("away") && spread.Value["away"] != null)
-                                        resList[id].Add(new EventWithTotalDictionary
-                                        {
-                                            LineId = lineId,
-                                            TotalType = $"F2({spread.Value["hdp"].ToString().InvertValue()})".MinimalizeValue(),
-                                            TotalValue = spread.Value["away"].ToString(),
-                                            MatchDateTime = matchDateTime,
-                                            LeagueId = leagueId,
-                                            TeamType = TeamType.TEAM2,
-                                            SideType = SideType.OVER,
-                                            BetType = BetType.SPREAD
-                                        });
+                                        resList[id].AddRange(eventFactory.CreateEventsWithTotal($"F2({spread.Value["hdp"].ToString().InvertValue()})".MinimalizeValue(),
+                                                                                          spread.Value["away"].ToString(),
+                                                                                          TeamType.TEAM2,
+                                                                                          SideType.OVER,
+                                                                                          BetType.SPREAD));
                                 }
                             if (period.Value.ContainsKey("totals") && period.Value["totals"] != null)
                                 foreach (var total in period.Value["totals"])
                                 {
                                     if (!total.Value.ContainsKey("points") || total.Value["points"] == null) continue;
                                     if (total.Value.ContainsKey("over") && total.Value["over"] != null)
-                                    {
-                                        var totalType = string.Empty;
-                                        //matchPeriod can be only 0,1 and 2 according API
-                                        switch (matchPeriod)
-                                        {
-                                            case 0:
-                                                totalType = $"TO({total.Value["points"]})".MinimalizeValue();
-                                                break;
-
-                                            default:
-                                                switch (_sportType)
-                                                {
-                                                    case SportType.Soccer:
-                                                        totalType = $"{DictionatyTypeCoef.TT}O({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-
-                                                    case SportType.Basketball:
-                                                        totalType = $"{DictionatyTypeCoef.TPT}O({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-
-                                                    case SportType.Hockey:
-                                                        totalType = $"{DictionatyTypeCoef.TPR}O({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-
-                                                    case SportType.Tennis:
-                                                        totalType = $"{DictionatyTypeCoef.TS}O({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-
-                                                    case SportType.Volleyball:
-                                                        totalType = $"TO({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-                                                }
-                                                break;
-                                        }
-                                        resList[id].Add(new EventWithTotalDictionary
-                                        {
-                                            LineId = lineId,
-                                            TotalType = totalType,
-                                            TotalValue = total.Value["over"].ToString(),
-                                            MatchDateTime = matchDateTime,
-                                            LeagueId = leagueId,
-                                            MatchPeriod = matchPeriod,
-                                            TeamType = TeamType.DRAW,
-                                            SideType = SideType.OVER,
-                                            BetType = BetType.TOTAL_POINTS
-                                        });
-                                    }
+                                        resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TO({total.Value["points"]})".MinimalizeValue(),
+                                                                                          total.Value["over"].ToString(),
+                                                                                          TeamType.DRAW,
+                                                                                          SideType.OVER,
+                                                                                          BetType.TOTAL_POINTS));
                                     if (total.Value.ContainsKey("under") && total.Value["under"] != null)
-                                    {
-                                        var totalType = string.Empty;
-                                        //matchPeriod can be only 0,1 and 2 according API
-                                        switch (matchPeriod)
-                                        {
-                                            case 0:
-                                                totalType = $"TU({total.Value["points"]})".MinimalizeValue();
-                                                break;
-
-                                            default:
-                                                switch (_sportType)
-                                                {
-                                                    case SportType.Soccer:
-                                                        totalType = $"{DictionatyTypeCoef.TT}U({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-
-                                                    case SportType.Basketball:
-                                                        totalType = $"{DictionatyTypeCoef.TPT}U({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-
-                                                    case SportType.Hockey:
-                                                        totalType = $"{DictionatyTypeCoef.TPR}U({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-
-                                                    case SportType.Tennis:
-                                                        totalType = $"{DictionatyTypeCoef.TS}U({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-
-                                                    case SportType.Volleyball:
-                                                        totalType = $"TU({total.Value["points"]})".MinimalizeValue();
-                                                        break;
-                                                }
-                                                break;
-                                        }
-
-                                        resList[id].Add(new EventWithTotalDictionary
-                                        {
-                                            LineId = lineId,
-                                            TotalType = totalType,
-                                            TotalValue = total.Value["under"].ToString(),
-                                            MatchDateTime = matchDateTime,
-                                            LeagueId = leagueId,
-                                            MatchPeriod = matchPeriod,
-                                            TeamType = TeamType.DRAW,
-                                            SideType = SideType.UNDER,
-                                            BetType = BetType.TOTAL_POINTS
-                                        });
-                                    }
+                                        resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TU({total.Value["points"]})".MinimalizeValue(),
+                                                                                          total.Value["under"].ToString(),
+                                                                                          TeamType.DRAW,
+                                                                                          SideType.UNDER,
+                                                                                          BetType.TOTAL_POINTS));
                                 }
                             if (period.Value.ContainsKey("teamTotal") && period.Value["teamTotal"] != null)
                             {
+                                //todo
                                 var teamTotal = period.Value["teamTotal"];
                                 if (teamTotal.ContainsKey("home") && teamTotal["home"] != null)
                                 {
                                     var home = teamTotal["home"];
                                     if (!home.ContainsKey("points") || home["points"] == null) continue;
                                     if (home.ContainsKey("over") && home["over"] != null)
-                                        resList[id].Add(new EventWithTotalDictionary
-                                        {
-                                            LineId = lineId,
-                                            TotalType = $"TF1O({home["points"]})".MinimalizeValue(),
-                                            TotalValue = home["over"].ToString(),
-                                            MatchDateTime = matchDateTime,
-                                            LeagueId = leagueId,
-                                            MatchPeriod = matchPeriod,
-                                            SideType = SideType.OVER,
-                                            TeamType = TeamType.TEAM1,
-                                            BetType = BetType.TEAM_TOTAL_POINTS
-                                        });
+                                        resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TOT1({home["points"]})".MinimalizeValue(),
+                                                                                          home["over"].ToString(),
+                                                                                          TeamType.TEAM1,
+                                                                                          SideType.OVER,
+                                                                                          BetType.TEAM_TOTAL_POINTS));
                                     if (home.ContainsKey("under") && home["under"] != null)
-                                        resList[id].Add(new EventWithTotalDictionary
-                                        {
-                                            LineId = lineId,
-                                            TotalType = $"TF1U({home["points"]})".MinimalizeValue(),
-                                            TotalValue = home["under"].ToString(),
-                                            MatchDateTime = matchDateTime,
-                                            LeagueId = leagueId,
-                                            MatchPeriod = matchPeriod,
-                                            SideType = SideType.UNDER,
-                                            TeamType = TeamType.TEAM1,
-                                            BetType = BetType.TEAM_TOTAL_POINTS
-                                        });
+                                        resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TUT1({home["points"]})".MinimalizeValue(),
+                                                                                          home["under"].ToString(),
+                                                                                          TeamType.TEAM1,
+                                                                                          SideType.UNDER,
+                                                                                          BetType.TEAM_TOTAL_POINTS));
                                 }
                                 if (teamTotal.ContainsKey("away") && teamTotal["away"] != null)
                                 {
                                     var away = teamTotal["away"];
                                     if (!away.ContainsKey("points") || away["points"] == null) continue;
                                     if (away.ContainsKey("over") && away["over"] != null)
-                                        resList[id].Add(new EventWithTotalDictionary
-                                        {
-                                            LineId = lineId,
-                                            TotalType = $"TF2O({away["points"]})".MinimalizeValue(),
-                                            TotalValue = away["over"].ToString(),
-                                            MatchDateTime = matchDateTime,
-                                            LeagueId = leagueId,
-                                            MatchPeriod = matchPeriod,
-                                            SideType = SideType.OVER,
-                                            TeamType = TeamType.TEAM2,
-                                            BetType = BetType.TEAM_TOTAL_POINTS
-                                        });
+                                        resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TOT2({away["points"]})".MinimalizeValue(),
+                                                                                          away["over"].ToString(),
+                                                                                          TeamType.TEAM2,
+                                                                                          SideType.OVER,
+                                                                                          BetType.TEAM_TOTAL_POINTS));
                                     if (away.ContainsKey("under") && away["under"] != null)
-                                        resList[id].Add(new EventWithTotalDictionary
-                                        {
-                                            LineId = lineId,
-                                            TotalType = $"TF2U({away["points"]})".MinimalizeValue(),
-                                            TotalValue = away["under"].ToString(),
-                                            MatchDateTime = matchDateTime,
-                                            LeagueId = leagueId,
-                                            MatchPeriod = matchPeriod,
-                                            SideType = SideType.UNDER,
-                                            TeamType = TeamType.TEAM2,
-                                            BetType = BetType.TEAM_TOTAL_POINTS
-                                        });
+                                        resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TUT2({away["points"]})".MinimalizeValue(),
+                                                                                          away["under"].ToString(),
+                                                                                          TeamType.TEAM2,
+                                                                                          SideType.UNDER,
+                                                                                          BetType.TEAM_TOTAL_POINTS));
                                 }
                             }
                         }
@@ -334,7 +188,7 @@ namespace WinParse.DataParser.DefaultRealization
                     {
                         var id = sportEvent.Value["id"].ConvertToLongOrNull();
                         if (id == null) continue;
-                        System.Diagnostics.Debug.WriteLine(sportEvent.Value["status"]);
+                        //System.Diagnostics.Debug.WriteLine(sportEvent.Value["status"]);
                         if (!resList.ContainsKey(id.Value))
                             resList.Add(id.Value, $"{sportEvent.Value["home"]} - {sportEvent.Value["away"]}".Replace("\"", ""));
                     }

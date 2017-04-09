@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FormulasCollection.Realizations;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToolsPortable;
-using WinParse.BusinessLogic.Realizations;
 
 namespace UnitTest.FormulasCollectionTests.CalculationTests
 {

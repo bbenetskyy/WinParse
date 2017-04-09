@@ -1,11 +1,11 @@
 ﻿#define CalculatorProgram
 
+using FormulasCollection.Models;
+using FormulasCollection.Realizations;
 using System;
 using System.Globalization;
 using System.Windows.Forms;
 using ToolsPortable;
-using WinParse.BusinessLogic.Models;
-using WinParse.BusinessLogic.Realizations;
 
 namespace DXApplication1.Pages
 {

@@ -1,4 +1,6 @@
-﻿namespace WinParse.BusinessLogic.Models
+﻿using MarathonBetLibrary.Model;
+
+namespace WinParse.BusinessLogic.Models
 {
     public class EventForAutoPlay
     {

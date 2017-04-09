@@ -1,5 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WinParse.BusinessLogic.Helpers;
+﻿using FormulasCollection.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 // ReSharper disable ExpressionIsAlwaysNull
 
 namespace UnitTest.FormulasCollectionTests.HelpersTests
@@ -85,7 +86,74 @@ namespace UnitTest.FormulasCollectionTests.HelpersTests
             inValue = "2";
             outValue = "+2";
             Assert.AreEqual(inValue.LocalizeToMarathon(), outValue);
+        }
 
+        [TestMethod]
+        public void ExtendType_TestWithSimple()
+        {
+            var extention = "H";
+            var period = 1;
+            var inValue = "1";
+            var outValue = "1H1";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
+
+            extention = "P";
+            period = 3;
+            inValue = "2";
+            outValue = "2P3";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
+
+            extention = "HQE";
+            period = 2;
+            inValue = "X";
+            outValue = "XHQE2";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
+
+            extention = null;
+            period = 3;
+            inValue = "2";
+            outValue = "2";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
+
+            extention = "H";
+            period = 0;
+            inValue = "2";
+            outValue = "2";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
+        }
+
+        [TestMethod]
+        public void ExtendType_TestWithCombined()
+        {
+            var extention = "H";
+            var period = 1;
+            var inValue = "F2(+4)";
+            var outValue = "F2H1(+4)";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
+
+            extention = "P";
+            period = 3;
+            inValue = "TO(+7.5)";
+            outValue = "TOP3(+7.5)";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
+
+            extention = "HQE";
+            period = 2;
+            inValue = "F2(+1)";
+            outValue = "F2HQE2(+1)";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
+
+            extention = null;
+            period = 3;
+            inValue = "TU(-5.25)";
+            outValue = "TU(-5.25)";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
+
+            extention = "HQE";
+            period = -3;
+            inValue = "TU(-5.25)";
+            outValue = "TU(-5.25)";
+            Assert.AreEqual(inValue.ExtendType(extention, period), outValue);
         }
     }
 }

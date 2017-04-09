@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WinParse.DataSaver.RavenDB
+namespace DataSaver.RavenDB
 {
     public static class RavenDB_Extention
     {

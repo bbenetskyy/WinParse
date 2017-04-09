@@ -1,10 +1,10 @@
 ﻿using DataSaver;
+using FormulasCollection.Enums;
+using FormulasCollection.Models;
+using FormulasCollection.Realizations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ToolsPortable;
-using WinParse.BusinessLogic.Enums;
-using WinParse.BusinessLogic.Models;
-using WinParse.BusinessLogic.Realizations;
 
 namespace DXApplication1.Models
 {
@@ -28,9 +28,6 @@ namespace DXApplication1.Models
 
             foreach (var fork in forks)
             {
-                fork.Profit = _calculatorFormulas.GetProfit(
-                    fork.CoefFirst.ConvertToDoubleOrNull() ?? 0d,
-                    fork.CoefSecond.ConvertToDoubleOrNull() ?? 0d);
                 fork.prices = null;
             }
 

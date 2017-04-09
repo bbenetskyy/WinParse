@@ -1,8 +1,9 @@
-﻿using DXApplication1.Pages;
+﻿using DataSaver.Models;
+using DXApplication1.Pages;
+using FormulasCollection.Enums;
+using FormulasCollection.Models;
 using System;
 using System.Windows.Forms;
-using WinParse.BusinessLogic.Enums;
-using WinParse.BusinessLogic.Models;
 
 namespace DXApplication1.Models
 {

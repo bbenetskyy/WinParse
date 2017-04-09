@@ -1,4 +1,9 @@
-﻿using NLog;
+﻿using DataParser.Enums;
+using DataSaver.Models;
+using DataSaver.RavenDB;
+using FormulasCollection.Enums;
+using FormulasCollection.Models;
+using NLog;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
@@ -10,11 +15,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using WinParse.BusinessLogic.Enums;
-using WinParse.BusinessLogic.Models;
-using WinParse.DataParser.Enums;
-using WinParse.DataSaver.Models;
-using WinParse.DataSaver.RavenDB;
 
 namespace DataSaver
 {
@@ -123,8 +123,7 @@ namespace DataSaver
             return rowsForDelete;
         }
 
-        public bool IsSameFork(Fork fNew,
-            ForkRow fBase)
+        public bool IsSameFork(Fork fNew, ForkRow fBase)
         {
             // ReSharper disable once JoinDeclarationAndInitializer
             bool bRes;
@@ -246,11 +245,11 @@ namespace DataSaver
                 Period = json.DataAsJson.Value<int>("Period"),
                 SideType = json.DataAsJson.Value<SideType>("SideType"),
                 TeamType = json.DataAsJson.Value<TeamType>("TeamType"),
-                BetType = json.DataAsJson.Value<BetType>("Period")
+                BetType = json.DataAsJson.Value<BetType>("BetType"),
+                Profit = json.DataAsJson.Value<double>("Profit")
             };
             return result;
         }
-
         protected User MapJsonDocumentToUser(JsonDocument json)
         {
             var result = new User
@@ -318,6 +317,7 @@ namespace DataSaver
                 prices = fork.prices,
                 selection_key = fork.selection_key,
 
+
                 MarRate = fork.MarRate,
                 PinRate = fork.PinRate,
                 MarSuccess = fork.MarSuccess,
@@ -326,10 +326,12 @@ namespace DataSaver
                 Period = fork.Period,
                 SideType = fork.SideType,
                 TeamType = fork.TeamType,
-                BetType = fork.BetType
+                BetType = fork.BetType,
+                Profit = fork.Profit
             };
             return result;
         }
+
 
         protected Fork MapForkRowToFork(ForkRow forkRow)
         {
@@ -369,7 +371,8 @@ namespace DataSaver
                 Period = forkRow.Period,
                 SideType = forkRow.SideType,
                 TeamType = forkRow.TeamType,
-                BetType = forkRow.BetType
+                BetType = forkRow.BetType,
+                Profit = forkRow.Profit
             };
             return result;
         }
@@ -412,13 +415,13 @@ namespace DataSaver
         }
 
         /// <summary>
-        /// Add new User into Raven Db 
+        /// Add new User into Raven Db
         /// </summary>
-        /// <param name="loginPinnacle"> User pinnacle login </param>
-        /// <param name="passwordPinnacle"> User pinnacle password </param>
-        /// <param name="loginMarathon"> User marathon login </param>
-        /// <param name="passwordMarathon"> User marathon password </param>
-        /// <param name="antiGateCode"> anticaptcha user private Id </param>
+        /// <param name="loginPinnacle">User pinnacle login</param>
+        /// <param name="passwordPinnacle">User pinnacle password</param>
+        /// <param name="loginMarathon">User marathon login</param>
+        /// <param name="passwordMarathon">User marathon password</param>
+        /// <param name="antiGateCode">anticaptcha user private Id</param>
         /// <returns></returns>
         public bool AddUserToDb(string loginPinnacle,
             string passwordPinnacle,
@@ -477,6 +480,7 @@ namespace DataSaver
             Session.SaveChanges();
             return true;
         }
+
 
         public User FindUser()
         {

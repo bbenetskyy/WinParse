@@ -2,9 +2,9 @@
 using DataSaver;
 using DevExpress.XtraEditors;
 using DXApplication1.Models;
+using FormulasCollection.Models;
 using NLog;
 using System.Windows.Forms;
-using WinParse.BusinessLogic.Models;
 
 namespace DXApplication1
 {

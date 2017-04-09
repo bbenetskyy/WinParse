@@ -1,4 +1,4 @@
-﻿namespace WinParse.DataParser.Enums
+﻿namespace DataParser.Enums
 {
     public enum SportType
     {

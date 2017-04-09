@@ -1,11 +1,11 @@
-﻿using System;
+﻿using FormulasCollection.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using ToolsPortable;
-using WinParse.BusinessLogic.Models;
 
-namespace WinParse.BusinessLogic.Realizations
+namespace FormulasCollection.Realizations
 {
     public class TwoOutComeCalculatorFormulas
     {
@@ -13,8 +13,6 @@ namespace WinParse.BusinessLogic.Realizations
         {
             Formatter = "-";
         }
-
-        public string CalculateIncome(double coef, double rate) => (coef * rate).ToString(CultureInfo.CurrentCulture); //todo check and delete because it's don't used in code
 
         public string CalculateRate(double? rateMain, double? rateCurrent, double? kof)
         {

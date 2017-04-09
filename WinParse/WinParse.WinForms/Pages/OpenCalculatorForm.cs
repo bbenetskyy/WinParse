@@ -1,9 +1,9 @@
-﻿using System;
+﻿using FormulasCollection.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ToolsPortable;
-using WinParse.BusinessLogic.Models;
 
 namespace DXApplication1.Pages
 {

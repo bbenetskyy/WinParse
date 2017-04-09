@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WinParse.BusinessLogic.Models
+namespace FormulasCollection.Models
 {
     public class ResultForForksDictionary
     {

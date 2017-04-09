@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WinParse.BusinessLogic.Realizations
+namespace FormulasCollection.Realizations
 {
     public class ConverterFormulas
     {

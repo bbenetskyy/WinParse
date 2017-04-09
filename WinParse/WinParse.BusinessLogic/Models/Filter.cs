@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WinParse.BusinessLogic.Models
+namespace FormulasCollection.Models
 {
     public class Filter
     {
@@ -34,6 +34,7 @@ namespace WinParse.BusinessLogic.Models
 
         public bool AutoDelete { get; set; }
 
+
         private int defaultAutoDeleteTime = 1200;
 
         private int? _autoDeleteTime;
@@ -49,5 +50,6 @@ namespace WinParse.BusinessLogic.Models
         public DateTime? AfterTime { get; set; }
 
         public bool PinnaclePlace { get; set; }
+
     }
 }

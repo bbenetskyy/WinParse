@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAccess", "SiteAccess\Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.Tests", "WinParse.Tests\WinParse.Tests.csproj", "{083BA84F-1D4E-4B59-923D-CB3F6081015A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.MarathonBetLibrary", "WinParse.MarathonBetLibrary\WinParse.MarathonBetLibrary.csproj", "{F7DCD3C5-349A-4553-8A4F-60C95E132BFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{083BA84F-1D4E-4B59-923D-CB3F6081015A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{083BA84F-1D4E-4B59-923D-CB3F6081015A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{083BA84F-1D4E-4B59-923D-CB3F6081015A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7DCD3C5-349A-4553-8A4F-60C95E132BFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7DCD3C5-349A-4553-8A4F-60C95E132BFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7DCD3C5-349A-4553-8A4F-60C95E132BFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7DCD3C5-349A-4553-8A4F-60C95E132BFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
