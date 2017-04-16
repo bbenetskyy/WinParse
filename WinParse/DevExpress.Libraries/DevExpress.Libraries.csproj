@@ -43,268 +43,270 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DevExpress.BonusSkins.v15.2.dll">
+    <None Include="DevExpress.BonusSkins.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Data.v15.2.dll">
+    </None>
+    <None Include="DevExpress.Data.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Data.v15.2.xml">
+    </None>
+    <None Include="DevExpress.Data.v15.2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Images.v15.2.dll" />
-    <Content Include="DevExpress.Office.v15.2.Core.dll">
+    </None>
+    <None Include="DevExpress.Images.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Office.v15.2.Core.xml">
+    </None>
+    <None Include="DevExpress.Office.v15.2.Core.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Pdf.v15.2.Core.dll">
+    </None>
+    <None Include="DevExpress.Office.v15.2.Core.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Pdf.v15.2.Core.xml">
+    </None>
+    <None Include="DevExpress.Pdf.v15.2.Core.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Pdf.v15.2.Drawing.dll">
+    </None>
+    <None Include="DevExpress.Pdf.v15.2.Core.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Pdf.v15.2.Drawing.xml">
+    </None>
+    <None Include="DevExpress.Pdf.v15.2.Drawing.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Printing.v15.2.Core.dll">
+    </None>
+    <None Include="DevExpress.Pdf.v15.2.Drawing.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Printing.v15.2.Core.xml">
+    </None>
+    <None Include="DevExpress.Printing.v15.2.Core.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.RichEdit.v15.2.Core.dll">
+    </None>
+    <None Include="DevExpress.Printing.v15.2.Core.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.RichEdit.v15.2.Core.xml">
+    </None>
+    <None Include="DevExpress.RichEdit.v15.2.Core.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Sparkline.v15.2.Core.dll">
+    </None>
+    <None Include="DevExpress.RichEdit.v15.2.Core.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Sparkline.v15.2.Core.xml">
+    </None>
+    <None Include="DevExpress.Sparkline.v15.2.Core.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Utils.v15.2.dll">
+    </None>
+    <None Include="DevExpress.Sparkline.v15.2.Core.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.Utils.v15.2.xml">
+    </None>
+    <None Include="DevExpress.Utils.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraBars.v15.2.dll">
+    </None>
+    <None Include="DevExpress.Utils.v15.2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraBars.v15.2.xml">
+    </None>
+    <None Include="DevExpress.XtraBars.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraEditors.v15.2.dll">
+    </None>
+    <None Include="DevExpress.XtraBars.v15.2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraEditors.v15.2.xml">
+    </None>
+    <None Include="DevExpress.XtraEditors.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraGrid.v15.2.dll">
+    </None>
+    <None Include="DevExpress.XtraEditors.v15.2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraGrid.v15.2.xml">
+    </None>
+    <None Include="DevExpress.XtraGrid.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraLayout.v15.2.dll">
+    </None>
+    <None Include="DevExpress.XtraGrid.v15.2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraLayout.v15.2.xml">
+    </None>
+    <None Include="DevExpress.XtraLayout.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraNavBar.v15.2.dll">
+    </None>
+    <None Include="DevExpress.XtraLayout.v15.2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraNavBar.v15.2.xml">
+    </None>
+    <None Include="DevExpress.XtraNavBar.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraPrinting.v15.2.dll">
+    </None>
+    <None Include="DevExpress.XtraNavBar.v15.2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraPrinting.v15.2.xml">
+    </None>
+    <None Include="DevExpress.XtraPrinting.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraTreeList.v15.2.dll">
+    </None>
+    <None Include="DevExpress.XtraPrinting.v15.2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DevExpress.XtraTreeList.v15.2.xml">
+    </None>
+    <None Include="DevExpress.XtraTreeList.v15.2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.Data.v15.2.resources.dll">
+    </None>
+    <None Include="DevExpress.XtraTreeList.v15.2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.Office.v15.2.Core.resources.dll">
+    </None>
+    <None Include="de\DevExpress.Data.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.Pdf.v15.2.Core.resources.dll">
+    </None>
+    <None Include="de\DevExpress.Office.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.Printing.v15.2.Core.resources.dll">
+    </None>
+    <None Include="de\DevExpress.Pdf.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.RichEdit.v15.2.Core.resources.dll">
+    </None>
+    <None Include="de\DevExpress.Printing.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.Sparkline.v15.2.Core.resources.dll">
+    </None>
+    <None Include="de\DevExpress.RichEdit.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.Utils.v15.2.resources.dll">
+    </None>
+    <None Include="de\DevExpress.Sparkline.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.XtraBars.v15.2.resources.dll">
+    </None>
+    <None Include="de\DevExpress.Utils.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.XtraEditors.v15.2.resources.dll">
+    </None>
+    <None Include="de\DevExpress.XtraBars.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.XtraGrid.v15.2.resources.dll">
+    </None>
+    <None Include="de\DevExpress.XtraEditors.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.XtraLayout.v15.2.resources.dll">
+    </None>
+    <None Include="de\DevExpress.XtraGrid.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.XtraNavBar.v15.2.resources.dll">
+    </None>
+    <None Include="de\DevExpress.XtraLayout.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.XtraPrinting.v15.2.resources.dll">
+    </None>
+    <None Include="de\DevExpress.XtraNavBar.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="de\DevExpress.XtraTreeList.v15.2.resources.dll">
+    </None>
+    <None Include="de\DevExpress.XtraPrinting.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.Data.v15.2.resources.dll">
+    </None>
+    <None Include="de\DevExpress.XtraTreeList.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.Office.v15.2.Core.resources.dll">
+    </None>
+    <None Include="es\DevExpress.Data.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.Pdf.v15.2.Core.resources.dll">
+    </None>
+    <None Include="es\DevExpress.Office.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.Printing.v15.2.Core.resources.dll">
+    </None>
+    <None Include="es\DevExpress.Pdf.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.RichEdit.v15.2.Core.resources.dll">
+    </None>
+    <None Include="es\DevExpress.Printing.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.Sparkline.v15.2.Core.resources.dll">
+    </None>
+    <None Include="es\DevExpress.RichEdit.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.Utils.v15.2.resources.dll">
+    </None>
+    <None Include="es\DevExpress.Sparkline.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.XtraBars.v15.2.resources.dll">
+    </None>
+    <None Include="es\DevExpress.Utils.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.XtraEditors.v15.2.resources.dll">
+    </None>
+    <None Include="es\DevExpress.XtraBars.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.XtraGrid.v15.2.resources.dll">
+    </None>
+    <None Include="es\DevExpress.XtraEditors.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.XtraLayout.v15.2.resources.dll">
+    </None>
+    <None Include="es\DevExpress.XtraGrid.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.XtraNavBar.v15.2.resources.dll">
+    </None>
+    <None Include="es\DevExpress.XtraLayout.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.XtraPrinting.v15.2.resources.dll">
+    </None>
+    <None Include="es\DevExpress.XtraNavBar.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="es\DevExpress.XtraTreeList.v15.2.resources.dll">
+    </None>
+    <None Include="es\DevExpress.XtraPrinting.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.Data.v15.2.resources.dll">
+    </None>
+    <None Include="es\DevExpress.XtraTreeList.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.Office.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.Data.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.Pdf.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.Office.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.Printing.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.Pdf.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.RichEdit.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.Printing.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.Sparkline.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.RichEdit.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.Utils.v15.2.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.Sparkline.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.XtraBars.v15.2.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.Utils.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.XtraEditors.v15.2.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.XtraBars.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.XtraGrid.v15.2.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.XtraEditors.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.XtraLayout.v15.2.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.XtraGrid.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.XtraNavBar.v15.2.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.XtraLayout.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.XtraPrinting.v15.2.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.XtraNavBar.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ja\DevExpress.XtraTreeList.v15.2.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.XtraPrinting.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.Data.v15.2.resources.dll">
+    </None>
+    <None Include="ja\DevExpress.XtraTreeList.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.Office.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.Data.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.Pdf.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.Office.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.Printing.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.Pdf.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.RichEdit.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.Printing.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.Sparkline.v15.2.Core.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.RichEdit.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.Utils.v15.2.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.Sparkline.v15.2.Core.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.XtraBars.v15.2.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.Utils.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.XtraEditors.v15.2.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.XtraBars.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.XtraGrid.v15.2.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.XtraEditors.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.XtraLayout.v15.2.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.XtraGrid.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.XtraNavBar.v15.2.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.XtraLayout.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.XtraPrinting.v15.2.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.XtraNavBar.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ru\DevExpress.XtraTreeList.v15.2.resources.dll">
+    </None>
+    <None Include="ru\DevExpress.XtraPrinting.v15.2.resources.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
+    <None Include="ru\DevExpress.XtraTreeList.v15.2.resources.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
