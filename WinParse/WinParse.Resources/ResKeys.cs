@@ -26,5 +26,26 @@ namespace WinParse.Resources
         public static string LoginForm_ButtonOk_ToolTip => nameof(LoginForm_ButtonOk_ToolTip);
 
         #endregion LoginForm
+
+        #region DefaultHomeForm
+
+        public static string DefaultHomeForm_Name => nameof(DefaultHomeForm_Name);
+
+        public static string DefaultHomeForm_Language_Description_Caption
+            => nameof(DefaultHomeForm_Language_Description_Caption);
+
+        public static string DefaultHomeForm_Language_CodeColumn_Caption
+            => nameof(DefaultHomeForm_Language_CodeColumn_Caption);
+
+        public static string DefaultHomeForm_PageGroupLocalization_Text
+            => nameof(DefaultHomeForm_PageGroupLocalization_Text);
+
+        public static string DefaultHomeForm_PageGroupSkins_Text => nameof(DefaultHomeForm_PageGroupSkins_Text);
+
+        public static string DefaultHomeForm_PageSettings_Text => nameof(DefaultHomeForm_PageSettings_Text);
+
+        public static string DefaultHomeForm_Language_Caption => nameof(DefaultHomeForm_Language_Caption);
+
+        #endregion DefaultHomeForm
     }
 }

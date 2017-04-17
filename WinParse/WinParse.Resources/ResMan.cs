@@ -5,7 +5,7 @@ using ToolsPortable;
 
 namespace WinParse.Resources
 {
-    public class ResMan : SortedList
+    public static class ResMan
     {
         private static ResourceManager _instance;
         public static string NoDataSource = "__NO_DATA__";
@@ -23,6 +23,21 @@ namespace WinParse.Resources
                 return NoDataSource;
             var res = _instance?.GetString(code);
             return res.IsNotBlank() ? res : NoDataSource;
+        }
+
+        public static ResourceManager GetResourceByName(string resourceName)
+        {
+            switch (resourceName)
+            {
+                case "en-GB":
+                    return en_GB.ResourceManager;
+                case "ru-RU":
+                    return ru_RU.ResourceManager;
+                case "uk-UA":
+                    return uk_UA.ResourceManager;
+                default:
+                    return null;
+            }
         }
     }
 }
