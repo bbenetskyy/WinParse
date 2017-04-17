@@ -97,15 +97,15 @@
   <ItemGroup>
     <ProjectReference Include="..\WinParse.DataParser\WinParse.DataParser.csproj">
       <Project>{586a03bb-1702-4143-b370-e1dc6656762a}</Project>
-      <Name>DataParser</Name>
+      <Name>WinParse.DataParser</Name>
     </ProjectReference>
     <ProjectReference Include="..\WinParse.DataSaver\WinParse.DataSaver.csproj">
       <Project>{6C968817-C8BB-4BFF-9284-C786DBF5E90D}</Project>
-      <Name>DataSaver</Name>
+      <Name>WinParse.DataSaver</Name>
     </ProjectReference>
     <ProjectReference Include="..\WinParse.BusinessLogic\WinParse.BusinessLogic.csproj">
       <Project>{c6982ab9-704a-474f-a303-89b4c4a3d11e}</Project>
-      <Name>FormulasCollection</Name>
+      <Name>WinParse.BusinessLogic</Name>
     </ProjectReference>
     <ProjectReference Include="..\SiteAccess\SiteAccess.csproj">
       <Project>{DDC82E86-35CB-4465-B23C-6C341FE9CC36}</Project>

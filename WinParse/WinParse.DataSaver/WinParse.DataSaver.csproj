@@ -129,7 +129,7 @@
     </ProjectReference>
     <ProjectReference Include="..\WinParse.BusinessLogic\WinParse.BusinessLogic.csproj">
       <Project>{C6982AB9-704A-474F-A303-89B4C4A3D11E}</Project>
-      <Name>FormulasCollection</Name>
+      <Name>WinParse.BusinessLogic</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
