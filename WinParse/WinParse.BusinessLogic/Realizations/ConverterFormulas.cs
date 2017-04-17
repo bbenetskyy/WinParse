@@ -7,9 +7,9 @@ namespace FormulasCollection.Realizations
     {
         public double IncorrectAmericanOdds => -127;
 
-        public List<string> ConvertToAsian(double? asian1cof, double? asian2cof) => (asian1cof == null || asian2cof == null)
+        public List<string> ConvertToAsian(double? asian1Cof, double? asian2Cof) => (asian1Cof == null || asian2Cof == null)
             ? new List<string>(new[] { "No any Rates" })
-            : new List<string>(new[] { $"{asian1cof.Value},{(asian1cof.Value + asian2cof.Value) / 2},{asian2cof.Value}" });
+            : new List<string>(new[] { $"{asian1Cof.Value},{(asian1Cof.Value + asian2Cof.Value) / 2},{asian2Cof.Value}" });
 
         public double ConvertAmericanToDecimal(double? american) => american == null
                 ? IncorrectAmericanOdds

@@ -16,7 +16,7 @@ namespace SiteAccess.Access
     {
         private IAntiCaptcha _ac;
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        private static int countAttemptToLogin = 5;
+        private static int _countAttemptToLogin = 5;
 
         public MarathonAccess(IAntiCaptcha anti) : base(null)
         {
@@ -166,7 +166,7 @@ namespace SiteAccess.Access
 
         private void LoginWithCapcha(string login, string password)
         {
-            for (int i = 0; i < countAttemptToLogin; i++)
+            for (int i = 0; i < _countAttemptToLogin; i++)
             {
                 // Получение капчи
                 Headers.Clear();
@@ -350,7 +350,7 @@ namespace SiteAccess.Access
             Proxy = proxy as WebProxy;
         }
 
-        private User _user;
+        private UserSiteAccess _user;
         private readonly Uri _domain = new Uri("https://www.marathonbet.com/su");
         private string _xpid;
         private string _html;

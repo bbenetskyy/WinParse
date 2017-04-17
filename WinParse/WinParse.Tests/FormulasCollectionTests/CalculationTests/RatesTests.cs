@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToolsPortable;
 
-namespace UnitTest.FormulasCollectionTests.CalculationTests
+namespace WinParse.Tests.FormulasCollectionTests.CalculationTests
 {
     [TestClass]
     public class RatesTests

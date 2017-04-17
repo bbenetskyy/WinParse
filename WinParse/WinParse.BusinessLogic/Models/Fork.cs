@@ -1,7 +1,7 @@
 ﻿using FormulasCollection.Enums;
-using SiteAccess.Enums;
 using System;
 using System.Collections.Generic;
+using SiteAccess.Model;
 
 namespace FormulasCollection.Models
 {
@@ -90,23 +90,23 @@ namespace FormulasCollection.Models
         /// </summary>
         public string LineId { get; set; }
 
-        public string sn { get; set; }
+        public string Sn { get; set; }
 
-        public string mn { get; set; }
+        public string Mn { get; set; }
 
-        public string ewc { get; set; }
+        public string Ewc { get; set; }
 
-        public string cid { get; set; }
+        public string Cid { get; set; }
 
-        public string prt { get; set; }
+        public string Prt { get; set; }
 
-        public string ewf { get; set; }
+        public string Ewf { get; set; }
 
-        public string epr { get; set; }
+        public string Epr { get; set; }
 
-        public List<string> prices { get; set; }
+        public List<string> Prices { get; set; }
 
-        public string selection_key { get; set; }
+        public string SelectionKey { get; set; }
 
         public string MarRate { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using NLog;
-using SiteAccess.Enums;
 using SiteAccess.Helpers;
 using SiteAccess.Model.Bets;
 
@@ -9,25 +8,26 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using SiteAccess.Model;
 
 namespace SiteAccess.Access
 {
     public class PinncaleAccess : AccessBase, ISiteAccess<PinnacleBet, PinncaleAccess.Result>
     {
-        private HttpWebRequest request;
-        private string _username, _password, Domain, ApiDomain;
+        private HttpWebRequest _request;
+        private string _username, _password, _domain, _apiDomain;
         private WebClient _testCl;
         private static Logger _logger;
 
         public PinncaleAccess() : base(null)
         {
-            Domain = "https://www.pinnacle.com/";
-            ApiDomain = "https://api.pinnaclesports.com/v1/bets/place";
+            _domain = "https://www.pinnacle.com/";
+            _apiDomain = "https://api.pinnaclesports.com/v1/bets/place";
             _testCl = new WebClient();
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public PinncaleAccess.Result MakeBet(PinnacleBet bet)
+        public Result MakeBet(PinnacleBet bet)
         {
             string postJson =
             "{\"uniqueRequestId\":\"" + bet.Guid + "\"," +
@@ -41,7 +41,7 @@ namespace SiteAccess.Access
             "\"betType\":\"" + bet.BetType.ToString() + "\"," +
             "\"oddsFormat\":\"" + bet.OddsFormat.ToString() + "\"";
 
-            if (bet.BetType == BetType.TOTAL_POINTS || bet.BetType == BetType.TEAM_TOTAL_POINTS)
+            if (bet.BetType == BetType.TotalPoints || bet.BetType == BetType.TeamTotalPoints)
             {
                 postJson += ",\"side\":\"" + bet.Side.ToString() + "\"";
             }
@@ -75,7 +75,7 @@ namespace SiteAccess.Access
             Stream dataStream;
             try
             {
-                dataStream = request.GetRequestStream();
+                dataStream = _request.GetRequestStream();
                 dataStream.Write(byteArray, 0, byteArray.Length);
                 dataStream.Close();
             }
@@ -88,7 +88,7 @@ namespace SiteAccess.Access
             HttpWebResponse response;
             try
             {
-                response = (HttpWebResponse)request.GetResponse();
+                response = (HttpWebResponse)_request.GetResponse();
             }
             catch (WebException ex)
             {
@@ -118,7 +118,7 @@ namespace SiteAccess.Access
         {
             try
             {
-                _testCl.DownloadString(Domain);
+                _testCl.DownloadString(_domain);
             }
             catch
             {
@@ -136,18 +136,18 @@ namespace SiteAccess.Access
             string base64 = Convert.ToBase64String(bytes);
             string authorization = String.Concat("Basic ", base64);
 
-            request.Headers.Add("Authorization", authorization);
+            _request.Headers.Add("Authorization", authorization);
 
             return true;
         }
 
         protected override void SetHeaders()
         {
-            request = (HttpWebRequest)WebRequest.Create("https://api.pinnaclesports.com/v1/bets/place");
-            request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)";
-            request.Method = "POST";
-            request.Accept = "application/json";
-            request.ContentType = "application/json; charset=utf-8";
+            _request = (HttpWebRequest)WebRequest.Create("https://api.pinnaclesports.com/v1/bets/place");
+            _request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)";
+            _request.Method = "POST";
+            _request.Accept = "application/json";
+            _request.ContentType = "application/json; charset=utf-8";
         }
 
         protected override void Connect()
@@ -159,24 +159,24 @@ namespace SiteAccess.Access
         {
             switch (key)
             {
-                case "User-Agent": request.UserAgent = val; break;
-                case "Method": request.Method = val; break;
-                case "Content-Type": request.ContentType = val; break;
-                case "Accept": request.Accept = val; break;
-                default: request.Headers[key] = val; break;
+                case "User-Agent": _request.UserAgent = val; break;
+                case "Method": _request.Method = val; break;
+                case "Content-Type": _request.ContentType = val; break;
+                case "Accept": _request.Accept = val; break;
+                default: _request.Headers[key] = val; break;
             }
         }
 
         public void SetProxy(IWebProxy proxy)
         {
-            request.Proxy = proxy;
+            _request.Proxy = proxy;
         }
 
         public class Result
         {
             public decimal? Price { get; set; }
             public long? BetId { get; set; }
-            public string GUID;
+            public string Guid;
             public StatusEnum? Status;
             public ErrorCode? Error;
             public bool? BetterLineWasAccepted;
@@ -193,13 +193,13 @@ namespace SiteAccess.Access
                         return;
                     Price = jo["price"] == null ? (decimal?)null : (decimal?)jo["price"];
                     BetId = jo["betId"] == null ? (long?)null : (long?)jo["betId"];
-                    GUID = jo["uniqueRequestId"] == null ? null : (string)jo["uniqueRequestId"];
+                    Guid = jo["uniqueRequestId"] == null ? null : (string)jo["uniqueRequestId"];
                     Status = (StatusEnum)Enum.GetNames(typeof(StatusEnum)).ToList().IndexOf((string)jo["status"]);
                     Error = (ErrorCode)Enum.GetNames(typeof(ErrorCode)).ToList().IndexOf((string)jo["errorCode"]);
                     BetterLineWasAccepted = ((string)jo["betterLineWasAccepted"])
                         == null ? (bool?)null : ((string)jo["betterLineWasAccepted"]).ToUpper() == "TRUE";
 
-                    Success = Status.Value == StatusEnum.ACCEPTED;
+                    Success = Status.Value == StatusEnum.Accepted;
                 }
                 catch
                 {
@@ -218,31 +218,31 @@ namespace SiteAccess.Access
 
         public enum StatusEnum
         {
-            ACCEPTED,
-            PENDING_ACCEPTANCE,
-            PROCESSED_WITH_ERROR
+            Accepted,
+            PendingAcceptance,
+            ProcessedWithError
         }
 
         public enum ErrorCode
         {
-            ALL_BETTING_CLOSED,
-            ALL_LIVE_BETTING_CLOSED,
-            ABOVE_EVENT_MAX,
-            ABOVE_MAX_BET_AMOUNT,
-            BELOW_MIN_BET_AMOUNT,
-            BLOCKED_BETTING,
-            BLOCKED_CLIENT,
-            INSUFFICIENT_FUNDS,
-            INVALID_COUNTRY,
-            INVALID_EVENT,
-            INVALID_ODDS_FORMAT,
-            LINE_CHANGED,
-            LISTED_PITCHERS_SELECTION_ERROR,
-            OFFLINE_EVENT,
-            PAST_CUTOFFTIME,
-            RED_CARDS_CHANGED,
-            SCORE_CHANGED,
-            TIME_RESTRICTION
+            AllBettingClosed,
+            AllLiveBettingClosed,
+            AboveEventMax,
+            AboveMaxBetAmount,
+            BelowMinBetAmount,
+            BlockedBetting,
+            BlockedClient,
+            InsufficientFunds,
+            InvalidCountry,
+            InvalidEvent,
+            InvalidOddsFormat,
+            LineChanged,
+            ListedPitchersSelectionError,
+            OfflineEvent,
+            PastCutofftime,
+            RedCardsChanged,
+            ScoreChanged,
+            TimeRestriction
         }
     }
 }

@@ -11,11 +11,11 @@ namespace DataParser.Models
         public Surebet() { }
         public Surebet(string booker, string time, string _event, string coeff, string value)
         {
-            this.Booker = booker;
-            this.Time = time;
-            this.Event = _event;
-            this.Coeff = coeff;
-            this.Value = value;
+            Booker = booker;
+            Time = time;
+            Event = _event;
+            Coeff = coeff;
+            Value = value;
         }
     }
 }

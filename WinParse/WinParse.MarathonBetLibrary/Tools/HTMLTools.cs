@@ -1,20 +1,15 @@
-﻿using HtmlAgilityPack;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Text;
-using System.Threading.Tasks;
+using HtmlAgilityPack;
 
-namespace MarathonBetLibrary.Tools
+namespace WinParse.MarathonBetLibrary.Tools
 {
-    public class HTMLTools
+    public class HtmlTools
     {
-        private string PATH;
-        public HTMLTools(string path)
+        private string _path;
+        public HtmlTools(string path)
         {
-            this.PATH = path;
+            _path = path;
         }
         public HtmlDocument LoadHtmlDocument()
         {
@@ -26,11 +21,11 @@ namespace MarathonBetLibrary.Tools
         public string LoadHtmlString()
         {
             string html = string.Empty;
-            if (string.IsNullOrEmpty(PATH)) return null;
+            if (string.IsNullOrEmpty(_path)) return null;
             using (WebClient wc = new WebClient())
             {
-                wc.Encoding = System.Text.Encoding.UTF8;
-                html = wc.DownloadString(PATH);
+                wc.Encoding = Encoding.UTF8;
+                html = wc.DownloadString(_path);
             }
             return html;
         }

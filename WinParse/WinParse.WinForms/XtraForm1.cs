@@ -1,12 +1,13 @@
 ﻿//#define UseLicense
+
+using System.Windows.Forms;
 using DataSaver;
 using DevExpress.XtraEditors;
-using DXApplication1.Models;
 using FormulasCollection.Models;
 using NLog;
-using System.Windows.Forms;
+using WinParse.WinForms.Models;
 
-namespace DXApplication1
+namespace WinParse.WinForms
 {
     public partial class XtraForm1 : XtraForm
     {
@@ -80,7 +81,7 @@ namespace DXApplication1
 
         private void XtraForm1_Closed(object sender, System.EventArgs e)
         {
-            new LocalSaver().UpdateFilter(_filter);
+            new LocalSaver("http://localhost:8765", "Parser").UpdateFilter(_filter);
         }
 
         private void barButtonItem1_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

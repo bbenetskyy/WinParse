@@ -1,6 +1,6 @@
 ﻿using DevExpress.XtraEditors;
 
-namespace DXApplication1.Pages
+namespace WinParse.WinForms.Pages
 {
     partial class FilterPage
     {

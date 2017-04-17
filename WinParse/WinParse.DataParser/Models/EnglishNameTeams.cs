@@ -2,11 +2,11 @@
 {
     public class EnglishNameTeams
     {
-        public string eventid;
-        public string name1;
-        public string name2;
-        public string league;
-        public string eventRU;
+        public string Eventid;
+        public string Name1;
+        public string Name2;
+        public string League;
+        public string EventRu;
 
         public EnglishNameTeams()
         {
@@ -14,9 +14,9 @@
 
         public EnglishNameTeams(string _eventid, string _name1, string _name2)
         {
-            this.eventid = _eventid;
-            this.name1 = _name1;
-            this.name2 = _name2;
+            Eventid = _eventid;
+            Name1 = _name1;
+            Name2 = _name2;
         }
     }
 }

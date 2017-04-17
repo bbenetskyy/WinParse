@@ -3,6 +3,7 @@ namespace WinParse.Resources
 {
     public static class ResKeys
     {
+
         #region LoginForm
 
         public static string LoginForm_PasswordTextEdit_Text => nameof(LoginForm_PasswordTextEdit_Text);
@@ -19,6 +20,10 @@ namespace WinParse.Resources
 
         public static string LoginForm_LoginTextEdit_CustomizationFormText
             => nameof(LoginForm_LoginTextEdit_CustomizationFormText);
+
+        public static string LoginForm_ButtonCancel_ToolTip => nameof(LoginForm_ButtonCancel_ToolTip);
+
+        public static string LoginForm_ButtonOk_ToolTip => nameof(LoginForm_ButtonOk_ToolTip);
 
         #endregion LoginForm
     }

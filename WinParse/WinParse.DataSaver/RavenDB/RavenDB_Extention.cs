@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DataSaver.RavenDB
 {
-    public static class RavenDB_Extention
+    public static class RavenDbExtention
     {
         public static int GetPageCount<T>(this IRavenQueryable<T> queryable, int pageSize)
         {

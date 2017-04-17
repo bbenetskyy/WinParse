@@ -1,12 +1,11 @@
-﻿using DataSaver;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using DataSaver;
 using FormulasCollection.Enums;
 using FormulasCollection.Models;
 using FormulasCollection.Realizations;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ToolsPortable;
 
-namespace DXApplication1.Models
+namespace WinParse.WinForms.Models
 {
     public class DataManager
     {
@@ -16,7 +15,7 @@ namespace DXApplication1.Models
         public DataManager()
         {
             _calculatorFormulas = new TwoOutComeCalculatorFormulas();
-            _localSaver = new LocalSaver();
+            _localSaver = new LocalSaver("http://localhost:8765", "Parser");
         }
         public async Task<List<Fork>> GetForksForAllSportsAsync(Filter filterPage, ForkType forkType)
         {
@@ -28,7 +27,7 @@ namespace DXApplication1.Models
 
             foreach (var fork in forks)
             {
-                fork.prices = null;
+                fork.Prices = null;
             }
 
             return forks;

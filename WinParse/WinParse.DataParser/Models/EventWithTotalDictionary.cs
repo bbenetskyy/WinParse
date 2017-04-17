@@ -1,4 +1,4 @@
-﻿using SiteAccess.Enums;
+﻿using SiteAccess.Model;
 
 namespace DataParser.Models
 {

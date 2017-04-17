@@ -1,4 +1,4 @@
-﻿namespace DXApplication1.Pages
+﻿namespace WinParse.WinForms.Pages
 {
     partial class CalculatorPage
     {

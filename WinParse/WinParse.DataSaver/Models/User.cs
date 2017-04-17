@@ -1,13 +1,16 @@
-﻿namespace DataSaver.Models
-{
-    public class User
-    {
-        public string Id { get; set; }
-        public string LoginPinnacle { get; set; }
-        public string PasswordPinnacle { get; set; }
-        public string LoginMarathon { get; set; }
-        public string PasswordMarathon { get; set; }
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-        public string AntiGateCode { get; set; }
+namespace DataSaver.Models
+{
+    public class User : BaseObject
+    {
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public bool PlaceBets { get; set; }
     }
 }

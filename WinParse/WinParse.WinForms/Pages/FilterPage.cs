@@ -1,16 +1,17 @@
 ﻿//#define DisableForkDeletion
+
+using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Forms;
 using DataSaver;
 using DataSaver.Models;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.DXErrorProvider;
 using FormulasCollection.Models;
-using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Forms;
 using ToolsPortable;
 
-namespace DXApplication1.Pages
+namespace WinParse.WinForms.Pages
 {
     public partial class FilterPage : Form
     {
@@ -30,7 +31,7 @@ namespace DXApplication1.Pages
         {
             InitializeComponent();
             Closing += FilterPage_Closing;
-            LocalSaver = new LocalSaver();
+            LocalSaver = new LocalSaver("http://localhost:8765", "Parser");
             FilterUpdated += (sender, args) => { LocalSaver.UpdateFilter(Filter); };
             ReloadingData += (sender, args) => { UpdateFilter(LocalSaver.FindFilter()); FirstBind(); UserBind(); };
             Filter = filter;
@@ -112,7 +113,7 @@ namespace DXApplication1.Pages
 
         private void SaveUser()
         {
-            var user = new User
+            var user = new UserData
             {
                 Id = _userId,
                 LoginPinnacle = textEditLoginPinnacle.Text,

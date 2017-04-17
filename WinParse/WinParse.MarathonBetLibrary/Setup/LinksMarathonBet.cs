@@ -1,56 +1,51 @@
-﻿using MarathonBetLibrary.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using WinParse.MarathonBetLibrary.Enums;
 
-namespace MarathonBetLibrary.Setup
+namespace WinParse.MarathonBetLibrary.Setup
 {
     public class LinksMarathonBet
     {
-        public readonly string MAIN_LINK = "https://www.marathonbet.com/";
+        public readonly string MainLink = "https://www.marathonbet.com/";
         public string Language { get; private set; }
 
-        private readonly string RU = "su";
-        private readonly string EN = "en";
+        private readonly string _ru = "su";
+        private readonly string _en = "en";
 
-        private readonly string soccer = "Football/";
-        private readonly string basketball = "Basketball/";
-        private readonly string hockey = "Ice+Hockey/";
-        private readonly string tenis = "Tennis/";
-        private readonly string volleyball = "Volleyball/";
+        private readonly string _soccer = "Football/";
+        private readonly string _basketball = "Basketball/";
+        private readonly string _hockey = "Ice+Hockey/";
+        private readonly string _tenis = "Tennis/";
+        private readonly string _volleyball = "Volleyball/";
 
-        private readonly string betting = "/betting/";
-        private readonly string events ="/events.htm?id=";
+        private readonly string _betting = "/betting/";
+        private readonly string _events ="/events.htm?id=";
 
-        public LinksMarathonBet(bool LoadEnglishName)
+        public LinksMarathonBet(bool loadEnglishName)
         {
-            Language = LoadEnglishName ? EN : RU;
+            Language = loadEnglishName ? _en : _ru;
         }
 
-        public string SOCCER { get { return MAIN_LINK + Language + betting + soccer; } private set { } }
-        public string BASKETBALL { get { return MAIN_LINK + Language + betting + basketball; } private set { } }
-        public string HOCKEY { get { return MAIN_LINK + Language + betting + hockey; } private set { } }
-        public string TENIS { get { return MAIN_LINK + Language + betting + tenis; } private set { } }
-        public string VOLLEYBALL { get { return MAIN_LINK + Language + betting + volleyball; } private set { } }
+        public string Soccer { get { return MainLink + Language + _betting + _soccer; } private set { } }
+        public string Basketball { get { return MainLink + Language + _betting + _basketball; } private set { } }
+        public string Hockey { get { return MainLink + Language + _betting + _hockey; } private set { } }
+        public string Tenis { get { return MainLink + Language + _betting + _tenis; } private set { } }
+        public string Volleyball { get { return MainLink + Language + _betting + _volleyball; } private set { } }
 
         public string GetSportLink(SportType sportType)
         {
             switch (sportType)
             {
-                case SportType.Soccer: return SOCCER;
-                case SportType.Basketball: return BASKETBALL;
-                case SportType.Hockey: return HOCKEY;
-                case SportType.Tennis: return TENIS;
-                case SportType.Volleyball: return VOLLEYBALL;
+                case SportType.Soccer: return Soccer;
+                case SportType.Basketball: return Basketball;
+                case SportType.Hockey: return Hockey;
+                case SportType.Tennis: return Tenis;
+                case SportType.Volleyball: return Volleyball;
                 default: return string.Empty;
             }
         }
 
-        public string LoadSelectedLinkForEvent(string eventID)
+        public string LoadSelectedLinkForEvent(string eventId)
         {
-            return MAIN_LINK + Language + events + eventID;
+            return MainLink + Language + _events + eventId;
         }
     }
 }

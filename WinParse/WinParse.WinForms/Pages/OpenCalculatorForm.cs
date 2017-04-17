@@ -1,27 +1,27 @@
-﻿using FormulasCollection.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using FormulasCollection.Models;
 using ToolsPortable;
 
-namespace DXApplication1.Pages
+namespace WinParse.WinForms.Pages
 {
     public partial class OpenCalculatorForm : Form
     {
         public Fork SelectedEvent { get; set; }
-        private List<Fork> dataSource;
+        private List<Fork> _dataSource;
 
         public OpenCalculatorForm()
         {
             InitializeComponent();
-            dataSource = new List<Fork>();
+            _dataSource = new List<Fork>();
         }
 
         public OpenCalculatorForm(List<Fork> dataList)
             : this()
         {
-            dataSource.AddRange(dataList);
+            _dataSource.AddRange(dataList);
             gridControl1.DataSource = dataList;
 
             if (gridView1.RowCount == 0)
@@ -50,7 +50,7 @@ namespace DXApplication1.Pages
         private List<Fork> MakeSearch(string eventCriteria, string typeFirstCriteria, string typeSecondCriteria)
         {
             var resList = new List<Fork>();
-            resList.AddRange(dataSource);
+            resList.AddRange(_dataSource);
 
             if (eventCriteria.IsNotBlank())
                 resList = resList.Where(f => f.Event.Contains(eventCriteria)).ToList();
@@ -67,7 +67,7 @@ namespace DXApplication1.Pages
             textEditEvent.Text = string.Empty;
             textEditTypeSecond.Text = string.Empty;
             textEditTypeFirst.Text = string.Empty;
-            gridControl1.DataSource = dataSource;
+            gridControl1.DataSource = _dataSource;
             gridControl1.Refresh();
         }
 

@@ -1,11 +1,11 @@
-﻿using DataSaver;
-using DevExpress.XtraGrid;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using DataSaver;
+using DevExpress.XtraGrid;
 
-namespace DXApplication1.Pages
+namespace WinParse.WinForms.Pages
 {
     public partial class SearchPage : Form
     {
@@ -14,7 +14,7 @@ namespace DXApplication1.Pages
         private LocalSaver _localSaver;
 
         public bool ToClose { get; set; }
-        public GridControl MainGridControl => gridControl1;
+        public GridControl MainGridControl { get; private set; }
 
         public virtual void OnUpdate() => UpdateEvent?.Invoke(null, null);
 
@@ -26,7 +26,7 @@ namespace DXApplication1.Pages
             Closing += SearchPage_Closing;
             backgroundWorker1.DoWork += BackgroundWorker1_DoWork;
             backgroundWorker1.WorkerSupportsCancellation = true;
-            _localSaver = new LocalSaver();
+            _localSaver = new LocalSaver("http://localhost:8765", "Parser");
 
             if (isSearchPage)
                 InitSearchPage();
@@ -68,7 +68,7 @@ namespace DXApplication1.Pages
                 Hide();
         }
 
-        protected virtual void bUpdate_Click(object sender, System.EventArgs e)
+        protected virtual void bUpdate_Click(object sender, EventArgs e)
         {
             OnUpdate();
         }

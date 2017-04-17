@@ -1,11 +1,11 @@
-﻿using DevExpress.LookAndFeel;
-using DXApplication1.ErrorProvider;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
+using DevExpress.LookAndFeel;
+using WinParse.WinForms.ErrorProvider;
 
-namespace DXApplication1
+namespace WinParse.WinForms
 {
     internal static class Program
     {
@@ -35,7 +35,7 @@ namespace DXApplication1
             UserLookAndFeel.Default.SetSkinStyle("DevExpress Style");
 
             Application.ThreadException += new
-              System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+              ThreadExceptionEventHandler(Application_ThreadException);
 
             // Set the unhandled exception mode to force all Windows Forms
             // errors to go through our handler.
@@ -48,7 +48,7 @@ namespace DXApplication1
             Application.Run(new XtraForm1());
         }
 
-        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
             ExceptionHandlerForm.ShowException(e.Exception);
         }

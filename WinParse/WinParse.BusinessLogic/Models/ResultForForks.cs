@@ -1,4 +1,4 @@
-﻿using MarathonBetLibrary.Model;
+﻿using WinParse.MarathonBetLibrary.Model;
 
 namespace FormulasCollection.Models
 {
@@ -6,7 +6,7 @@ namespace FormulasCollection.Models
     {
         public string Event { get; set; }
 
-        public string Event_RU { get; set; }
+        public string EventRu { get; set; }
 
         public string Type { get; set; }
 
@@ -17,25 +17,25 @@ namespace FormulasCollection.Models
         public string League { get; set; }
 
         public string Bookmaker { get; set; }
-        public string FuulID { get { return "event_" + this.EventId; } }
+        public string FuulId { get { return "event_" + EventId; } }
 
-        public DataMarathonForAutoPlays marathonAutoPlay { get; set; }
-        public MarathonEvent parentEvent { get; set; }
+        public DataMarathonForAutoPlays MarathonAutoPlay { get; set; }
+        public MarathonEvent ParentEvent { get; set; }
 
         public ResultForForks() { }
 
-        public ResultForForks(string eventID, string nameTeam1, string nameTeam2, string date, string nameCoff, string coef, string type, string bookmaker, string league, DataMarathonForAutoPlays obj)
+        public ResultForForks(string eventId, string nameTeam1, string nameTeam2, string date, string nameCoff, string coef, string type, string bookmaker, string league, DataMarathonForAutoPlays obj)
         {
-            this.Event = nameTeam1.Trim() + " # " + nameTeam2.Trim();
-            this.MatchDateTime = date;
-            this.Type = nameCoff;
-            this.Coef = coef;
+            Event = nameTeam1.Trim() + " # " + nameTeam2.Trim();
+            MatchDateTime = date;
+            Type = nameCoff;
+            Coef = coef;
             SportType = type;
             Bookmaker = bookmaker;
-            this.EventId = eventID;
-            this.League = league;
+            EventId = eventId;
+            League = league;
 
-            this.marathonAutoPlay = obj;
+            MarathonAutoPlay = obj;
         }
 
         public string SportType { get; set; }

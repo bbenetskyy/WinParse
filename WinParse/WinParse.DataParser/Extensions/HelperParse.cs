@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MarathonBetLibrary.Model;
+using WinParse.MarathonBetLibrary.Model;
 
 namespace DataParser.Extensions
 {
@@ -61,7 +61,7 @@ namespace DataParser.Extensions
 
             return res.Replace(" ","");
         }
-        public static string getValueWithoutStartTags(this string line)
+        public static string GetValueWithoutStartTags(this string line)
         {
             string result = string.Empty;
             foreach (var l in line)
@@ -80,10 +80,10 @@ namespace DataParser.Extensions
             return true;
         }
 
-        public static string GetEventID(this string line)
+        public static string GetEventId(this string line)
         {
             string eventid = null;
-            int start = line.IndexOf(MarathonTags.EventID) + MarathonTags.EventID.Length + 2;
+            int start = line.IndexOf(MarathonTags.EventId) + MarathonTags.EventId.Length + 2;
             line = line.Substring(start);
             eventid = line.Substring(0, line.IndexOf("\""));
             return eventid;
@@ -158,15 +158,15 @@ namespace DataParser.Extensions
         {
             if (obj == null) return false;
             return obj != null &&
-                   obj.cid != null &&
-                   obj.epr != null &&
-                   obj.ewc != null &&
-                   obj.ewf != null &&
-                   obj.mn != null &&
-                   obj.prices != null &&
-                   obj.prt != null &&
-                   obj.selection_key != null &&
-                   obj.sn != null;
+                   obj.Cid != null &&
+                   obj.Epr != null &&
+                   obj.Ewc != null &&
+                   obj.Ewf != null &&
+                   obj.Mn != null &&
+                   obj.Prices != null &&
+                   obj.Prt != null &&
+                   obj.SelectionKey != null &&
+                   obj.Sn != null;
         }
         public static string EventToString(this ResultForForks ev)
         {
@@ -228,7 +228,7 @@ namespace DataParser.Extensions
 
             return sb.ToString();
         }
-        public static bool isFullData(this ResultForForks team)
+        public static bool IsFullData(this ResultForForks team)
         {
             if (team == null) return false;
             else
@@ -241,7 +241,7 @@ namespace DataParser.Extensions
                       && !string.IsNullOrEmpty(team.Bookmaker)
                       && !string.IsNullOrEmpty(team.SportType)
                       && !string.IsNullOrEmpty(team.MatchDateTime)
-                      && team.marathonAutoPlay.CheckFullData();
+                      && team.MarathonAutoPlay.CheckFullData();
             }
         }
         public static bool Validate(this ResultForForks team)
@@ -251,7 +251,7 @@ namespace DataParser.Extensions
             {
                 return !string.IsNullOrEmpty(team.EventId)
                      && !string.IsNullOrEmpty(team.MatchDateTime)
-                     && team.marathonAutoPlay.CheckFullData();
+                     && team.MarathonAutoPlay.CheckFullData();
                      //&& team.AllCoef != null;
             }
         }

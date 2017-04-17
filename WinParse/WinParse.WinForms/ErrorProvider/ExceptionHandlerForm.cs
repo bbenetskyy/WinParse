@@ -1,8 +1,8 @@
-﻿using DevExpress.XtraEditors;
-using System;
+﻿using System;
 using System.Windows.Forms;
+using DevExpress.XtraEditors;
 
-namespace DXApplication1.ErrorProvider
+namespace WinParse.WinForms.ErrorProvider
 {
     public partial class ExceptionHandlerForm : XtraForm
     {
@@ -33,7 +33,7 @@ namespace DXApplication1.ErrorProvider
             form.ShowDialog();
         }
 
-        private void simpleButton1_Click(object sender, System.EventArgs e)
+        private void simpleButton1_Click(object sender, EventArgs e)
         {
             Close();
         }

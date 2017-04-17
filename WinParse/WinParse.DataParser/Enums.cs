@@ -2,10 +2,10 @@
 {
     public enum Office
     {
-        ua1xetCom = 2,
-        olimpKz = 4,
-        fonbetCom = 8,
-        williamhillCom = 16,
-        ru10betCom = 32
+        Ua1XetCom = 2,
+        OlimpKz = 4,
+        FonbetCom = 8,
+        WilliamhillCom = 16,
+        Ru10BetCom = 32
     }
 }

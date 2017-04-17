@@ -1,31 +1,29 @@
-﻿using MarathonBetLibrary.Model;
-using MarathonBetLibrary.Setup;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using WinParse.MarathonBetLibrary.Model;
+using WinParse.MarathonBetLibrary.Setup;
 
-namespace MarathonBetLibrary.Tools
+namespace WinParse.MarathonBetLibrary.Tools
 {
     public class ParseTools
     {
         public static DataMarathonForAutoPlays ParseAutoPlay(string line, string selectionKey) => new DataMarathonForAutoPlays()
         {
-            sn = RegexByTags(line, Tags.SN),
-            mn = RegexByTags(line, Tags.MN),
-            ewc = RegexByTags(line, Tags.EWC),
-            cid = RegexByTags(line, Tags.CID),
-            prt = RegexByTags(line, Tags.PRT),
-            ewf = RegexByTags(line, Tags.EWF),
-            epr = RegexByTags(line, Tags.EPR),
-            prices = RegexByTags(line, Tags.PRICES)
+            Sn = RegexByTags(line, Tags.Sn),
+            Mn = RegexByTags(line, Tags.Mn),
+            Ewc = RegexByTags(line, Tags.Ewc),
+            Cid = RegexByTags(line, Tags.Cid),
+            Prt = RegexByTags(line, Tags.Prt),
+            Ewf = RegexByTags(line, Tags.Ewf),
+            Epr = RegexByTags(line, Tags.Epr),
+            Prices = RegexByTags(line, Tags.Prices)
                                 .Replace('\"', ' ')
                                 .Split(new char[] { ',', ':' }, StringSplitOptions.RemoveEmptyEntries)
                                 .Where((x, y) => y % 2 != 0)
                                 .ToList(),
-            selection_key = selectionKey
+            SelectionKey = selectionKey
         };
 
         public static string RegexByTags(string line, string tag, int groupNum = 1)
@@ -43,7 +41,7 @@ namespace MarathonBetLibrary.Tools
             return result;
         }
 
-        public static NameEvent CreateEventName(string eventName, string QueueTeams)
+        public static NameEvent CreateEventName(string eventName, string queueTeams)
         {
             NameEvent nameEvent = null;
             string midlePart = string.Empty;
@@ -64,7 +62,7 @@ namespace MarathonBetLibrary.Tools
                 return null;
             }
 
-            string[] nums = QueueTeams.Split('-');
+            string[] nums = queueTeams.Split('-');
             if (eventName.Contains("#"))
             {
                 string name1 = eventName.Split('#')[0].Trim();
@@ -122,26 +120,26 @@ namespace MarathonBetLibrary.Tools
             return dateTime;
         }
 
-        public static string TypeCoef(NameEvent EventNameRU, string sn, string mn, bool isAsiat)
+        public static string TypeCoef(NameEvent eventNameRu, string sn, string mn, bool isAsiat)
         {
             sn = sn.ToLower();
             mn = mn.ToLower();
             string result = string.Empty;
             if (mn.Contains("результат"))
             {
-                result = Results(EventNameRU, sn, mn);
+                result = Results(eventNameRu, sn, mn);
             }
             else if (mn.Equals("победа в матче"))
             {
-                result = ResultsForVolleyball(EventNameRU, sn, mn);
+                result = ResultsForVolleyball(eventNameRu, sn, mn);
             }
             else if (mn.Contains("победа") && mn.Contains("учетом") && mn.Contains("форы"))
             {
-                result = Fora(EventNameRU, sn, mn, isAsiat);
+                result = Fora(eventNameRu, sn, mn, isAsiat);
             }
             else if (mn.Contains("тотал голов") || mn.Contains("тотал матча по очкам"))
             {
-                result = Total(EventNameRU, sn, mn, isAsiat);
+                result = Total(eventNameRu, sn, mn, isAsiat);
             }
             else if (mn.Contains("счет матча"))
             {
@@ -171,27 +169,27 @@ namespace MarathonBetLibrary.Tools
             return result;
         }
 
-        private static string Results(NameEvent EventNameRU, string sn, string mn)
+        private static string Results(NameEvent eventNameRu, string sn, string mn)
         {
             string result = "ERROR";
-            if (sn.Contains(CoefTypes.WINS))
+            if (sn.Contains(CoefTypes.Wins))
             {
-                if (!sn.Contains(CoefTypes.DRAW))
+                if (!sn.Contains(CoefTypes.Draw))
                 {
-                    result = Helper.CheckPositionForNameTeam(sn, EventNameRU);
-                    if (sn.Contains(EventNameRU.NameTeam1.ToLower()) && sn.Contains(EventNameRU.NameTeam2.ToLower()))
+                    result = Helper.CheckPositionForNameTeam(sn, eventNameRu);
+                    if (sn.Contains(eventNameRu.NameTeam1.ToLower()) && sn.Contains(eventNameRu.NameTeam2.ToLower()))
                         result = "12";
                 }
                 else
                 {
-                    string position = Helper.CheckPositionForNameTeam(sn, EventNameRU);
+                    string position = Helper.CheckPositionForNameTeam(sn, eventNameRu);
                     if ("1".Equals(position))
                         result = "1X";
                     else if ("2".Equals(position))
                         result = "X2";
                 }
             }
-            else if (sn.Contains(CoefTypes.DRAW))
+            else if (sn.Contains(CoefTypes.Draw))
             {
                 result = "X";
             }
@@ -200,9 +198,9 @@ namespace MarathonBetLibrary.Tools
                 string otherType = Helper.CheckPartGame(mn);
                 result += otherType + RegexByTags(mn, "([0-9])");
             }
-            if (mn.Equals(CoefTypes.RESULTS_DRAW))
+            if (mn.Equals(CoefTypes.ResultsDraw))
             {
-                result = CoefTypes.RESULTS_DRAW_PART + "(" + Helper.TrueOrFalse(sn) + ")";
+                result = CoefTypes.ResultsDrawPart + "(" + Helper.TrueOrFalse(sn) + ")";
             }
             if ("ERROR".Equals(result))
             {
@@ -210,11 +208,11 @@ namespace MarathonBetLibrary.Tools
             return result;
         }
 
-        private static string ResultsForVolleyball(NameEvent EventNameRU, string sn, string mn)
+        private static string ResultsForVolleyball(NameEvent eventNameRu, string sn, string mn)
         {
-            string position = Helper.CheckPositionForNameTeam(sn, EventNameRU);
+            string position = Helper.CheckPositionForNameTeam(sn, eventNameRu);
             string result = "ERROR";
-            if (mn.Contains(CoefTypes.WINS))
+            if (mn.Contains(CoefTypes.Wins))
             {
                 result = position;
             }
@@ -222,19 +220,19 @@ namespace MarathonBetLibrary.Tools
             return result;
         }
 
-        private static string Fora(NameEvent EventNameRU, string sn, string mn, bool isAsiat)
+        private static string Fora(NameEvent eventNameRu, string sn, string mn, bool isAsiat)
         {
             string result = "ERROR";
-            string positionTeam = Helper.CheckPositionForNameTeam(sn, EventNameRU);
+            string positionTeam = Helper.CheckPositionForNameTeam(sn, eventNameRu);
             string foraValue = sn.Split(' ').LastOrDefault();
             if (isAsiat)
             {
                 foraValue = Helper.ConvertAsiatType(sn);
                 foraValue = foraValue.Contains("-") ? $"(foraValue)" : $"(+{foraValue})";
             }
-            if (mn.Equals(CoefTypes.WINS_WITH_FORA)
-                || mn.Equals(CoefTypes.WINS_WITH_ASIAT_FORA)
-                || mn.Equals(CoefTypes.WINS_WITH_FORA_VOLLEYBALL))
+            if (mn.Equals(CoefTypes.WinsWithFora)
+                || mn.Equals(CoefTypes.WinsWithAsiatFora)
+                || mn.Equals(CoefTypes.WinsWithForaVolleyball))
             {
                 result = CoefTypes.SimpleFora(positionTeam, foraValue);
             }
@@ -251,7 +249,7 @@ namespace MarathonBetLibrary.Tools
             return result;
         }
 
-        private static string Total(NameEvent EventNameRU, string sn, string mn, bool isAsiat)
+        private static string Total(NameEvent eventNameRu, string sn, string mn, bool isAsiat)
         {
             string result = "ERROR";
             string underOrOver = Helper.CheckTotal(sn);
@@ -260,14 +258,14 @@ namespace MarathonBetLibrary.Tools
             {
                 totalValue = $"{Helper.ConvertAsiatType(sn)}";
             }
-            if (mn.Equals(CoefTypes.TOTAL)
-                || mn.Equals(CoefTypes.TOTAL_ASIAT)
-                || mn.Equals(CoefTypes.TOTAL_VOLLEYBALL))
+            if (mn.Equals(CoefTypes.Total)
+                || mn.Equals(CoefTypes.TotalAsiat)
+                || mn.Equals(CoefTypes.TotalVolleyball))
             {
-                if (sn.Contains(CoefTypes.ODD))
-                    result = CoefTypes.ODD_PART;
-                else if (sn.Contains(CoefTypes.EVEN))
-                    result = CoefTypes.EVEN_PART;
+                if (sn.Contains(CoefTypes.Odd))
+                    result = CoefTypes.OddPart;
+                else if (sn.Contains(CoefTypes.Even))
+                    result = CoefTypes.EvenPart;
                 else if (!string.IsNullOrEmpty(totalValue) && !string.IsNullOrEmpty(underOrOver))
                     result = CoefTypes.SimpleTotal(totalValue, underOrOver);
             }
@@ -279,10 +277,10 @@ namespace MarathonBetLibrary.Tools
                 if (!string.IsNullOrEmpty(numHalf))
                     result = CoefTypes.OtherTotal(totalValue, underOrOver, otherType + numHalf);
             }
-            else if (mn.Contains(CoefTypes.TOTAL) && (mn.Contains(EventNameRU.NameTeam1.ToLower()) || mn.Contains(EventNameRU.NameTeam2.ToLower())))
+            else if (mn.Contains(CoefTypes.Total) && (mn.Contains(eventNameRu.NameTeam1.ToLower()) || mn.Contains(eventNameRu.NameTeam2.ToLower())))
             {
                 result = CoefTypes.OtherTotal(totalValue, underOrOver,
-                    CoefTypes.TEAM + Helper.CheckPositionForNameTeam(mn, EventNameRU));
+                    CoefTypes.Team + Helper.CheckPositionForNameTeam(mn, eventNameRu));
             }
             if ("ERROR".Equals(result))
             {

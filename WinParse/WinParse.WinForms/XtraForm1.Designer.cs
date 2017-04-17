@@ -1,4 +1,4 @@
-﻿namespace DXApplication1
+﻿namespace WinParse.WinForms
 {
     partial class XtraForm1
     {

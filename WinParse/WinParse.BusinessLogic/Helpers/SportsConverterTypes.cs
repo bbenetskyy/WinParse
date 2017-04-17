@@ -1,7 +1,7 @@
-﻿using DataParser.Enums;
-using FormulasCollection.Models;
+﻿using FormulasCollection.Models;
 using System.Collections.Generic;
 using System.Linq;
+using FormulasCollection.Enums;
 using ToolsPortable;
 
 namespace FormulasCollection.Helpers
@@ -66,12 +66,12 @@ namespace FormulasCollection.Helpers
             return null;
         }
 
-        public static List<string> CheckAsiatType(string _type)
+        public static List<string> CheckAsiatType(string type)
         {
             // перевірити азіатскі типи на баскетбол const double delta = 0.25;
 
             List<string> result = new List<string>();
-            result.Add(_type);
+            result.Add(type);
             /*string znak = string.Empty;
 
             if (!(_type.Contains("(") && _type.Contains(")")))

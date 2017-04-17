@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MarathonBetLibrary.Model;
+using WinParse.MarathonBetLibrary.Model;
 
 namespace FormulasCollection.Models
 {
@@ -13,7 +13,7 @@ namespace FormulasCollection.Models
 
         public string Event { get; set; }
 
-        public string Event_RU { get; set; }
+        public string EventRu { get; set; }
 
         public string MatchDateTime { get; set; }
 
@@ -27,29 +27,14 @@ namespace FormulasCollection.Models
 
         public MarathonEvent() { }
 
-        public MarathonEvent(string eventID, string date, string sportType, string bookmaker, string league, DataMarathonForAutoPlays obj)
+        public MarathonEvent(string eventId, string date, string sportType, string bookmaker, string league, DataMarathonForAutoPlays obj)
         {
-            this.MatchDateTime = date;
+            MatchDateTime = date;
             SportType = sportType;
             Bookmaker = bookmaker;
-            this.EventId = eventID;
-            this.League = league;
+            EventId = eventId;
+            League = league;
         }
 
-    }
-    public class EventForAutoPlay
-    {
-        public string EventID { get; set; }
-        public string Type { get; set; }
-        public string Value { get; set; }
-        public DataMarathonForAutoPlays marathonAutoPlay { get; set; }
-        public EventForAutoPlay() { }
-        public EventForAutoPlay(string eventID, string type, string value, DataMarathonForAutoPlays autoplay)
-        {
-            this.EventID = eventID;
-            this.Type = type;
-            this.Value = value;
-            this.marathonAutoPlay = autoplay;
-        }
     }
 }

@@ -1,27 +1,27 @@
 ﻿using System;
 using DataParser.Models;
-using SiteAccess.Enums;
 using System.Collections.Generic;
 using FormulasCollection.Helpers;
+using SiteAccess.Model;
 
 namespace DataParser.DefaultRealization
 {
     internal class EventFactory
     {
-        private string lineId;
-        private int matchPeriod;
-        private long? leagueId;
-        private string matchDateTime;
+        private string _lineId;
+        private int _matchPeriod;
+        private long? _leagueId;
+        private string _matchDateTime;
 
         public EventFactory(string lineId,
                             int matchPeriod,
                             long? leagueId,
                             string matchDateTime)
         {
-            this.lineId = lineId;
-            this.matchPeriod = matchPeriod;
-            this.leagueId = leagueId;
-            this.matchDateTime = matchDateTime;
+            this._lineId = lineId;
+            this._matchPeriod = matchPeriod;
+            this._leagueId = leagueId;
+            this._matchDateTime = matchDateTime;
         }
 
         internal IEnumerable<EventWithTotalDictionary> CreateEventsWithTotal(string totalType,
@@ -30,17 +30,17 @@ namespace DataParser.DefaultRealization
                                                                SideType sideType,
                                                                BetType betType)
         {
-            switch (matchPeriod)
+            switch (_matchPeriod)
             {
                 case 0:
                     return new[]{ new EventWithTotalDictionary
                     {
-                        LineId = lineId,
+                        LineId = _lineId,
                         TotalType = totalType,
                         TotalValue = totalValue,
-                        MatchDateTime = matchDateTime,
-                        LeagueId = leagueId,
-                        MatchPeriod = matchPeriod,
+                        MatchDateTime = _matchDateTime,
+                        LeagueId = _leagueId,
+                        MatchPeriod = _matchPeriod,
                         TeamType = team,
                         SideType = sideType,
                         BetType = betType
@@ -51,72 +51,72 @@ namespace DataParser.DefaultRealization
                     return new[]{
                     new EventWithTotalDictionary
                     {
-                        LineId = lineId,
-                        TotalType = totalType.ExtendType("H",matchPeriod),
+                        LineId = _lineId,
+                        TotalType = totalType.ExtendType("H",_matchPeriod),
                         TotalValue = totalValue,
-                        MatchDateTime = matchDateTime,
-                        LeagueId = leagueId,
-                        MatchPeriod = matchPeriod,
+                        MatchDateTime = _matchDateTime,
+                        LeagueId = _leagueId,
+                        MatchPeriod = _matchPeriod,
                         TeamType = team,
                         SideType = sideType,
                         BetType = betType
                     } ,
                     new EventWithTotalDictionary
                     {
-                        LineId = lineId,
-                        TotalType = totalType.ExtendType("P",matchPeriod),
+                        LineId = _lineId,
+                        TotalType = totalType.ExtendType("P",_matchPeriod),
                         TotalValue = totalValue,
-                        MatchDateTime = matchDateTime,
-                        LeagueId = leagueId,
-                        MatchPeriod = matchPeriod,
+                        MatchDateTime = _matchDateTime,
+                        LeagueId = _leagueId,
+                        MatchPeriod = _matchPeriod,
                         TeamType = team,
                         SideType = sideType,
                         BetType = betType
                     },
                     new EventWithTotalDictionary
                     {
-                        LineId = lineId,
-                        TotalType = totalType.ExtendType("Q",matchPeriod),
+                        LineId = _lineId,
+                        TotalType = totalType.ExtendType("Q",_matchPeriod),
                         TotalValue = totalValue,
-                        MatchDateTime = matchDateTime,
-                        LeagueId = leagueId,
-                        MatchPeriod = matchPeriod,
+                        MatchDateTime = _matchDateTime,
+                        LeagueId = _leagueId,
+                        MatchPeriod = _matchPeriod,
                         TeamType = team,
                         SideType = sideType,
                         BetType = betType
                     } ,
                     new EventWithTotalDictionary
                     {
-                        LineId = lineId,
-                        TotalType = totalType.ExtendType("G",matchPeriod),
+                        LineId = _lineId,
+                        TotalType = totalType.ExtendType("G",_matchPeriod),
                         TotalValue = totalValue,
-                        MatchDateTime = matchDateTime,
-                        LeagueId = leagueId,
-                        MatchPeriod = matchPeriod,
+                        MatchDateTime = _matchDateTime,
+                        LeagueId = _leagueId,
+                        MatchPeriod = _matchPeriod,
                         TeamType = team,
                         SideType = sideType,
                         BetType = betType
                     },
                     new EventWithTotalDictionary
                     {
-                        LineId = lineId,
-                        TotalType = totalType.ExtendType("S",matchPeriod),
+                        LineId = _lineId,
+                        TotalType = totalType.ExtendType("S",_matchPeriod),
                         TotalValue = totalValue,
-                        MatchDateTime = matchDateTime,
-                        LeagueId = leagueId,
-                        MatchPeriod = matchPeriod,
+                        MatchDateTime = _matchDateTime,
+                        LeagueId = _leagueId,
+                        MatchPeriod = _matchPeriod,
                         TeamType = team,
                         SideType = sideType,
                         BetType = betType
                     },
                     new EventWithTotalDictionary
                     {
-                        LineId = lineId,
-                        TotalType = totalType.ExtendType("PR",matchPeriod),
+                        LineId = _lineId,
+                        TotalType = totalType.ExtendType("PR",_matchPeriod),
                         TotalValue = totalValue,
-                        MatchDateTime = matchDateTime,
-                        LeagueId = leagueId,
-                        MatchPeriod = matchPeriod,
+                        MatchDateTime = _matchDateTime,
+                        LeagueId = _leagueId,
+                        MatchPeriod = _matchPeriod,
                         TeamType = team,
                         SideType = sideType,
                         BetType = betType

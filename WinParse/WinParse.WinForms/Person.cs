@@ -4,39 +4,23 @@ namespace WinParse.WinForms
 {
     internal class Person
     {
-        private string firstName;
-        private string secondName;
-        private string comments;
-
         public Person(string firstName, string secondName)
         {
-            this.firstName = firstName;
-            this.secondName = secondName;
-            comments = String.Empty;
+            this.FirstName = firstName;
+            this.SecondName = secondName;
+            Comments = String.Empty;
         }
 
         public Person(string firstName, string secondName, string comments)
             : this(firstName, secondName)
         {
-            this.comments = comments;
+            this.Comments = comments;
         }
 
-        public string FirstName
-        {
-            get { return firstName; }
-            set { firstName = value; }
-        }
+        public string FirstName { get; set; }
 
-        public string SecondName
-        {
-            get { return secondName; }
-            set { secondName = value; }
-        }
+        public string SecondName { get; set; }
 
-        public string Comments
-        {
-            get { return comments; }
-            set { comments = value; }
-        }
+        public string Comments { get; set; }
     }
 }

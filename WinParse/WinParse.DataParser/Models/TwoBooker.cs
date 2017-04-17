@@ -7,8 +7,8 @@ namespace DataParser.Models
         public TwoBooker() { }
         public TwoBooker(Surebet pinnacle, Surebet marathon)
         {
-            this.Pinnacle = pinnacle;
-            this.Marathon = marathon;
+            Pinnacle = pinnacle;
+            Marathon = marathon;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using DataParser.Enums;
-using DataSaver.Models;
+﻿using DataSaver.Models;
 using DataSaver.RavenDB;
 using FormulasCollection.Enums;
 using FormulasCollection.Models;
@@ -9,42 +8,67 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Linq;
 using Raven.Json.Linq;
-using SiteAccess.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using SiteAccess.Model;
 
 namespace DataSaver
 {
     public class LocalSaver
     {
-        internal DocumentStore _store;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public static bool IsAlive
+        {
+            get
+            {
+                try
+                {
+                    return Store?.OpenSession() != null;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+                return false;
+            }
+        }
+
+        internal static DocumentStore Store;
 
         private IDocumentSession _session;
 
         public const int PageSize = 128;
 
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public LocalSaver()
+        public LocalSaver(string url, string dbName)
         {
-            _store = new DocumentStore
+            try
             {
-                Url = "http://localhost:8765",
-                DefaultDatabase = "Parser",
-                Conventions = { ShouldCacheRequest = url => false }
-            };
-            _store.Initialize();
+                Store = new DocumentStore
+                {
+                    Url = url,//"http://localhost:8765"
+                    DefaultDatabase = dbName,//"Parser"
+                    Conventions = { ShouldCacheRequest = should => false },
+                };
+                Store.Initialize();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                Store = null;
+            }
         }
 
         public void ClearDatabase()
         {
-            var indexDefinitions = _store.DatabaseCommands.GetIndexes(0, 100);
+            var indexDefinitions = Store.DatabaseCommands.GetIndexes(0, 100);
             foreach (var indexDefinition in indexDefinitions)
             {
-                _store.DatabaseCommands.DeleteByIndex(indexDefinition.Name, new IndexQuery());
+                Store.DatabaseCommands.DeleteByIndex(indexDefinition.Name, new IndexQuery());
             }
         }
 
@@ -54,7 +78,7 @@ namespace DataSaver
             {
                 if (_session == null)
                 {
-                    _session = _store.OpenSession();
+                    _session = Store.OpenSession();
                     _session.Advanced.MaxNumberOfRequestsPerSession = int.MaxValue;
                 }
 
@@ -63,7 +87,7 @@ namespace DataSaver
                     _session.Advanced.MaxNumberOfRequestsPerSession)
                 {
                     _session.Dispose();
-                    _session = _store.OpenSession();
+                    _session = Store.OpenSession();
                 }
                 return _session;
             }
@@ -82,11 +106,19 @@ namespace DataSaver
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex.Message);
-                    _logger.Error(ex.StackTrace);
+                    Logger.Error(ex.Message);
+                    Logger.Error(ex.StackTrace);
                 }
             }
             Session.SaveChanges();
+        }
+
+        public User AuthenticateUser(string login, string password)
+        {
+            return Session
+                .Query<User>()
+                .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                .FirstOrDefault(u => u.Login == login && u.Password == password);
         }
 
         public void ClearAndInsertForks(List<Fork> forkList, SportType sportType)
@@ -141,7 +173,7 @@ namespace DataSaver
             if (rowsForDelete == null || rowsForDelete.Count <= 0)
                 return;
             rowsForDelete.ForEach(f =>
-                _store.DatabaseCommands.Delete(f.Id,
+                Store.DatabaseCommands.Delete(f.Id,
                     null));
             rowsForDelete.Clear();
         }
@@ -149,7 +181,7 @@ namespace DataSaver
         public IEnumerable<ForkRow> GetAllForkRows()
         {
             var resList = new List<ForkRow>();
-            using (_store.DatabaseCommands.DisableAllCaching())
+            using (Store.DatabaseCommands.DisableAllCaching())
             {
                 resList.AddRange(Session.Query<ForkRow>()
                                         .Customize(x => x.WaitForNonStaleResultsAsOfNow())
@@ -190,8 +222,8 @@ namespace DataSaver
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
-                _logger.Error(ex.StackTrace);
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
             }
             Session.SaveChanges();
         }
@@ -229,15 +261,15 @@ namespace DataSaver
                 League = json.DataAsJson.Value<string>("League"),
                 Type = (ForkType)Enum.Parse(typeof(ForkType), json.DataAsJson.Value<string>("Type")),
                 LineId = json.DataAsJson.Value<string>("LineId"),
-                sn = json.DataAsJson.Value<string>("sn"),
-                mn = json.DataAsJson.Value<string>("mn"),
-                ewc = json.DataAsJson.Value<string>("ewc"),
-                cid = json.DataAsJson.Value<string>("cid"),
-                prt = json.DataAsJson.Value<string>("prt"),
-                ewf = json.DataAsJson.Value<string>("ewf"),
-                epr = json.DataAsJson.Value<string>("epr"),
-                prices = prices,
-                selection_key = json.DataAsJson.Value<string>("selection_key"),
+                Sn = json.DataAsJson.Value<string>("sn"),
+                Mn = json.DataAsJson.Value<string>("mn"),
+                Ewc = json.DataAsJson.Value<string>("ewc"),
+                Cid = json.DataAsJson.Value<string>("cid"),
+                Prt = json.DataAsJson.Value<string>("prt"),
+                Ewf = json.DataAsJson.Value<string>("ewf"),
+                Epr = json.DataAsJson.Value<string>("epr"),
+                Prices = prices,
+                SelectionKey = json.DataAsJson.Value<string>("selection_key"),
                 MarRate = json.DataAsJson.Value<string>("MarRate"),
                 MarSuccess = json.DataAsJson.Value<string>("MarSuccess"),
                 PinRate = json.DataAsJson.Value<string>("PinRate"),
@@ -250,9 +282,9 @@ namespace DataSaver
             };
             return result;
         }
-        protected User MapJsonDocumentToUser(JsonDocument json)
+        protected UserData MapJsonDocumentToUser(JsonDocument json)
         {
-            var result = new User
+            var result = new UserData
             {
                 Id = json.Key,
                 LoginPinnacle = json.DataAsJson.Value<string>("LoginPinnacle"),
@@ -307,15 +339,15 @@ namespace DataSaver
                 League = fork.League,
                 LineId = fork.LineId,
 
-                sn = fork.sn,
-                mn = fork.mn,
-                ewc = fork.ewc,
-                cid = fork.cid,
-                prt = fork.prt,
-                ewf = fork.ewf,
-                epr = fork.epr,
-                prices = fork.prices,
-                selection_key = fork.selection_key,
+                Sn = fork.Sn,
+                Mn = fork.Mn,
+                Ewc = fork.Ewc,
+                Cid = fork.Cid,
+                Prt = fork.Prt,
+                Ewf = fork.Ewf,
+                Epr = fork.Epr,
+                Prices = fork.Prices,
+                SelectionKey = fork.SelectionKey,
 
 
                 MarRate = fork.MarRate,
@@ -353,15 +385,15 @@ namespace DataSaver
                 League = forkRow.League,
                 LineId = forkRow.LineId,
 
-                sn = forkRow.sn,
-                mn = forkRow.mn,
-                ewc = forkRow.ewc,
-                cid = forkRow.cid,
-                prt = forkRow.prt,
-                ewf = forkRow.ewf,
-                epr = forkRow.epr,
-                prices = forkRow.prices,
-                selection_key = forkRow.selection_key,
+                Sn = forkRow.Sn,
+                Mn = forkRow.Mn,
+                Ewc = forkRow.Ewc,
+                Cid = forkRow.Cid,
+                Prt = forkRow.Prt,
+                Ewf = forkRow.Ewf,
+                Epr = forkRow.Epr,
+                Prices = forkRow.Prices,
+                SelectionKey = forkRow.SelectionKey,
 
                 MarRate = forkRow.MarRate,
                 PinRate = forkRow.PinRate,
@@ -377,9 +409,9 @@ namespace DataSaver
             return result;
         }
 
-        public void UpdateUser(User user)
+        public void UpdateUser(UserData user)
         {
-            var userDocument = Session.Load<User>(user.Id);
+            var userDocument = Session.Load<UserData>(user.Id);
 
             userDocument.LoginPinnacle = user.LoginPinnacle;
             userDocument.PasswordPinnacle = user.PasswordPinnacle;
@@ -429,7 +461,7 @@ namespace DataSaver
             string passwordMarathon,
             string antiGateCode)
         {
-            var user = new User
+            var user = new UserData
             {
                 LoginPinnacle = loginPinnacle,
                 PasswordPinnacle = passwordPinnacle,
@@ -444,14 +476,14 @@ namespace DataSaver
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
-                _logger.Error(ex.StackTrace);
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
             }
             Session.SaveChanges();
             return true;
         }
 
-        public bool AddUserToDb(User user)
+        public bool AddUserToDb(UserData user)
         {
             try
             {
@@ -459,8 +491,8 @@ namespace DataSaver
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
-                _logger.Error(ex.StackTrace);
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
             }
             Session.SaveChanges();
             return true;
@@ -474,20 +506,20 @@ namespace DataSaver
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
-                _logger.Error(ex.StackTrace);
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
             }
             Session.SaveChanges();
             return true;
         }
 
 
-        public User FindUser()
+        public UserData FindUser()
         {
-            var resList = new List<User>();
-            using (_store.DatabaseCommands.DisableAllCaching())
+            var resList = new List<UserData>();
+            using (Store.DatabaseCommands.DisableAllCaching())
             {
-                resList.AddRange(Session.Query<User>()
+                resList.AddRange(Session.Query<UserData>()
                                         .Customize(x => x.WaitForNonStaleResultsAsOfNow())
                                         .GetAllRecords(PageSize));
             }
@@ -497,7 +529,7 @@ namespace DataSaver
         public Filter FindFilter()
         {
             var resList = new List<Filter>();
-            using (_store.DatabaseCommands.DisableAllCaching())
+            using (Store.DatabaseCommands.DisableAllCaching())
             {
                 resList.AddRange(Session.Query<Filter>()
                                         .Customize(x => x.WaitForNonStaleResultsAsOfNow())

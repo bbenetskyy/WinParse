@@ -1,37 +1,35 @@
-﻿using MarathonBetLibrary.Model;
-using MarathonBetLibrary.Setup;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using WinParse.MarathonBetLibrary.Model;
+using WinParse.MarathonBetLibrary.Setup;
 
-namespace MarathonBetLibrary.Tools
+namespace WinParse.MarathonBetLibrary.Tools
 {
     public class Helper
     {
-        public static string CheckPositionForNameTeam(string sn, NameEvent EventNameRU)
+        public static string CheckPositionForNameTeam(string sn, NameEvent eventNameRu)
         {
             string result = "NULL";
-            if (!sn.Contains(EventNameRU.NameTeam1.ToLower()) && !sn.Contains(EventNameRU.NameTeam2.ToLower()))
+            if (!sn.Contains(eventNameRu.NameTeam1.ToLower()) && !sn.Contains(eventNameRu.NameTeam2.ToLower()))
             {
-                string res1 = CheckExistTeamName(sn, EventNameRU.NameTeam1);
-                if (res1 != "NULL") EventNameRU.NameTeam1 = res1;
+                string res1 = CheckExistTeamName(sn, eventNameRu.NameTeam1);
+                if (res1 != "NULL") eventNameRu.NameTeam1 = res1;
                 else
                 {
-                    string res2 = CheckExistTeamName(sn, EventNameRU.NameTeam2);
-                    if (res2 != "NULL") EventNameRU.NameTeam2 = res2;
+                    string res2 = CheckExistTeamName(sn, eventNameRu.NameTeam2);
+                    if (res2 != "NULL") eventNameRu.NameTeam2 = res2;
                 }
             }
             if (sn.Contains("&#39;"))
             {
                 sn = sn.Replace("&#39;", "'");
             }
-            if (sn.Contains(EventNameRU.NameTeam1.ToLower()))
-                result = EventNameRU.PositionTeam(EventNameRU.NameTeam1);
-            else if (sn.Contains(EventNameRU.NameTeam2.ToLower()))
-                result = EventNameRU.PositionTeam(EventNameRU.NameTeam2);
+            if (sn.Contains(eventNameRu.NameTeam1.ToLower()))
+                result = eventNameRu.PositionTeam(eventNameRu.NameTeam1);
+            else if (sn.Contains(eventNameRu.NameTeam2.ToLower()))
+                result = eventNameRu.PositionTeam(eventNameRu.NameTeam2);
             if (result.Equals("NULL"))
             {
             }
@@ -41,17 +39,17 @@ namespace MarathonBetLibrary.Tools
         public static string CheckTotal(string sn)
         {
             string result = "NULL";
-            if (sn.Contains(CoefTypes.UNDER))
+            if (sn.Contains(CoefTypes.Under))
                 result = "U";
-            else if (sn.Contains(CoefTypes.OVER))
+            else if (sn.Contains(CoefTypes.Over))
                 result = "O";
-            else if (sn.Contains(CoefTypes.ODD))
+            else if (sn.Contains(CoefTypes.Odd))
             {
-                result = CoefTypes.ODD_PART;
+                result = CoefTypes.OddPart;
             }
-            else if (sn.Contains(CoefTypes.EVEN))
+            else if (sn.Contains(CoefTypes.Even))
             {
-                result = CoefTypes.EVEN_PART;
+                result = CoefTypes.EvenPart;
             }
             if (result.Equals("NULL"))
             {
@@ -96,42 +94,42 @@ namespace MarathonBetLibrary.Tools
             return sn.Equals("да") ? "T" : "F";
         }
 
-        public static string ContainsTeamRuAndEn(string nameEventRU, string nameEventEN)
+        public static string ContainsTeamRuAndEn(string nameEventRu, string nameEventEn)
         {
-            if (nameEventEN == null) return nameEventRU;
-            string newNameRU = string.Empty;
+            if (nameEventEn == null) return nameEventRu;
+            string newNameRu = string.Empty;
 
-            string[] splitRU = nameEventRU.Split(' ');
-            string[] splitEN = nameEventEN.Split(' ');
+            string[] splitRu = nameEventRu.Split(' ');
+            string[] splitEn = nameEventEn.Split(' ');
             string result = string.Empty;
-            newNameRU = nameEventRU.Replace(" - ", " # ");
-            return newNameRU;
+            newNameRu = nameEventRu.Replace(" - ", " # ");
+            return newNameRu;
         }
 
         public static string CheckExistTeamName(string sn, string nameTeam)
         {
             nameTeam = nameTeam.ToLower();
-            string newSN = string.Empty;
+            string newSn = string.Empty;
             string newNameTeam = string.Empty;
             int index = 0;
             for (int i = 0; i < sn.Length; i++)
             {
                 if (index == nameTeam.Length)
                 {
-                    if (!string.IsNullOrEmpty(newSN) && !string.IsNullOrEmpty(newNameTeam) && newSN.Equals(newNameTeam))
+                    if (!string.IsNullOrEmpty(newSn) && !string.IsNullOrEmpty(newNameTeam) && newSn.Equals(newNameTeam))
                         return newNameTeam;
                     else
                         return "NULL";
                 }
                 if (sn[i] == nameTeam[index])
                 {
-                    newSN += sn[i].ToString();
+                    newSn += sn[i].ToString();
                     newNameTeam += nameTeam[index].ToString();
                 }
                 else
                 {
                     newNameTeam = string.Empty;
-                    newSN = string.Empty;
+                    newSn = string.Empty;
                     i = -1;
                 }
 
@@ -143,31 +141,31 @@ namespace MarathonBetLibrary.Tools
         public static bool IsPartGame(string mn)
         {
             bool result = false;
-            result = mn.Contains(CoefTypes.HALF)
-                || mn.Contains(CoefTypes.HALF2)
-                || mn.Contains(CoefTypes.QUARTER)
-                || mn.Contains(CoefTypes.PERIOD)
-                || mn.Contains(CoefTypes.GAME)
-                || mn.Contains(CoefTypes.SET)
-                || mn.Contains(CoefTypes.PARTY);
+            result = mn.Contains(CoefTypes.Half)
+                || mn.Contains(CoefTypes.Half2)
+                || mn.Contains(CoefTypes.Quarter)
+                || mn.Contains(CoefTypes.Period)
+                || mn.Contains(CoefTypes.Game)
+                || mn.Contains(CoefTypes.Set)
+                || mn.Contains(CoefTypes.Party);
             return result;
         }
 
         public static string CheckPartGame(string mn)
         {
             string result = "ERROR";
-            if (mn.Contains(CoefTypes.HALF) || mn.Contains(CoefTypes.HALF2))
-                result = CoefTypes.HALF_PART;
-            else if (mn.Contains(CoefTypes.QUARTER))
-                result = CoefTypes.QUARTER_PART;
-            else if (mn.Contains(CoefTypes.PERIOD))
-                result = CoefTypes.PERIOD_PART;
-            else if (mn.Contains(CoefTypes.GAME))
-                result = CoefTypes.GAME_PART;
-            else if (mn.Contains(CoefTypes.SET))
-                result = CoefTypes.SET_PART;
-            else if (mn.Contains(CoefTypes.PARTY))
-                result = CoefTypes.PARTY_PART;
+            if (mn.Contains(CoefTypes.Half) || mn.Contains(CoefTypes.Half2))
+                result = CoefTypes.HalfPart;
+            else if (mn.Contains(CoefTypes.Quarter))
+                result = CoefTypes.QuarterPart;
+            else if (mn.Contains(CoefTypes.Period))
+                result = CoefTypes.PeriodPart;
+            else if (mn.Contains(CoefTypes.Game))
+                result = CoefTypes.GamePart;
+            else if (mn.Contains(CoefTypes.Set))
+                result = CoefTypes.SetPart;
+            else if (mn.Contains(CoefTypes.Party))
+                result = CoefTypes.PartyPart;
             return result;
         }
 
@@ -192,16 +190,16 @@ namespace MarathonBetLibrary.Tools
             return result;
         }
 
-        public static bool CheckCountEventsInPage(string HTML)
+        public static bool CheckCountEventsInPage(string html)
         {
-            var _eventsID = new List<string>();
-            foreach (Match match in Regex.Matches(HTML, Tags.EventID))
+            var eventsId = new List<string>();
+            foreach (Match match in Regex.Matches(html, Tags.EventIdFull))
             {
                 string id = match.Groups[1].Value;
-                if (!_eventsID.Any(x => x.Equals(id)))
-                    _eventsID.Add(id);
+                if (!eventsId.Any(x => x.Equals(id)))
+                    eventsId.Add(id);
             }
-            return _eventsID.Count < 2;
+            return eventsId.Count < 2;
         }
     }
 }

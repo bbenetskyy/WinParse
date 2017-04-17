@@ -1,4 +1,4 @@
-﻿namespace DataParser.Enums
+﻿namespace FormulasCollection.Enums
 {
     public enum Site
     {

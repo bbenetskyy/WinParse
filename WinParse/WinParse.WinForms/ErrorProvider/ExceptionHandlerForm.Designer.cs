@@ -1,4 +1,4 @@
-﻿namespace DXApplication1.ErrorProvider
+﻿namespace WinParse.WinForms.ErrorProvider
 {
     partial class ExceptionHandlerForm
     {

@@ -12,13 +12,14 @@ using WinParse.Resources;
 
 namespace WinParse.UI.PasswordForms
 {
-    public partial class LoginForm : DevExpress.XtraEditors.XtraForm
+    public partial class LoginForm : XtraForm
     {
         public LoginForm()
         {
             InitializeComponent();
             ResMan.ResourceChaned += ResMan_ResourceChaned;
         }
+
 
         private void ResMan_ResourceChaned(object sender, EventArgs e)
         {
@@ -30,6 +31,23 @@ namespace WinParse.UI.PasswordForms
 
             layoutControlItemSaveCheckBox.Text = ResMan.GetString(ResKeys.LoginForm_SaveCheckBox_Text);
             layoutControlItemSaveCheckBox.CustomizationFormText = ResMan.GetString(ResKeys.LoginForm_SaveCheckBox_CustomizationFormText);
+
+            simpleButtonOk.ToolTip = ResMan.GetString(ResKeys.LoginForm_ButtonOk_ToolTip);
+            simpleButtonCancel.ToolTip = ResMan.GetString(ResKeys.LoginForm_ButtonCancel_ToolTip);
         }
+
+        /// <summary>
+        /// Get data from filled forms
+        /// </summary>
+        /// <returns>Dynamic type with Login(string), Password(string), Url(string), SaveMe(bool)</returns>
+        public dynamic GetCredentials
+            =>
+                new
+                {
+                    Login = textEditLogin.Text,
+                    Password = textEditPassword.Text,
+                    Url = textEditUrl.Text,
+                    SaveMe = checkBoxSave.Checked
+                };
     }
 }

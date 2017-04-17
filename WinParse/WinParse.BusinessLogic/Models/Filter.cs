@@ -35,13 +35,13 @@ namespace FormulasCollection.Models
         public bool AutoDelete { get; set; }
 
 
-        private int defaultAutoDeleteTime = 1200;
+        private int _defaultAutoDeleteTime = 1200;
 
         private int? _autoDeleteTime;
 
         public int? AutoDeleteTime
         {
-            get { return _autoDeleteTime ?? (_autoDeleteTime = defaultAutoDeleteTime); }
+            get { return _autoDeleteTime ?? (_autoDeleteTime = _defaultAutoDeleteTime); }
             set { _autoDeleteTime = value; }
         }
 

@@ -2,11 +2,11 @@
 
 namespace SiteAccess.Access
 {
-    public interface ISiteAccess<Bet, Result>
+    public interface ISiteAccess<TBet, TResult>
     {
         bool CheckAvailable();
 
-        Result MakeBet(Bet bet);
+        TResult MakeBet(TBet bet);
 
         bool Login(string login, string password);
 

@@ -61,7 +61,7 @@ namespace DataParser.DefaultRealization
         public double Fora2 { get; set; }
         /// <summary>
         ///2
-        public double II { get; set; }
+        public double Ii { get; set; }
         /// <summary>
         ///Тотал
         /// </summary>

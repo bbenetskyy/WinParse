@@ -1,6 +1,6 @@
 ﻿//#define TestCoef
 //#define TestNames
-using DataParser.Enums;
+
 using FormulasCollection.Enums;
 using FormulasCollection.Helpers;
 using FormulasCollection.Models;
@@ -11,13 +11,13 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ToolsPortable;
-using NewMarathonEvent = MarathonBetLibrary.Model.MarathonEvent;
+using NewMarathonEvent = WinParse.MarathonBetLibrary.Model.MarathonEvent;
 
 namespace FormulasCollection.Realizations
 {
     public class TwoOutComeForkFormulas
     {
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly TwoOutComeCalculatorFormulas _calculatorFormulas;
         private readonly Dictionary<string, string> _pinKeyCache = new Dictionary<string, string>();
 
@@ -152,9 +152,9 @@ namespace FormulasCollection.Realizations
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error(eventItem.MatchDateTime);
-                        _logger.Error(ex.Message);
-                        _logger.Error(ex.StackTrace);
+                        Logger.Error(eventItem.MatchDateTime);
+                        Logger.Error(ex.Message);
+                        Logger.Error(ex.StackTrace);
                     }
                 }
                 if (pinKey == null)
@@ -184,20 +184,20 @@ namespace FormulasCollection.Realizations
                         fork.Sport = eventItem.SportType;
                         fork.MatchDateTime = pinnacleEvent.MatchDateTime;
                         fork.BookmakerSecond = pinKey;
-                        fork.BookmakerFirst = eventItem.Event_RU;
+                        fork.BookmakerFirst = eventItem.EventRu;
                         fork.Type = ForkType.Current;
                         fork.LineId = pinnacleEvent.ForkDetailDictionary[pinEventKey].LineId;
                         fork.Profit = _calculatorFormulas.GetProfit(Convert.ToDouble(eventItem.Coef),
                             Convert.ToDouble(pinnacleEvent.ForkDetailDictionary[pinEventKey].TypeCoef));
-                        fork.sn = eventItem.marathonAutoPlay.sn;
-                        fork.mn = eventItem.marathonAutoPlay.mn;
-                        fork.ewc = eventItem.marathonAutoPlay.ewc;
-                        fork.cid = eventItem.marathonAutoPlay.cid;
-                        fork.prt = eventItem.marathonAutoPlay.prt;
-                        fork.ewf = eventItem.marathonAutoPlay.ewf;
-                        fork.epr = eventItem.marathonAutoPlay.epr;
-                        fork.prices = eventItem.marathonAutoPlay.prices;
-                        fork.selection_key = eventItem.marathonAutoPlay.selection_key;
+                        fork.Sn = eventItem.MarathonAutoPlay.Sn;
+                        fork.Mn = eventItem.MarathonAutoPlay.Mn;
+                        fork.Ewc = eventItem.MarathonAutoPlay.Ewc;
+                        fork.Cid = eventItem.MarathonAutoPlay.Cid;
+                        fork.Prt = eventItem.MarathonAutoPlay.Prt;
+                        fork.Ewf = eventItem.MarathonAutoPlay.Ewf;
+                        fork.Epr = eventItem.MarathonAutoPlay.Epr;
+                        fork.Prices = eventItem.MarathonAutoPlay.Prices;
+                        fork.SelectionKey = eventItem.MarathonAutoPlay.SelectionKey;
                         fork.Period = pinnacleEvent.ForkDetailDictionary[pinEventKey].Period;
                         fork.SideType = pinnacleEvent.ForkDetailDictionary[pinEventKey].SideType;
                         fork.TeamType = pinnacleEvent.ForkDetailDictionary[pinEventKey].TeamType;
@@ -207,8 +207,8 @@ namespace FormulasCollection.Realizations
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex.Message);
-                    _logger.Error(ex.StackTrace);
+                    Logger.Error(ex.Message);
+                    Logger.Error(ex.StackTrace);
                 }
             }
 #if TestNames
@@ -224,19 +224,19 @@ namespace FormulasCollection.Realizations
             foreach (var eventItem in marathon)
             {
                 //todo log it!
-                if (eventItem?.EventNameEN == null) continue;
+                if (eventItem?.EventNameEn == null) continue;
                 string pinKey = null;
                 try
                 {
                     pinKey = pinnacle.FirstOrDefault(pinEvent => Extentions
-                                     .GetStringSimilarityForSportTeams(eventItem.EventNameEN.FullName,
+                                     .GetStringSimilarityForSportTeams(eventItem.EventNameEn.FullName,
                                                                        pinEvent.Key,
                                                                        true,
                                                                        eventItem.Date,
                                                                        pinEvent.Value.MatchDateTime)
                                       >= 85).Key
                           ?? pinnacle.FirstOrDefault(pinEvent =>
-                                                                       CalculateSimilarity(eventItem.EventNameEN.FullName,
+                                                                       CalculateSimilarity(eventItem.EventNameEn.FullName,
                                                                        pinEvent.Key,
                                                                        eventItem.Date,
                                                                        pinEvent.Value.MatchDateTime)
@@ -244,9 +244,9 @@ namespace FormulasCollection.Realizations
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(eventItem.Date);
-                    _logger.Error(ex.Message);
-                    _logger.Error(ex.StackTrace);
+                    Logger.Error(eventItem.Date);
+                    Logger.Error(ex.Message);
+                    Logger.Error(ex.StackTrace);
                 }
 
                 if (pinKey == null) continue;
@@ -265,7 +265,7 @@ namespace FormulasCollection.Realizations
                         fork.League = pinnacleEvent.LeagueName;
                         fork.MarathonEventId = eventItem.EventId;
                         fork.PinnacleEventId = pinnacleEvent.EventId;
-                        fork.Event = eventItem.EventNameEN.FullName;
+                        fork.Event = eventItem.EventNameEn.FullName;
                         fork.TypeFirst = forkEvent.Mar.NameCoef;
                         fork.CoefFirst = forkEvent.Mar.ValueCoef.ToString();
                         fork.TypeSecond = forkEvent.Pin;
@@ -273,20 +273,20 @@ namespace FormulasCollection.Realizations
                         fork.Sport = eventItem.SportType;
                         fork.MatchDateTime = pinnacleEvent.MatchDateTime;
                         fork.BookmakerSecond = pinKey;
-                        fork.BookmakerFirst = eventItem.EventNameRU.FullName;
+                        fork.BookmakerFirst = eventItem.EventNameRu.FullName;
                         fork.Type = ForkType.Current;
                         fork.LineId = pinnacleEvent.ForkDetailDictionary[forkEvent.Pin].LineId;
                         fork.Profit = _calculatorFormulas.GetProfit(forkEvent.Mar.ValueCoef,
                             Convert.ToDouble(pinnacleEvent.ForkDetailDictionary[forkEvent.Pin].TypeCoef));
-                        fork.sn = forkEvent.Mar.AutoPlay.sn;
-                        fork.mn = forkEvent.Mar.AutoPlay.mn;
-                        fork.ewc = forkEvent.Mar.AutoPlay.ewc;
-                        fork.cid = forkEvent.Mar.AutoPlay.cid;
-                        fork.prt = forkEvent.Mar.AutoPlay.prt;
-                        fork.ewf = forkEvent.Mar.AutoPlay.ewf;
-                        fork.epr = forkEvent.Mar.AutoPlay.epr;
-                        fork.prices = forkEvent.Mar.AutoPlay.prices;
-                        fork.selection_key = forkEvent.Mar.AutoPlay.selection_key;
+                        fork.Sn = forkEvent.Mar.AutoPlay.sn;
+                        fork.Mn = forkEvent.Mar.AutoPlay.mn;
+                        fork.Ewc = forkEvent.Mar.AutoPlay.ewc;
+                        fork.Cid = forkEvent.Mar.AutoPlay.cid;
+                        fork.Prt = forkEvent.Mar.AutoPlay.prt;
+                        fork.Ewf = forkEvent.Mar.AutoPlay.ewf;
+                        fork.Epr = forkEvent.Mar.AutoPlay.epr;
+                        fork.Prices = forkEvent.Mar.AutoPlay.prices;
+                        fork.SelectionKey = forkEvent.Mar.AutoPlay.selection_key;
                         fork.Period = pinnacleEvent.ForkDetailDictionary[forkEvent.Pin].Period;
                         fork.SideType = pinnacleEvent.ForkDetailDictionary[forkEvent.Pin].SideType;
                         fork.TeamType = pinnacleEvent.ForkDetailDictionary[forkEvent.Pin].TeamType;
@@ -296,8 +296,8 @@ namespace FormulasCollection.Realizations
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex.Message);
-                    _logger.Error(ex.StackTrace);
+                    Logger.Error(ex.Message);
+                    Logger.Error(ex.StackTrace);
                 }
             }
             return resList;
@@ -403,8 +403,8 @@ namespace FormulasCollection.Realizations
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message);
-                _logger.Error(ex.StackTrace);
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
             }
             return resList;
         }
@@ -430,8 +430,8 @@ namespace FormulasCollection.Realizations
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex.Message);
-                    _logger.Error(ex.StackTrace);
+                    Logger.Error(ex.Message);
+                    Logger.Error(ex.StackTrace);
                 }
             }
             return resList;

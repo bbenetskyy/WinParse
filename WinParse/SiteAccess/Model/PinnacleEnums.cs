@@ -1,41 +1,41 @@
-﻿namespace SiteAccess.Enums
+﻿namespace SiteAccess.Model
 {
     // Bets for pinnacle
 
     public enum OddsFormat
     {
-        AMERICAN,
-        DECIMAL,
-        HONGKONG,
-        INDONESIAN,
-        MALAY
+        American,
+        Decimal,
+        Hongkong,
+        Indonesian,
+        Malay
     }
 
     public enum WinRiskType
     {
-        WIN,
-        RISK
+        Win,
+        Risk
     }
 
     public enum BetType
     {
-        MONEYLINE,
-        TEAM_TOTAL_POINTS,
-        SPREAD,
-        TOTAL_POINTS,
-        SPECIAL
+        Moneyline,
+        TeamTotalPoints,
+        Spread,
+        TotalPoints,
+        Special
     }
 
     public enum TeamType
     {
-        DRAW,
-        TEAM1,
-        TEAM2
+        Draw,
+        Team1,
+        Team2
     }
 
     public enum SideType
     {
-        OVER,
-        UNDER
+        Over,
+        Under
     }
 }

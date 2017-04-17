@@ -1,5 +1,4 @@
-﻿using SiteAccess.Enums;
-using System;
+﻿using System;
 
 namespace SiteAccess.Model.Bets
 {

@@ -1,13 +1,13 @@
 ﻿#define CalculatorProgram
 
-using FormulasCollection.Models;
-using FormulasCollection.Realizations;
 using System;
 using System.Globalization;
 using System.Windows.Forms;
+using FormulasCollection.Models;
+using FormulasCollection.Realizations;
 using ToolsPortable;
 
-namespace DXApplication1.Pages
+namespace WinParse.WinForms.Pages
 {
     public partial class CalculatorPage : Form
     {
@@ -71,7 +71,7 @@ namespace DXApplication1.Pages
             OnURateChanging();
         }
 
-        private void CalculatorPage_Shown(object sender, System.EventArgs e) => IsOpen = true;
+        private void CalculatorPage_Shown(object sender, EventArgs e) => IsOpen = true;
 
 
         public void InitializeEvents()

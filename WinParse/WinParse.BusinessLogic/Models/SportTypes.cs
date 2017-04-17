@@ -1,22 +1,19 @@
-﻿using DataParser.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace FormulasCollection.Models
 {
     public static class SportTypes
     {
-        private static Dictionary<string, string> CoefsAll;
-
-        public static Dictionary<string, string> TypeCoefsAll => CoefsAll;
+        public static Dictionary<string, string> TypeCoefsAll { get; private set; }
 
         static SportTypes()
         {
-            initCoefsAll();
+            InitCoefsAll();
         }
-        private static void initCoefsAll()
+        private static void InitCoefsAll()
         {
-            CoefsAll = new Dictionary<string, string>
+            TypeCoefsAll = new Dictionary<string, string>
             {
                 {"F1","F2"},
                 {"F2","F1"},

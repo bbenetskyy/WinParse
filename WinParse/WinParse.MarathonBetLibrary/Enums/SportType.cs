@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MarathonBetLibrary.Enums
+﻿namespace WinParse.MarathonBetLibrary.Enums
 {
     public enum SportType
     {

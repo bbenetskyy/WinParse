@@ -1,48 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MarathonBetLibrary.Setup
+﻿namespace WinParse.MarathonBetLibrary.Setup
 {
     public class CoefTypes
     {
-        public static string RESULTS_DRAW = "результативная ничья";
-        public static string RESULTS_DRAW_PART = "RD";
+        public static string ResultsDraw = "результативная ничья";
+        public static string ResultsDrawPart = "RD";
 
-        public static string WINS = "победа";
-        public static string DRAW = "ничья";
+        public static string Wins = "победа";
+        public static string Draw = "ничья";
 
-        public static string WINS_WITH_FORA = "победа с учетом форы";
-        public static string WINS_WITH_ASIAT_FORA = "победа с учетом азиатской форы";
-        public static string WINS_WITH_FORA_VOLLEYBALL = "победа в матче с учетом форы по очкам";
+        public static string WinsWithFora = "победа с учетом форы";
+        public static string WinsWithAsiatFora = "победа с учетом азиатской форы";
+        public static string WinsWithForaVolleyball = "победа в матче с учетом форы по очкам";
 
-        public static string TOTAL = "тотал голов";
-        public static string TOTAL_ASIAT = "азиатский тотал голов";
-        public static string TOTAL_VOLLEYBALL = "тотал матча по очкам";
-        public static string UNDER = "меньше";
-        public static string OVER = "больше";
+        public static string Total = "тотал голов";
+        public static string TotalAsiat = "азиатский тотал голов";
+        public static string TotalVolleyball = "тотал матча по очкам";
+        public static string Under = "меньше";
+        public static string Over = "больше";
 
-        public static string ODD = "нечет";
-        public static string ODD_PART = "TOOD";
-        public static string EVEN = "чет";
-        public static string EVEN_PART = "TEVEN";
+        public static string Odd = "нечет";
+        public static string OddPart = "TOOD";
+        public static string Even = "чет";
+        public static string EvenPart = "TEVEN";
 
-        public static string HALF = "тайм";
-        public static string HALF2 = "половина";
-        public static string QUARTER = "четверть";
-        public static string PERIOD = "период";
-        public static string GAME = "гейм";
-        public static string PARTY = "парти";
-        public static string SET = "сет";
-        public static string PARTY_PART = "PR";
-        public static string SET_PART = "S";
-        public static string GAME_PART = "G";
-        public static string PERIOD_PART = "P";
-        public static string QUARTER_PART = "Q";
-        public static string HALF_PART = "H";
-        public static string TEAM = "T";
+        public static string Half = "тайм";
+        public static string Half2 = "половина";
+        public static string Quarter = "четверть";
+        public static string Period = "период";
+        public static string Game = "гейм";
+        public static string Party = "парти";
+        public static string Set = "сет";
+        public static string PartyPart = "PR";
+        public static string SetPart = "S";
+        public static string GamePart = "G";
+        public static string PeriodPart = "P";
+        public static string QuarterPart = "Q";
+        public static string HalfPart = "H";
+        public static string Team = "T";
 
         public static string SimpleFora(string numTeam, string fora)
         {

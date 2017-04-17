@@ -8,10 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WinParse.Resources.uk_UA {
-    using System;
-    
-    
+namespace WinParse.Resources {
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -57,6 +54,78 @@ namespace WinParse.Resources.uk_UA {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LoginForm_ButtonCancel_ToolTip {
+            get {
+                return ResourceManager.GetString("LoginForm_ButtonCancel_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LoginForm_ButtonOk_ToolTip {
+            get {
+                return ResourceManager.GetString("LoginForm_ButtonOk_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LoginForm_LoginTextEdit_CustomizationFormText {
+            get {
+                return ResourceManager.GetString("LoginForm_LoginTextEdit_CustomizationFormText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LoginForm_LoginTextEdit_Text {
+            get {
+                return ResourceManager.GetString("LoginForm_LoginTextEdit_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LoginForm_PasswordTextEdit_CustomizationFormText {
+            get {
+                return ResourceManager.GetString("LoginForm_PasswordTextEdit_CustomizationFormText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LoginForm_PasswordTextEdit_Text {
+            get {
+                return ResourceManager.GetString("LoginForm_PasswordTextEdit_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LoginForm_SaveCheckBox_CustomizationFormText {
+            get {
+                return ResourceManager.GetString("LoginForm_SaveCheckBox_CustomizationFormText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LoginForm_SaveCheckBox_Text {
+            get {
+                return ResourceManager.GetString("LoginForm_SaveCheckBox_Text", resourceCulture);
             }
         }
     }

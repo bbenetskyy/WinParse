@@ -8,9 +8,7 @@ namespace FormulasCollection.Models
 {
     public static class CoefsWhichMustBeRevert
     {
-        private static Dictionary<string, string> coefs;
-
-        public static Dictionary<string, string> revertCoefs => coefs;
+        public static Dictionary<string, string> RevertCoefs { get; private set; }
 
         static CoefsWhichMustBeRevert()
         {
@@ -19,7 +17,7 @@ namespace FormulasCollection.Models
 
         private static void FillCoefsToRevert()
         {
-            coefs = new Dictionary<string, string>
+            RevertCoefs = new Dictionary<string, string>
                 {
                 { "12", "X"},
                 { "1X", "1"},

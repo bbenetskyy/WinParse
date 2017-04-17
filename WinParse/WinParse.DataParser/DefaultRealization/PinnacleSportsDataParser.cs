@@ -1,16 +1,16 @@
-﻿using DataParser.Enums;
-using DataParser.Models;
+﻿using DataParser.Models;
 using FormulasCollection.Helpers;
 using FormulasCollection.Models;
 using FormulasCollection.Realizations;
 using NLog;
-using SiteAccess.Enums;
 using System;
 using System.Collections.Generic;
 using System.Json;
 using System.Linq;
 using System.Net;
 using System.Text;
+using FormulasCollection.Enums;
+using SiteAccess.Model;
 using ToolsPortable;
 
 namespace DataParser.DefaultRealization
@@ -68,21 +68,21 @@ namespace DataParser.DefaultRealization
                                 if (moneyLine.ContainsKey("home") && moneyLine["home"] != null)
                                     resList[id].AddRange(eventFactory.CreateEventsWithTotal("1",
                                                                                       moneyLine["home"].ToString(),
-                                                                                      TeamType.TEAM1,
-                                                                                      SideType.OVER,
-                                                                                      BetType.MONEYLINE));
+                                                                                      TeamType.Team1,
+                                                                                      SideType.Over,
+                                                                                      BetType.Moneyline));
                                 if (moneyLine.ContainsKey("away") && moneyLine["away"] != null)
                                     resList[id].AddRange(eventFactory.CreateEventsWithTotal("2",
                                                                                       moneyLine["away"].ToString(),
-                                                                                      TeamType.TEAM2,
-                                                                                      SideType.OVER,
-                                                                                      BetType.MONEYLINE));
+                                                                                      TeamType.Team2,
+                                                                                      SideType.Over,
+                                                                                      BetType.Moneyline));
                                 if (moneyLine.ContainsKey("draw") && moneyLine["draw"] != null)
                                     resList[id].AddRange(eventFactory.CreateEventsWithTotal("X",
                                                                                       moneyLine["draw"].ToString(),
-                                                                                      TeamType.DRAW,
-                                                                                      SideType.OVER,
-                                                                                      BetType.MONEYLINE));
+                                                                                      TeamType.Draw,
+                                                                                      SideType.Over,
+                                                                                      BetType.Moneyline));
                             }
                             if (period.Value.ContainsKey("spreads") && period.Value["spreads"] != null && matchPeriod == 0)
                                 foreach (var spread in period.Value["spreads"])
@@ -92,15 +92,15 @@ namespace DataParser.DefaultRealization
                                     if (spread.Value.ContainsKey("home") && spread.Value["home"] != null)
                                         resList[id].AddRange(eventFactory.CreateEventsWithTotal($"F1({spread.Value["hdp"].ToString().LocalizeToMarathon()})".MinimalizeValue(),
                                                                                           spread.Value["home"].ToString(),
-                                                                                          TeamType.TEAM1,
-                                                                                          SideType.OVER,
-                                                                                          BetType.SPREAD));
+                                                                                          TeamType.Team1,
+                                                                                          SideType.Over,
+                                                                                          BetType.Spread));
                                     if (spread.Value.ContainsKey("away") && spread.Value["away"] != null)
                                         resList[id].AddRange(eventFactory.CreateEventsWithTotal($"F2({spread.Value["hdp"].ToString().InvertValue()})".MinimalizeValue(),
                                                                                           spread.Value["away"].ToString(),
-                                                                                          TeamType.TEAM2,
-                                                                                          SideType.OVER,
-                                                                                          BetType.SPREAD));
+                                                                                          TeamType.Team2,
+                                                                                          SideType.Over,
+                                                                                          BetType.Spread));
                                 }
                             if (period.Value.ContainsKey("totals") && period.Value["totals"] != null)
                                 foreach (var total in period.Value["totals"])
@@ -109,15 +109,15 @@ namespace DataParser.DefaultRealization
                                     if (total.Value.ContainsKey("over") && total.Value["over"] != null)
                                         resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TO({total.Value["points"]})".MinimalizeValue(),
                                                                                           total.Value["over"].ToString(),
-                                                                                          TeamType.DRAW,
-                                                                                          SideType.OVER,
-                                                                                          BetType.TOTAL_POINTS));
+                                                                                          TeamType.Draw,
+                                                                                          SideType.Over,
+                                                                                          BetType.TotalPoints));
                                     if (total.Value.ContainsKey("under") && total.Value["under"] != null)
                                         resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TU({total.Value["points"]})".MinimalizeValue(),
                                                                                           total.Value["under"].ToString(),
-                                                                                          TeamType.DRAW,
-                                                                                          SideType.UNDER,
-                                                                                          BetType.TOTAL_POINTS));
+                                                                                          TeamType.Draw,
+                                                                                          SideType.Under,
+                                                                                          BetType.TotalPoints));
                                 }
                             if (period.Value.ContainsKey("teamTotal") && period.Value["teamTotal"] != null)
                             {
@@ -130,15 +130,15 @@ namespace DataParser.DefaultRealization
                                     if (home.ContainsKey("over") && home["over"] != null)
                                         resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TOT1({home["points"]})".MinimalizeValue(),
                                                                                           home["over"].ToString(),
-                                                                                          TeamType.TEAM1,
-                                                                                          SideType.OVER,
-                                                                                          BetType.TEAM_TOTAL_POINTS));
+                                                                                          TeamType.Team1,
+                                                                                          SideType.Over,
+                                                                                          BetType.TeamTotalPoints));
                                     if (home.ContainsKey("under") && home["under"] != null)
                                         resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TUT1({home["points"]})".MinimalizeValue(),
                                                                                           home["under"].ToString(),
-                                                                                          TeamType.TEAM1,
-                                                                                          SideType.UNDER,
-                                                                                          BetType.TEAM_TOTAL_POINTS));
+                                                                                          TeamType.Team1,
+                                                                                          SideType.Under,
+                                                                                          BetType.TeamTotalPoints));
                                 }
                                 if (teamTotal.ContainsKey("away") && teamTotal["away"] != null)
                                 {
@@ -147,15 +147,15 @@ namespace DataParser.DefaultRealization
                                     if (away.ContainsKey("over") && away["over"] != null)
                                         resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TOT2({away["points"]})".MinimalizeValue(),
                                                                                           away["over"].ToString(),
-                                                                                          TeamType.TEAM2,
-                                                                                          SideType.OVER,
-                                                                                          BetType.TEAM_TOTAL_POINTS));
+                                                                                          TeamType.Team2,
+                                                                                          SideType.Over,
+                                                                                          BetType.TeamTotalPoints));
                                     if (away.ContainsKey("under") && away["under"] != null)
                                         resList[id].AddRange(eventFactory.CreateEventsWithTotal($"TUT2({away["points"]})".MinimalizeValue(),
                                                                                           away["under"].ToString(),
-                                                                                          TeamType.TEAM2,
-                                                                                          SideType.UNDER,
-                                                                                          BetType.TEAM_TOTAL_POINTS));
+                                                                                          TeamType.Team2,
+                                                                                          SideType.Under,
+                                                                                          BetType.TeamTotalPoints));
                                 }
                             }
                         }

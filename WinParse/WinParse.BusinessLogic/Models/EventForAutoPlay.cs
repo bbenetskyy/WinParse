@@ -1,24 +1,24 @@
-﻿using MarathonBetLibrary.Model;
+﻿using WinParse.MarathonBetLibrary.Model;
 
-namespace WinParse.BusinessLogic.Models
+namespace FormulasCollection.Models
 {
     public class EventForAutoPlay
     {
-        public string EventID { get; set; }
+        public string EventId { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
-        public DataMarathonForAutoPlays marathonAutoPlay { get; set; }
+        public DataMarathonForAutoPlays MarathonAutoPlay { get; set; }
 
         public EventForAutoPlay()
         {
         }
 
-        public EventForAutoPlay(string eventID, string type, string value, DataMarathonForAutoPlays autoplay)
+        public EventForAutoPlay(string eventId, string type, string value, DataMarathonForAutoPlays autoplay)
         {
-            this.EventID = eventID;
-            this.Type = type;
-            this.Value = value;
-            this.marathonAutoPlay = autoplay;
+            EventId = eventId;
+            Type = type;
+            Value = value;
+            MarathonAutoPlay = autoplay;
         }
     }
 }

@@ -4,7 +4,6 @@
 #define NewMarathon
 
 using DataParser.DefaultRealization;
-using DataParser.Enums;
 using DataSaver;
 using DataSaver.Models;
 using FormulasCollection.Enums;
@@ -17,12 +16,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using SiteAccess.Enums;
 using ToolsPortable;
-using MarathonBetLibrary;
-using MarathonBetLibrary.Model;
-using MarathonSportType = MarathonBetLibrary.Enums.SportType;
-using NewMarathonEvent = MarathonBetLibrary.Model.MarathonEvent;
+using WinParse.MarathonBetLibrary;
+using MarathonSportType = WinParse.MarathonBetLibrary.Enums.SportType;
+using NewMarathonEvent = WinParse.MarathonBetLibrary.Model.MarathonEvent;
 
 #if PlaceBets
 
@@ -36,7 +33,7 @@ namespace DataLoader
 {
     internal class Program
     {
-        private static User _currentUser;
+        private static UserData _currentUser;
 
         private static PinnacleSportsDataParser _pinnacle;
 #if NewMarathon
@@ -54,7 +51,7 @@ namespace DataLoader
 #endif
         private static double _defRate;
         private static Filter _filter;
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static void Main()
         {
@@ -76,7 +73,7 @@ namespace DataLoader
 #if !NewMarathon
             _marathon = new MarathonParser();
 #endif
-            _localSaver = new LocalSaver();
+            _localSaver = new LocalSaver("http://localhost:8765", "Parser");
             _forkFormulas = new TwoOutComeForkFormulas();
             StartLoadDictionary();
         }
@@ -86,7 +83,7 @@ namespace DataLoader
             _currentUser = _localSaver.FindUser();
             if (_currentUser != null) return;
 
-            _currentUser = new User();
+            _currentUser = new UserData();
             Console.WriteLine("Please enter Pinnacle user login");//for test "VB794327", "artem89@"
             _currentUser.LoginPinnacle = Console.ReadLine();
 
@@ -143,38 +140,38 @@ namespace DataLoader
                     Console.WriteLine($"Max Rate {_filter.MaxRate}");
                     Console.WriteLine($"After Time {_filter.AfterTime}");
                     Console.WriteLine($"Before Time {_filter.BeforeTime}");
-                    MarathonSportType _marathonSportType = default(MarathonSportType);
+                    MarathonSportType marathonSportType = default(MarathonSportType);
                     switch (sportType)
                     {
                         case SportType.Soccer:
                             if (!_filter.Football) continue;
-                            _marathonSportType = MarathonSportType.Soccer;
+                            marathonSportType = MarathonSportType.Soccer;
                             break;
 
                         case SportType.Basketball:
                             if (!_filter.Basketball) continue;
-                            _marathonSportType = MarathonSportType.Basketball;
+                            marathonSportType = MarathonSportType.Basketball;
                             break;
 
                         case SportType.Hockey:
                             if (!_filter.Hockey) continue;
-                            _marathonSportType = MarathonSportType.Hockey;
+                            marathonSportType = MarathonSportType.Hockey;
                             break;
 
                         case SportType.Tennis:
                             if (!_filter.Tennis) continue;
-                            _marathonSportType = MarathonSportType.Tennis;
+                            marathonSportType = MarathonSportType.Tennis;
                             break;
 
                         case SportType.Volleyball:
                             if (!_filter.Volleyball) continue;
-                            _marathonSportType = MarathonSportType.Volleyball;
+                            marathonSportType = MarathonSportType.Volleyball;
                             break;
                     }
                     var pinSport = LoadPinacleDictionary(sportType);
 #if NewMarathon
                     Console.WriteLine("Start loading Marathon");
-                    _marLoading = new Loading(_marathonSportType);
+                    _marLoading = new Loading(marathonSportType);
                     _marLoading.LoadingEvent();
                     var marSport = _marLoading.GetEvents();
                     Console.WriteLine($"Was loaded {marSport.Count}");
@@ -191,7 +188,7 @@ namespace DataLoader
                         SaveNewForks(forks, sportType);
                     }
                     watch.Stop();
-                    _logger.Fatal($"StartLoadDictionary {sportType} {watch.Elapsed}");
+                    Logger.Fatal($"StartLoadDictionary {sportType} {watch.Elapsed}");
                 }
             }
             // ReSharper disable once FunctionNeverReturns
@@ -208,7 +205,7 @@ namespace DataLoader
             var rowsForDelete = _localSaver.MoveForks(forks, sportType);
             _localSaver.ClearForks(rowsForDelete);
             watch.Stop();
-            _logger.Fatal($"ClearForks {sportType} {watch.Elapsed}");
+            Logger.Fatal($"ClearForks {sportType} {watch.Elapsed}");
             Console.WriteLine($"{forks.Count} forks left for place and save. Sport type {sportType}");
         }
 
@@ -299,7 +296,7 @@ namespace DataLoader
             }
 
             watch.Stop();
-            _logger.Fatal($"PlaceAllBets {sportType} {watch.Elapsed}");
+            Logger.Fatal($"PlaceAllBets {sportType} {watch.Elapsed}");
             Console.WriteLine(
                 $"End placing bet. Was placed {forks.Count(f => f.Type == ForkType.Saved)} forks. Sport type {sportType}");
         }
@@ -312,7 +309,7 @@ namespace DataLoader
             watch.Start();
             var resList = _forkFormulas.GetAllForksDictionary(pinSport, marSport);
             watch.Stop();
-            _logger.Fatal($"GetForksDictionary {sportType} {watch.Elapsed}");
+            Logger.Fatal($"GetForksDictionary {sportType} {watch.Elapsed}");
             Console.WriteLine("Calculate finished");
             Console.WriteLine($"Was founded {resList.Count} {sportType} Forks");
 
@@ -327,7 +324,7 @@ namespace DataLoader
             watch.Start();
             var resList = _forkFormulas.GetAllForksDictionary(pinSport, marSport);
             watch.Stop();
-            _logger.Fatal($"GetForksDictionary {sportType} {watch.Elapsed}");
+            Logger.Fatal($"GetForksDictionary {sportType} {watch.Elapsed}");
             Console.WriteLine("Calculate finished");
             Console.WriteLine($"Was founded {resList.Count} {sportType} Forks");
 
@@ -342,7 +339,7 @@ namespace DataLoader
             watch.Start();
             _localSaver.InsertForks(forks);
             watch.Stop();
-            _logger.Fatal($"SaveNewForks {sportType} {watch.Elapsed}");
+            Logger.Fatal($"SaveNewForks {sportType} {watch.Elapsed}");
 
             Console.WriteLine("End Saving.");
         }
@@ -373,7 +370,7 @@ namespace DataLoader
             watch.Start();
             var newList = _pinnacle.GetAllPinacleEventsDictionary(sportType, _currentUser.LoginPinnacle, _currentUser.PasswordPinnacle);
             watch.Stop();
-            _logger.Fatal($"LoadPinacleDictionary {sportType} {watch.Elapsed}");
+            Logger.Fatal($"LoadPinacleDictionary {sportType} {watch.Elapsed}");
 
             Console.WriteLine("Loading finished");
             Console.WriteLine($"Was founded {newList.Count} {sportType} Events from Pinnacle");

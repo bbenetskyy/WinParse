@@ -1,82 +1,77 @@
-﻿using HtmlAgilityPack;
-using MarathonBetLibrary.Enums;
-using MarathonBetLibrary.Model;
-using MarathonBetLibrary.Setup;
-using MarathonBetLibrary.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using WinParse.MarathonBetLibrary.Enums;
+using WinParse.MarathonBetLibrary.Model;
+using WinParse.MarathonBetLibrary.Setup;
+using WinParse.MarathonBetLibrary.Tools;
 
-namespace MarathonBetLibrary
+namespace WinParse.MarathonBetLibrary
 {
     public class ParseLogic
     {
-        private List<MarathonEvent> Events;
-        private SportType sportType;
-        private bool isEnglish;
+        private List<MarathonEvent> _events;
+        private SportType _sportType;
+        private bool _isEnglish;
         public ParseLogic(SportType sportType)
         {
-            Events = new List<MarathonEvent>();
-            this.sportType = sportType;
+            _events = new List<MarathonEvent>();
+            this._sportType = sportType;
         }
-        public List<string> LoadID()
+        public List<string> LoadId()
         {
-            var _eventsID = new List<string>();
-            string HTML = LoadData(true);
+            var eventsId = new List<string>();
+            string html = LoadData(true);
 
-            foreach (Match match in Regex.Matches(HTML, Tags.EventID + " " + Tags.NameEvent))
+            foreach (Match match in Regex.Matches(html, Tags.EventIdFull + " " + Tags.NameEvent))
             {
                 string id = match.Groups[1].Value;
-                _eventsID.Add(id+"#"+match.Groups[2].Value);
+                eventsId.Add(id+"#"+match.Groups[2].Value);
                // MarathonEvent eventName = GetMarathonEvent(id, match.Groups[2].Value);
             }
-            return _eventsID;
+            return eventsId;
         }
-        public MarathonEvent GetMarathonEvent(string eventId, string eventTeamsEN)
+        public MarathonEvent GetMarathonEvent(string eventId, string eventTeamsEn)
         {
             MarathonEvent eventBet = null;
-            string HTML = LoadData(false, eventId);
-            if (!Helper.CheckCountEventsInPage(HTML))
+            string html = LoadData(false, eventId);
+            if (!Helper.CheckCountEventsInPage(html))
                 return null;
-            var data_sel = Regex.Matches(HTML, Tags.DataSel);
-            var selection_key = Regex.Matches(HTML, Tags.SelectionKey);
+            var dataSel = Regex.Matches(html, Tags.DataSel);
+            var selectionKey = Regex.Matches(html, Tags.SelectionKey);
 
-            if (data_sel.Count == selection_key.Count)
+            if (dataSel.Count == selectionKey.Count)
             {
                 eventBet = new MarathonEvent();
-                eventBet.Queue = ParseTools.QueueTeams(HTML);
-                eventBet.EventNameEN = ParseTools.CreateEventName(eventTeamsEN, eventBet.Queue);
-                if (eventBet.EventNameEN == null) return null;
-                string nameEventRU = ParseTools.RegexByTags(HTML, Tags.NameEvent, 1);
-                if (nameEventRU.Where(x => x.Equals('-')).Count() > 1)
+                eventBet.Queue = ParseTools.QueueTeams(html);
+                eventBet.EventNameEn = ParseTools.CreateEventName(eventTeamsEn, eventBet.Queue);
+                if (eventBet.EventNameEn == null) return null;
+                string nameEventRu = ParseTools.RegexByTags(html, Tags.NameEvent, 1);
+                if (nameEventRu.Where(x => x.Equals('-')).Count() > 1)
                 {
-                    nameEventRU = Helper.ContainsTeamRuAndEn(nameEventRU, eventTeamsEN);
+                    nameEventRu = Helper.ContainsTeamRuAndEn(nameEventRu, eventTeamsEn);
                 }
-                eventBet.EventNameRU = ParseTools.CreateEventName(nameEventRU, eventBet.Queue);
+                eventBet.EventNameRu = ParseTools.CreateEventName(nameEventRu, eventBet.Queue);
                 eventBet.EventId = eventId;
-                eventBet.LeguaId = Regex.Match(HTML, Tags.CategoryId).Groups[1].Value;
-                eventBet.Date = ParseTools.ConvertStringToDateTime(Helper.GetDate(HTML));
+                eventBet.LeguaId = Regex.Match(html, Tags.CategoryId).Groups[1].Value;
+                eventBet.Date = ParseTools.ConvertStringToDateTime(Helper.GetDate(html));
                // eventBet.Date = ParseTools.ConvertStringToDateTime(Regex.Match(HTML, Tags.DateTime).Value);
-                eventBet.isLive = Convert.ToBoolean(ParseTools.RegexByTags(HTML, Tags.IsLive));
-                eventBet.SportType = sportType.ToString();
+                eventBet.IsLive = Convert.ToBoolean(ParseTools.RegexByTags(html, Tags.IsLive));
+                eventBet.SportType = _sportType.ToString();
 
-                for (int i = 0; i < data_sel.Count; i++)
+                for (int i = 0; i < dataSel.Count; i++)
                 {
-                    DataMarathonForAutoPlays autoPlay = ParseTools.ParseAutoPlay(data_sel[i].Groups[1].Value, selection_key[i].Groups[1].Value);
-                    bool isAsiat = autoPlay.mn.ToLower().Contains("азиат");
+                    DataMarathonForAutoPlays autoPlay = ParseTools.ParseAutoPlay(dataSel[i].Groups[1].Value, selectionKey[i].Groups[1].Value);
+                    bool isAsiat = autoPlay.Mn.ToLower().Contains("азиат");
                     eventBet.Coefs.Add(new MarathonCoef()
                     {
                         Recid = eventId,
                         AutoPlay = autoPlay,
-                        isAsiat = isAsiat,
-                        NameCoef = ParseTools.TypeCoef(eventBet.EventNameRU, autoPlay.sn, autoPlay.mn, isAsiat),
-                        ValueCoef = Double.Parse(autoPlay.epr),
-                        Description = autoPlay.mn + $"[{autoPlay.sn}]"
+                        IsAsiat = isAsiat,
+                        NameCoef = ParseTools.TypeCoef(eventBet.EventNameRu, autoPlay.Sn, autoPlay.Mn, isAsiat),
+                        ValueCoef = Double.Parse(autoPlay.Epr),
+                        Description = autoPlay.Mn + $"[{autoPlay.Sn}]"
                     });
                 }
                 eventBet.Coefs = eventBet.Coefs.Where(y => !string.IsNullOrEmpty(y.NameCoef) && !y.NameCoef.Contains("ERROR") && !y.NameCoef.Contains("UNDEFINED")).Select(x => x).ToList<MarathonCoef>();
@@ -88,11 +83,11 @@ namespace MarathonBetLibrary
             LinksMarathonBet linksMarathonBet = new LinksMarathonBet(isEnglish);
 
             string link = string.IsNullOrEmpty(eventId) ?
-                linksMarathonBet.GetSportLink(sportType) :
+                linksMarathonBet.GetSportLink(_sportType) :
                 linksMarathonBet.LoadSelectedLinkForEvent(eventId);
 
-            string HTML = (new HTMLTools(link)).LoadHtmlString();
-            return HTML;
+            string html = (new HtmlTools(link)).LoadHtmlString();
+            return html;
         }
     }
 }

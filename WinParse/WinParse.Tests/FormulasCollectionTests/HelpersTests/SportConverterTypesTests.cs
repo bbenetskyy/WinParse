@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 // ReSharper disable ExpressionIsAlwaysNull
 
-namespace UnitTest.FormulasCollectionTests.HelpersTests
+namespace WinParse.Tests.FormulasCollectionTests.HelpersTests
 {
     [TestClass]
     public class SportConverterTypesTests

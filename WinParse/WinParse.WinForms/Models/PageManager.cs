@@ -1,11 +1,10 @@
-﻿using DataSaver.Models;
-using DXApplication1.Pages;
+﻿using System;
+using System.Windows.Forms;
 using FormulasCollection.Enums;
 using FormulasCollection.Models;
-using System;
-using System.Windows.Forms;
+using WinParse.WinForms.Pages;
 
-namespace DXApplication1.Models
+namespace WinParse.WinForms.Models
 {
     public class PageManager
     {
