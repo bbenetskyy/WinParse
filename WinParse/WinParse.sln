@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.WinForms", "WinParse.WinForms\WinParse.WinForms.csproj", "{6354E98A-4FE1-4869-8974-8EE0780A5F0E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.DataSaver", "WinParse.DataSaver\WinParse.DataSaver.csproj", "{6C968817-C8BB-4BFF-9284-C786DBF5E90D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinParse.DataParser", "WinParse.DataParser\WinParse.DataParser.csproj", "{586A03BB-1702-4143-B370-E1DC6656762A}"
@@ -31,10 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6354E98A-4FE1-4869-8974-8EE0780A5F0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6354E98A-4FE1-4869-8974-8EE0780A5F0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6354E98A-4FE1-4869-8974-8EE0780A5F0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6354E98A-4FE1-4869-8974-8EE0780A5F0E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6C968817-C8BB-4BFF-9284-C786DBF5E90D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6C968817-C8BB-4BFF-9284-C786DBF5E90D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C968817-C8BB-4BFF-9284-C786DBF5E90D}.Release|Any CPU.ActiveCfg = Release|Any CPU
