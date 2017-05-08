@@ -147,14 +147,14 @@
 
         #endregion
         private DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
-        private DevExpress.XtraBars.Ribbon.RibbonControl ribbonControl1;
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPageSettings;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup rpgSkins;
         private DevExpress.XtraBars.SkinRibbonGalleryBarItem skinRibbonGalleryBarItem1;
         private DevExpress.XtraBars.BarEditItem barEditItemLanguage;
         private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit repositoryItemLookUpEditLanguage;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup rpgLocalization;
-        protected DevExpress.XtraGrid.GridControl gridControlDefault;
-        protected DevExpress.XtraGrid.Views.Grid.GridView gridViewDefault;
+        public DevExpress.XtraGrid.GridControl gridControlDefault;
+        public DevExpress.XtraGrid.Views.Grid.GridView gridViewDefault;
+        public DevExpress.XtraBars.Ribbon.RibbonControl ribbonControl1;
     }
 }
