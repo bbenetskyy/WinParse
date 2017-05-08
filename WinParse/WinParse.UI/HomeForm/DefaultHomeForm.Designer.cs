@@ -99,9 +99,6 @@
             this.repositoryItemLookUpEditLanguage.AutoHeight = false;
             this.repositoryItemLookUpEditLanguage.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemLookUpEditLanguage.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("columnCode", "Code"),
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("columnDescription", "Description")});
             this.repositoryItemLookUpEditLanguage.DisplayMember = "Description";
             this.repositoryItemLookUpEditLanguage.Name = "repositoryItemLookUpEditLanguage";
             this.repositoryItemLookUpEditLanguage.ValueMember = "Code";
@@ -138,7 +135,6 @@
             this.Ribbon = this.ribbonControl1;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DefaultHomeForm_FormClosed);
             this.Load += new System.EventHandler(this.DefaultHomeForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gridControlDefault)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewDefault)).EndInit();
