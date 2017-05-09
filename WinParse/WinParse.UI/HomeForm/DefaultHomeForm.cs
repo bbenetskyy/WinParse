@@ -11,7 +11,11 @@ namespace WinParse.UI.HomeForm
         public string Language
         {
             get {return barEditItemLanguage.EditValue as string; }
-            set { barEditItemLanguage.EditValue = value; }
+            set
+            {
+                barEditItemLanguage.EditValue = value;
+                ResMan.SetResource(ResMan.GetResourceByName(value));
+            }
         }
 
         public string Skin
@@ -38,7 +42,6 @@ namespace WinParse.UI.HomeForm
 
         private void ResMan_ResourceChaned(object sender, EventArgs e)
         {
-            Name = ResMan.GetString(ResKeys.DefaultHomeForm_Name);
             barEditItemLanguage.Caption = ResMan.GetString(ResKeys.DefaultHomeForm_Language_Caption);
             ribbonPageSettings.Text = ResMan.GetString(ResKeys.DefaultHomeForm_PageSettings_Text);
             rpgSkins.Text = ResMan.GetString(ResKeys.DefaultHomeForm_PageGroupSkins_Text);

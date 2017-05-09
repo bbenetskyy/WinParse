@@ -4,7 +4,37 @@ namespace WinParse.Resources
     public static class ResKeys
     {
 
+        #region UserManagerHomeForm
+
+        public static string UserManagerHomeForm_Text => nameof(UserManagerHomeForm_Text);
+        public static string UserManagerHomeForm_AddButton_Caption 
+            => nameof(UserManagerHomeForm_AddButton_Caption);
+
+        public static string UserManagerHomeForm_RemoveButton_Caption
+            => nameof(UserManagerHomeForm_RemoveButton_Caption);
+
+        public static string UserManagerHomeForm_CopyButton_Caption 
+            => nameof(UserManagerHomeForm_CopyButton_Caption);
+        public static string UserManagerHomeForm_SaveButton_Caption 
+            => nameof(UserManagerHomeForm_SaveButton_Caption);
+
+        public static string UserManagerHomeForm_CancelButton_Caption
+            => nameof(UserManagerHomeForm_CancelButton_Caption);
+
+        public static string UserManagerHomeForm_RefreshButton_Caption
+            => nameof(UserManagerHomeForm_RefreshButton_Caption);
+
+        public static string UserManagerHomeForm_AddGroup_Text => nameof(UserManagerHomeForm_AddGroup_Text);
+        public static string UserManagerHomeForm_SaveGroup_Text => nameof(UserManagerHomeForm_SaveGroup_Text);
+        public static string UserManagerHomeForm_ToolsPage_Text => nameof(UserManagerHomeForm_ToolsPage_Text);
+
+        #endregion UserManagerHomeForm
+
+
         #region LoginForm
+
+        public static string LoginForm_Url_Text => nameof(LoginForm_Url_Text);
+        public static string LoginForm_Url_CustomizationFormText => nameof(LoginForm_Url_CustomizationFormText);
 
         public static string LoginForm_PasswordTextEdit_Text => nameof(LoginForm_PasswordTextEdit_Text);
 
@@ -29,7 +59,7 @@ namespace WinParse.Resources
 
         #region DefaultHomeForm
 
-        public static string DefaultHomeForm_Name => nameof(DefaultHomeForm_Name);
+        public static string DefaultHomeForm_Text => nameof(DefaultHomeForm_Text);
 
         public static string DefaultHomeForm_Language_Description_Caption
             => nameof(DefaultHomeForm_Language_Description_Caption);

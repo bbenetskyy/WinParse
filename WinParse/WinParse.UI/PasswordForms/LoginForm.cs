@@ -8,12 +8,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
+using ToolsPortable;
 using WinParse.Resources;
 
 namespace WinParse.UI.PasswordForms
 {
     public partial class LoginForm : XtraForm
     {
+        public string Language
+        {
+            set { ResMan.SetResource(ResMan.GetResourceByName(value)); }
+        }
+
         public LoginForm()
         {
             InitializeComponent();
@@ -31,6 +37,10 @@ namespace WinParse.UI.PasswordForms
 
             layoutControlItemSaveCheckBox.Text = ResMan.GetString(ResKeys.LoginForm_SaveCheckBox_Text);
             layoutControlItemSaveCheckBox.CustomizationFormText = ResMan.GetString(ResKeys.LoginForm_SaveCheckBox_CustomizationFormText);
+            checkBoxSave.Text = ResMan.GetString(ResKeys.LoginForm_SaveCheckBox_Text);
+
+            layoutControlItemUrlTextEdit.Text = ResMan.GetString(ResKeys.LoginForm_Url_Text);
+            layoutControlItemUrlTextEdit.CustomizationFormText = ResMan.GetString(ResKeys.LoginForm_Url_CustomizationFormText);
 
             simpleButtonOk.ToolTip = ResMan.GetString(ResKeys.LoginForm_ButtonOk_ToolTip);
             simpleButtonCancel.ToolTip = ResMan.GetString(ResKeys.LoginForm_ButtonCancel_ToolTip);
@@ -40,14 +50,7 @@ namespace WinParse.UI.PasswordForms
         /// Get data from filled forms
         /// </summary>
         /// <returns>Dynamic type with Login(string), Password(string), Url(string), SaveMe(bool)</returns>
-        public dynamic GetCredentials
-            =>
-                new
-                {
-                    Login = textEditLogin.Text,
-                    Password = textEditPassword.Text,
-                    Url = textEditUrl.Text,
-                    SaveMe = checkBoxSave.Checked
-                };
+        public (string Login, string Password, string Url, bool SaveMe) GetCredentials
+            => (textEditLogin.Text,textEditPassword.Text,textEditUrl.Text,checkBoxSave.Checked);
     }
 }

@@ -48,10 +48,10 @@
             // gridControlDefault
             // 
             this.gridControlDefault.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridControlDefault.Location = new System.Drawing.Point(0, 143);
+            this.gridControlDefault.Location = new System.Drawing.Point(0, 147);
             this.gridControlDefault.MainView = this.gridViewDefault;
             this.gridControlDefault.Name = "gridControlDefault";
-            this.gridControlDefault.Size = new System.Drawing.Size(905, 348);
+            this.gridControlDefault.Size = new System.Drawing.Size(913, 348);
             this.gridControlDefault.TabIndex = 0;
             this.gridControlDefault.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewDefault});
@@ -60,6 +60,10 @@
             // 
             this.gridViewDefault.GridControl = this.gridControlDefault;
             this.gridViewDefault.Name = "gridViewDefault";
+            // 
+            // defaultLookAndFeel1
+            // 
+            this.defaultLookAndFeel1.LookAndFeel.SkinName = "Office 2016 Dark";
             // 
             // ribbonControl1
             // 
@@ -75,7 +79,7 @@
             this.ribbonPageSettings});
             this.ribbonControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemLookUpEditLanguage});
-            this.ribbonControl1.Size = new System.Drawing.Size(905, 143);
+            this.ribbonControl1.Size = new System.Drawing.Size(913, 147);
             // 
             // skinRibbonGalleryBarItem1
             // 
@@ -108,6 +112,7 @@
             this.ribbonPageSettings.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
             this.rpgSkins,
             this.rpgLocalization});
+            this.ribbonPageSettings.MergeOrder = 2;
             this.ribbonPageSettings.Name = "ribbonPageSettings";
             this.ribbonPageSettings.Text = "ribbonPage1";
             // 
@@ -128,7 +133,7 @@
             this.AllowFormGlass = DevExpress.Utils.DefaultBoolean.False;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(905, 491);
+            this.ClientSize = new System.Drawing.Size(913, 495);
             this.Controls.Add(this.gridControlDefault);
             this.Controls.Add(this.ribbonControl1);
             this.Name = "DefaultHomeForm";

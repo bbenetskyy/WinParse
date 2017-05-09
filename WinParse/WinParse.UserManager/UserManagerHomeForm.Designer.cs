@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserManagerHomeForm));
             this.toolsPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.saveGroup = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.saveButton = new DevExpress.XtraBars.BarButtonItem();
             this.cancelButton = new DevExpress.XtraBars.BarButtonItem();
             this.refreshButton = new DevExpress.XtraBars.BarButtonItem();
@@ -39,6 +38,7 @@
             this.addButton = new DevExpress.XtraBars.BarButtonItem();
             this.removeButton = new DevExpress.XtraBars.BarButtonItem();
             this.copyButton = new DevExpress.XtraBars.BarButtonItem();
+            this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,7 +52,7 @@
             this.addButton,
             this.removeButton,
             this.copyButton});
-            this.ribbonControl1.MaxItemId = 7;
+            this.ribbonControl1.MaxItemId = 1;
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.toolsPage});
             // 
@@ -61,6 +61,7 @@
             this.toolsPage.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
             this.saveGroup,
             this.addGroup});
+            this.toolsPage.MergeOrder = 0;
             this.toolsPage.Name = "toolsPage";
             this.toolsPage.Text = "ribbonPage1";
             // 
@@ -71,11 +72,6 @@
             this.saveGroup.ItemLinks.Add(this.refreshButton);
             this.saveGroup.Name = "saveGroup";
             this.saveGroup.Text = "ribbonPageGroup1";
-            // 
-            // ribbonPage2
-            // 
-            this.ribbonPage2.Name = "ribbonPage2";
-            this.ribbonPage2.Text = "ribbonPage2";
             // 
             // saveButton
             // 
@@ -100,6 +96,7 @@
             this.refreshButton.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("refreshButton.ImageOptions.Image")));
             this.refreshButton.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("refreshButton.ImageOptions.LargeImage")));
             this.refreshButton.Name = "refreshButton";
+            this.refreshButton.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.refreshButton_ItemClick);
             // 
             // addGroup
             // 
@@ -133,13 +130,19 @@
             this.copyButton.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("copyButton.ImageOptions.LargeImage")));
             this.copyButton.Name = "copyButton";
             // 
+            // ribbonPage2
+            // 
+            this.ribbonPage2.Name = "ribbonPage2";
+            this.ribbonPage2.Text = "ribbonPage2";
+            // 
             // UserManagerHomeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(905, 491);
+            this.ClientSize = new System.Drawing.Size(913, 495);
             this.Name = "UserManagerHomeForm";
             this.Text = "UserManagerHomeForm";
+            this.Load += new System.EventHandler(this.UserManagerHomeForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
